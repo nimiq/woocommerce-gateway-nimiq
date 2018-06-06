@@ -2,6 +2,7 @@ var accounts_loaded = false;
 var accounts = [];
 var network_loaded = false;
 var awaiting_keyguard_signing = false;
+var awaiting_network_relaying = false;
 var nim_payment_completed = false;
 var current_blockchain_height = 0;
 
@@ -29,7 +30,7 @@ function fill_accounts_selector() {
 
     var checkout_place_order_hook = function() {
         if (nim_payment_completed) return true;
-        if (!accounts_loaded || awaiting_keyguard_signing) return false;
+        if (!accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
         // TODO Disable submit button until ready
 
         // Check if a sender NIM address is selected
@@ -60,6 +61,8 @@ function fill_accounts_selector() {
     }
 
     var process_payment = async function(sender_address) {
+        awaiting_keyguard_signing = true;
+
         // Generate transaction object
         var transaction = {
             sender: sender_address,
@@ -82,10 +85,30 @@ function fill_accounts_selector() {
         if (account.type === 'low')  sign_action = keyguard.signWallet;
         var signed_transaction = await sign_action(transaction);
 
+        // When keyguard returns, write transaction hash into the hidden input
         var transaction_hash_field = document.getElementById('transaction_hash');
         transaction_hash_field.value = signed_transaction.hash;
 
         console.log("signed_transaction", signed_transaction);
+
+        awaiting_network_relaying = true;
+        awaiting_keyguard_signing = false;
+
+        // Await network and relay transaction
+        window.network = await networkClient.rpcClient;
+        window.network_events = await networkClient.eventClient;
+        network.relayTransaction(signed_transaction);
+
+        // Await "transaction-relayed" event from network and submit form, for real this time
+        network_events.on('nimiq-transaction-relayed', function(relayed_transaction) {
+            if (relayed_transaction.hash !== signed_transaction.hash) return;
+            nim_payment_completed = true;
+            awaiting_network_relaying = false;
+            jQuery('form.checkout').submit();
+
+            // Let the user handle potential validation errors
+            // (DEBUG: check that the transaction_hash is still filled out on validation error)
+        });
     }
 
     // Add submit event listener to form, preventDefault()
@@ -110,17 +133,7 @@ function fill_accounts_selector() {
 
     // Get accounts
     accounts = await keyguard.list();
-    // accounts.pop();
 
     // Fill select
     fill_accounts_selector();
-
-    // When keyguard returns, write transaction hash into the hidden input
-
-    // Await network and relay transaction
-
-    // Await "transaction-relayed" event from network and submit form, for real this time
-
-    // Let the user handle potential validation errors
-    // (DEBUG: check that the transaction_hash is still filled out on validation error)
 })();
