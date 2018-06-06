@@ -70,7 +70,8 @@ function fill_accounts_selector() {
             value: STORE_CART_TOTAL,
             fee: 0,
             validityStartHeight: current_blockchain_height,
-            extraData: 'Thank you for shopping at shop.nimiq.com!',
+            // extraData: 'Thank you for shopping at shop.nimiq.com!',
+            extraData: 'nothing to see here...',
             network: 'test'
         };
 
