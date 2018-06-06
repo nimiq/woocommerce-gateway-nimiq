@@ -83,7 +83,14 @@ function fill_accounts_selector() {
         var sign_action;
         if (account.type === 'high') sign_action = keyguard.signSafe;
         if (account.type === 'low')  sign_action = keyguard.signWallet;
-        var signed_transaction = await sign_action(transaction);
+        var signed_transaction;
+        try {
+            signed_transaction = await sign_action(transaction);
+        } catch (e) {
+            console.error(e);
+            awaiting_keyguard_signing = false;
+            return;
+        }
 
         // When keyguard returns, write transaction hash into the hidden input
         var transaction_hash_field = document.getElementById('transaction_hash');
