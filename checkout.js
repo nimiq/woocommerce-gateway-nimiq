@@ -1,5 +1,5 @@
 var accounts_loaded = false;
-var accounts = [];
+var accounts = null;
 var network_loaded = false;
 var awaiting_keyguard_signing = false;
 var awaiting_network_relaying = false;
@@ -9,7 +9,7 @@ var current_blockchain_height = 0;
 function fill_accounts_selector() {
     'use strict';
 
-    if (accounts.length === 0) return;
+    if (accounts === null) return;
 
     var customer_nim_address_field = document.getElementById('customer_nim_address');
     for (var i = 0; i < accounts.length; i++) {
@@ -93,30 +93,44 @@ function fill_accounts_selector() {
             return;
         }
 
-        // When keyguard returns, write transaction hash into the hidden input
-        var transaction_hash_field = document.getElementById('transaction_hash');
-        transaction_hash_field.value = signed_transaction.hash;
-
         console.log("signed_transaction", signed_transaction);
 
         awaiting_network_relaying = true;
         awaiting_keyguard_signing = false;
+        jQuery( 'form.checkout' ).addClass( 'processing' ).block({
+            message: null,
+            overlayCSS: {
+                background: '#fff',
+                opacity: 0.6
+            }
+        });
 
         // Await network and relay transaction
         window.network = await networkClient.rpcClient;
         window.network_events = await networkClient.eventClient;
-        network.relayTransaction(signed_transaction);
 
         // Await "transaction-relayed" event from network and submit form, for real this time
         network_events.on('nimiq-transaction-relayed', function(relayed_transaction) {
             if (relayed_transaction.hash !== signed_transaction.hash) return;
+
+            // When network returns, write transaction hash into the hidden input
+            var transaction_hash_field = document.getElementById('transaction_hash');
+            transaction_hash_field.value = signed_transaction.hash;
+
             nim_payment_completed = true;
             awaiting_network_relaying = false;
-            jQuery('form.checkout').submit();
+            jQuery( 'form.checkout' ).removeClass( 'processing' ).submit();
 
             // Let the user handle potential validation errors
             // (DEBUG: check that the transaction_hash is still filled out on validation error)
         });
+
+        try {
+            await network.relayTransaction(signed_transaction);
+        } catch (e) {
+            jQuery( 'form.checkout' ).removeClass( 'processing' ).unblock();
+            alert(e.message || e);
+        }
     }
 
     // Add submit event listener to form, preventDefault()
