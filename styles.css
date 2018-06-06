@@ -2,7 +2,11 @@ iframe[name="keyguard"] {
     display: none;
 }
 
-.nim_address_loading.hidden,
-.nim_address_selector.hidden {
+#nim_account_loading_block.hidden,
+#nim_account_selector_block.hidden {
     display: none;
+}
+
+#customer_nim_address {
+    padding: 0.6em 0.8em;
 }

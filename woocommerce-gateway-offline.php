@@ -171,17 +171,18 @@ function wc_nimiq_gateway_init() {
 			// 	echo wpautop( wptexturize( $description ) );
 			// }
 
+			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('KeyguardClient', 'http://localhost:5000/libraries/account-manager/dist/keyguard-client.js');
 			// wp_enqueue_script('NetworkClient', '/path/to/network-client.js');
 			wp_enqueue_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'checkout.js', ['KeyguardClient']);
 
 			?>
 
-			<div class="nim_address_loading">
+			<div id="nim_account_loading_block">
 				Loading your accounts, please wait...
 			</div>
 
-			<div class="nim_address_selector hidden">
+			<div id="nim_account_selector_block" class="hidden">
 				<?php
 
 					$select_options = array( '' => 'Please select' );
@@ -205,6 +206,8 @@ function wc_nimiq_gateway_init() {
 			</div>
 			<script>
 				var STORE_NIM_ADDRESS = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
+				var STORE_CART_TOTAL = <?php echo WC()->cart->get_total(false); ?>;
+				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
 			<?php
 		}
