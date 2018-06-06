@@ -110,6 +110,9 @@ function wc_nimiq_gateway_init() {
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
+
+			// Add style, so it can be loaded in the header of the page
+			wp_enqueue_style('NimiqPayment', plugin_dir_url( __FILE__ ) . 'styles.css');
 		}
 
 
@@ -178,7 +181,7 @@ function wc_nimiq_gateway_init() {
 				Loading your accounts, please wait...
 			</div>
 
-			<div class="nim_address_selector">
+			<div class="nim_address_selector hidden">
 				<?php
 
 					$select_options = array( '' => 'Please select' );

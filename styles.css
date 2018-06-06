@@ -1,0 +1,8 @@
+iframe[name="keyguard"] {
+    display: none;
+}
+
+.nim_address_loading.hidden,
+.nim_address_selector.hidden {
+    display: none;
+}
