@@ -172,9 +172,9 @@ function wc_nimiq_gateway_init() {
 			// }
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('KeyguardClient', 'http://localhost:5000/libraries/account-manager/dist/keyguard-client.js');
-			wp_enqueue_script('NetworkClient', 'http://localhost:5000/apps/safe/dist/network-client.js');
-			wp_enqueue_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'checkout.js', ['KeyguardClient']);
+			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'keyguard-client.js');
+			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'network-client.js');
+			wp_enqueue_script('NimiqCheckout',  plugin_dir_url( __FILE__ ) . 'checkout.js', ['KeyguardClient']);
 
 			?>
 
