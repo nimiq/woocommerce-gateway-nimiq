@@ -172,15 +172,32 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script('NetworkClient', '/path/to/network-client.js');
 
 			?>
+
 			<div class="nim_address_loading">
 				Loading your accounts, please wait...
 			</div>
+
 			<div class="nim_address_selector">
-					<label>Please select which account you want to pay with:</label><br>
-					<select name="customer_nim_address" id="customer_nim_address">
-						<option>NQ02 EXRU MPQR TSM4 P5PB N6AU 6V71 C7CV D795</option>
-					</select>
-					<input type="hidden" name="transaction_hash">
+				<?php
+
+					$select_options = array( '' => 'Please select' );
+					if ( sanitize_text_field( $_POST['customer_nim_address'] ) ) {
+						$select_options[] = sanitize_text_field( $_POST['customer_nim_address'] );
+					}
+
+					woocommerce_form_field(
+						'customer_nim_address',
+						array(
+							'type'          => 'select', // text, textarea, select, radio, checkbox, password, about custom validation a little later
+							'required'      => true, // actually this parameter just adds "*" to the field
+							'id'            => 'customer_nim_address',
+							'class'         => array(), // array only, read more about classes and styling in the previous step
+							'label'         => 'Please select the account you want to pay with:',
+							'options'       => $select_options,
+						), sanitize_text_field( $_POST['customer_nim_address'] )
+					);
+				?>
+				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
 			</div>
 			<script>
 				var store_nim_address = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
