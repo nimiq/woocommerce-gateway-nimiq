@@ -318,4 +318,4 @@ function wc_nimiq_gateway_init() {
 	} // end \WC_Gateway_Nimiq class
 }
 
-include_once(plugin_dir_path( __FILE__ ) . 'extras.php');
+include_once(plugin_dir_path( __FILE__ ) . 'nimiq_currency.php');

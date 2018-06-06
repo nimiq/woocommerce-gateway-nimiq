@@ -1,16 +1,6 @@
 <?php
-
-// Hide coupon field on cart and checkout page
-function hide_coupon_field( $enabled ) {
-	if ( is_cart() || is_checkout() ) {
-		$enabled = false;
-	}
-	return $enabled;
-}
-add_filter( 'woocommerce_coupons_enabled', 'hide_coupon_field' );
-
 /**
- * Custom currency and currency symbol
+ * Nimiq currency and currency symbol
  */
 
 function add_nimiq_currency( $currencies ) {
