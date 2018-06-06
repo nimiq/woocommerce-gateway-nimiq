@@ -66,13 +66,12 @@ function fill_accounts_selector() {
         // Generate transaction object
         var transaction = {
             sender: sender_address,
-            recipient: STORE_NIM_ADDRESS,
+            recipient: CONFIG.STORE_ADDRESS,
             value: STORE_CART_TOTAL,
             fee: 0,
             validityStartHeight: current_blockchain_height,
-            // extraData: 'Thank you for shopping at shop.nimiq.com!',
-            extraData: 'nothing to see here...',
-            network: 'test'
+            extraData: CONFIG.TX_MESSAGE,
+            network: CONFIG.NETWORK
         };
 
         // Find account type
@@ -146,7 +145,7 @@ function fill_accounts_selector() {
     // Fetch block height now and every 30 minutes
     var block_height_getter = function() {
         var request = new XMLHttpRequest();
-        request.open('GET', 'https://test-api.nimiq.watch/latest/1', true);
+        request.open('GET', CONFIG.API_PATH + '/latest/1', true);
 
         request.onload = function() {
             if (this.status >= 200 && this.status < 400) {
@@ -170,7 +169,7 @@ function fill_accounts_selector() {
 
     // Await keyguard-client connection
     window.keyguard = await keyguardClient.create(
-        'http://keyguard.localhost:5000/libraries/keyguard/src',
+        CONFIG.KEYGUARD_PATH,
         new keyguardClient.Policies.ShopPolicy,
         function() { return {}; }
     );

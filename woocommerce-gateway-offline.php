@@ -139,6 +139,23 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'network' => array(
+					'title'       => __( 'Network', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
+					'default'     => 'test',
+					'options'     => array( 'test', 'main' ),
+					'desc_tip'    => true,
+				),
+
+				'message' => array(
+					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Enter a message that should be included in every transaction. 64 byte limit.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Thank you for shopping at shop.nimiq.com!', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
 				'title' => array(
 					'title'       => __( 'Payment Title', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
@@ -151,7 +168,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Description', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay for your swag with NIM via the Nimiq Keyguard.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay for your order with NIM via the Nimiq Keyguard.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -174,7 +191,16 @@ function wc_nimiq_gateway_init() {
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'keyguard-client.js');
 			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'network-client.js');
-			wp_enqueue_script('NimiqCheckout',  plugin_dir_url( __FILE__ ) . 'checkout.js', ['KeyguardClient']);
+
+			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'checkout.js');
+			wp_localize_script('NimiqCheckout', 'CONFIG', array(
+				'NETWORK'       => $this->get_option( 'network' ),
+				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
+				'API_PATH'      => $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch'    : 'https://test-api.nimiq.watch',
+				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
+				'TX_MESSAGE'    => $this->get_option( 'message' )
+			));
+			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
 
 			?>
 
@@ -209,7 +235,6 @@ function wc_nimiq_gateway_init() {
 				<small>The store does not currently check if the selected account has enough balance. Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.</small>
 			</div>
 			<script>
-				var STORE_NIM_ADDRESS = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
 				var STORE_CART_TOTAL = <?php echo WC()->cart->get_total(false); ?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
