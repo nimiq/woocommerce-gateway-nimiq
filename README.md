@@ -6,7 +6,7 @@
  - Tested up to: 4.3
  - Requires WooCommerce at least: 3.0
  - Tested WooCommerce up to: 3.4
- - Stable Tag: 1.2.1
+ - Stable Tag: 1.2.2
  - License: GPLv3
  - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -38,7 +38,7 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
-= 2018.06.06 - version 1.2.1 =
+= 2018.06.06 - version 1.2.2 =
  * Fix checkout icon
  * Remove coupon form hiding code
 
