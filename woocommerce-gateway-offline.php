@@ -203,6 +203,8 @@ function wc_nimiq_gateway_init() {
 					);
 				?>
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
+
+				<small>The store does currently not check if the selected account has enough balance. Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.</small>
 			</div>
 			<script>
 				var STORE_NIM_ADDRESS = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
