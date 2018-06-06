@@ -38,8 +38,12 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
+= 2018.06.06 - version 1.2.0 =
+ * Made network and message configurable
+ * Prepare for online deployment
+
 = 2018.06.05 - version 1.1.0 =
- * adapted for payments with Nimiq
+ * Adapted for payments with Nimiq
 
 = 2015.07.27 - version 1.0.1 =
  * Misc: WooCommerce 2.4 Compatibility
