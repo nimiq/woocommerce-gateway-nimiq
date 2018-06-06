@@ -8,6 +8,8 @@ var nim_payment_completed = false;
 var current_blockchain_height = 0;
 
 function fill_accounts_selector() {
+    'use strict';
+
     if (accounts.length === 0) return;
 
     var customer_nim_address_field = document.getElementById('customer_nim_address');
@@ -25,6 +27,7 @@ function fill_accounts_selector() {
 }
 
 (async function() {
+    'use strict';
 
     var checkout_place_order_hook = function() {
         if (nim_payment_completed) return true;
@@ -32,8 +35,8 @@ function fill_accounts_selector() {
         // TODO Disable submit button until ready
 
         // Check if a sender NIM address is selected
-        var sender = document.getElementById('customer_nim_address').value;
-        if (!sender || sender === '') {
+        var sender_address = document.getElementById('customer_nim_address').value;
+        if (!sender_address || sender_address === '') {
             alert('Please select which account you want to send from.');
             return false;
         }
@@ -48,23 +51,39 @@ function fill_accounts_selector() {
             current_blockchain_height = Math.round(height);
         }
 
-        // Generate transaction object
-        var transaction = {
-            sender: sender,
-            recipient: STORE_NIM_ADDRESS,
-            value: STORE_CART_TOTAL,
-            fee: 0,
-            validityStartHeight: current_blockchain_height,
-            extraData: 'Thank you for shopping at shop.nimiq.com!'
-        };
-
-        // Start Keyguard action
+        // Process NIM payment (async)
+        process_payment(sender_address);
 
         // In parallel, initialize network iframe and connect
 
         // Return false to prevent form submission
         console.log("Returning false");
         return false;
+    }
+
+    var process_payment = async function(sender_address) {
+        // Generate transaction object
+        var transaction = {
+            sender: sender_address,
+            recipient: STORE_NIM_ADDRESS,
+            value: STORE_CART_TOTAL,
+            fee: 0,
+            validityStartHeight: current_blockchain_height,
+            extraData: 'Thank you for shopping at shop.nimiq.com!',
+            network: 'test'
+        };
+
+        // Find account type
+        var account = accounts.find(function(a) {
+            return a.address === sender_address;
+        });
+
+        // Start Keyguard action
+        var sign_action;
+        if (account.type === 'high') sign_action = keyguard.signSafe;
+        if (account.type === 'low')  sign_action = keyguard.signWallet;
+        var signed_transaction = await sign_action(transaction);
+        console.log(signed_transaction);
     }
 
     // Add submit event listener to form, preventDefault()
