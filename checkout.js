@@ -1,5 +1,3 @@
-var transaction_hash_field = document.getElementById('transaction_hash');
-
 var accounts_loaded = false;
 var accounts = [];
 var network_loaded = false;
@@ -54,10 +52,10 @@ function fill_accounts_selector() {
         // Process NIM payment (async)
         process_payment(sender_address);
 
-        // In parallel, initialize network iframe and connect
+        // In parallel, initialize network iframe
+        networkClient.launch();
 
         // Return false to prevent form submission
-        console.log("Returning false");
         return false;
     }
 
@@ -83,7 +81,11 @@ function fill_accounts_selector() {
         if (account.type === 'high') sign_action = keyguard.signSafe;
         if (account.type === 'low')  sign_action = keyguard.signWallet;
         var signed_transaction = await sign_action(transaction);
-        console.log(signed_transaction);
+
+        var transaction_hash_field = document.getElementById('transaction_hash');
+        transaction_hash_field.value = signed_transaction.hash;
+
+        console.log("signed_transaction", signed_transaction);
     }
 
     // Add submit event listener to form, preventDefault()
