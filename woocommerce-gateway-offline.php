@@ -106,6 +106,7 @@ function wc_nimiq_gateway_init() {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
+			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta_data' ) );
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
@@ -168,51 +169,59 @@ function wc_nimiq_gateway_init() {
 			// }
 
 			?>
-				<div class="nim_address_loading">
-					Loading your accounts, please wait...
-				</div>
-				<div class="nim_address_selector">
+			<div class="nim_address_loading">
+				Loading your accounts, please wait...
+			</div>
+			<div class="nim_address_selector">
 					<label>Please select which account you want to pay with:</label><br>
 					<select name="customer_nim_address" id="customer_nim_address">
 						<option>NQ02 EXRU MPQR TSM4 P5PB N6AU 6V71 C7CV D795</option>
 					</select>
 					<input type="hidden" name="transaction_hash">
-				</div>
+			</div>
 				<script src="path/to/keyguard-client.js"></script>
-				<script>
-					var store_nim_address = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
+			<script>
+				var store_nim_address = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
 
-					// Add submit event listener to form, preventDefault()
+				// Add submit event listener to form, preventDefault()
 
-					// Start interval to fetch block height every 30 minutes
-					// (Make sure it's executed immediately as well)
+				// Start interval to fetch block height every 30 minutes
+				// (Make sure it's executed immediately as well)
 
-					// Await keyguard-client connection
+				// Await keyguard-client connection
 
-					// Get accounts
+				// Get accounts
 
-					// Fill select
+				// Fill select
 
-					// Hide loading message, unhide select, enable payment button
+				// Hide loading message, unhide select, enable payment button
 
-					// On form submit, generate tx object and call keyguard signSafe/signWallet method
+				// On form submit, generate tx object and call keyguard signSafe/signWallet method
 
-					// In parallel, initialize network iframe and connect
+				// In parallel, initialize network iframe and connect
 
-					// When keyguard returns, write transaction hash into the hidden input
+				// When keyguard returns, write transaction hash into the hidden input
 
-					// Await network and relay transaction
+				// Await network and relay transaction
 
-					// Await "transaction-relayed" event from network and submit form, for real this time
+				// Await "transaction-relayed" event from network and submit form, for real this time
 
-					// Let the user handle potential validation errors
-					// (DEBUG: check that the transaction_hash is still filled out on validation error)
-				</script>
+				// Let the user handle potential validation errors
+				// (DEBUG: check that the transaction_hash is still filled out on validation error)
+			</script>
 			<?php
 		}
 
 		public function validate_fields() {
-			return true;
+			// TODO Check validity of the hash (length)
+			if ( ! sanitize_text_field( $_POST['transaction_hash'] ) ) {
+				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
+			}
+		}
+
+		public function update_order_meta_data( $order_id ) {
+			update_post_meta( $order_id, 'customer_nim_address', sanitize_text_field( $_POST['customer_nim_address'] ) );
+			update_post_meta( $order_id, 'transaction_hash', sanitize_text_field( $_POST['transaction_hash'] ) );
 		}
 
 		/**
