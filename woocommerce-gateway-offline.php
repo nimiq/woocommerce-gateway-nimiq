@@ -180,6 +180,8 @@ function wc_nimiq_gateway_init() {
 
 			<div id="nim_account_loading_block">
 				Loading your accounts, please wait...
+
+				<noscript><br><br><strong>Javascript is required to pay with NIM. Please activate Javascript to continue.</strong></noscript>
 			</div>
 
 			<div id="nim_account_selector_block" class="hidden">
