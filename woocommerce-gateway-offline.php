@@ -168,8 +168,9 @@ function wc_nimiq_gateway_init() {
 			// 	echo wpautop( wptexturize( $description ) );
 			// }
 
-			wp_enqueue_script('KeyguardClient', '/path/to/keyguard-client.js');
-			wp_enqueue_script('NetworkClient', '/path/to/network-client.js');
+			wp_enqueue_script('KeyguardClient', 'http://localhost:5000/libraries/account-manager/dist/keyguard-client.js');
+			// wp_enqueue_script('NetworkClient', '/path/to/network-client.js');
+			wp_enqueue_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'checkout.js', ['KeyguardClient']);
 
 			?>
 
@@ -200,33 +201,7 @@ function wc_nimiq_gateway_init() {
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
 			</div>
 			<script>
-				var store_nim_address = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
-
-				// Add submit event listener to form, preventDefault()
-
-				// Start interval to fetch block height every 30 minutes
-				// (Make sure it's executed immediately as well)
-
-				// Await keyguard-client connection
-
-				// Get accounts
-
-				// Fill select
-
-				// Hide loading message, unhide select, enable payment button
-
-				// On form submit, generate tx object and call keyguard signSafe/signWallet method
-
-				// In parallel, initialize network iframe and connect
-
-				// When keyguard returns, write transaction hash into the hidden input
-
-				// Await network and relay transaction
-
-				// Await "transaction-relayed" event from network and submit form, for real this time
-
-				// Let the user handle potential validation errors
-				// (DEBUG: check that the transaction_hash is still filled out on validation error)
+				var STORE_NIM_ADDRESS = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
 			</script>
 			<?php
 		}
