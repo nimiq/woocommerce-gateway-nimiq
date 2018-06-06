@@ -168,6 +168,9 @@ function wc_nimiq_gateway_init() {
 			// 	echo wpautop( wptexturize( $description ) );
 			// }
 
+			wp_enqueue_script('KeyguardClient', '/path/to/keyguard-client.js');
+			wp_enqueue_script('NetworkClient', '/path/to/network-client.js');
+
 			?>
 			<div class="nim_address_loading">
 				Loading your accounts, please wait...
@@ -179,7 +182,6 @@ function wc_nimiq_gateway_init() {
 					</select>
 					<input type="hidden" name="transaction_hash">
 			</div>
-				<script src="path/to/keyguard-client.js"></script>
 			<script>
 				var store_nim_address = '<?php echo $this->get_option( 'nimiq_address' ); ?>';
 
