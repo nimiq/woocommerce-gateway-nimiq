@@ -112,12 +112,18 @@ function fill_accounts_selector() {
         network_events.on('nimiq-transaction-relayed', function(relayed_transaction) {
             if (relayed_transaction.hash !== signed_transaction.hash) return;
 
+			// This check stops the form from auto-submitting each time the tx is relayed to a new peer
+			if (awaiting_network_relaying === false) return;
+            awaiting_network_relaying = false;
+
             // When network returns, write transaction hash into the hidden input
             var transaction_hash_field = document.getElementById('transaction_hash');
             transaction_hash_field.value = signed_transaction.hash;
 
             nim_payment_completed = true;
-            awaiting_network_relaying = false;
+
+			// TODO Add a delay here to allow the tx to get relayed to more peers?
+
             jQuery( 'form.checkout' ).removeClass( 'processing' ).submit();
 
             // Let the user handle potential validation errors
