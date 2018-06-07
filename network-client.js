@@ -377,14 +377,10 @@ class Config {
     }
 
     static origin(subdomain) {
-        if (subdomain === 'shop') return 'http://localhost';
-        if (subdomain === 'network') return 'http://network.localhost:5000';
         return Config._origin(subdomain);
     }
 
     static src(subdomain) {
-        if (subdomain === 'shop') return 'http://localhost';
-        if (subdomain === 'network') return 'http://network.localhost:5000/libraries/network/src';
         return Config._origin(subdomain, true);
     }
 
