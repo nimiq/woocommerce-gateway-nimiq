@@ -234,6 +234,13 @@ function wc_nimiq_gateway_init() {
 
 				<small>The store does not currently check if the selected account has enough balance. Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.</small>
 			</div>
+
+			<div id="nim_payment_complete_block" class="hidden">
+				<i class="fas fa-check-circle" style="color: seagreen;"></i>
+				Payment complete
+				<small>It is safe to place your order now.</small>
+			</div>
+
 			<script>
 				var STORE_CART_TOTAL = <?php echo WC()->cart->get_total(false); ?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();

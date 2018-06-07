@@ -19,10 +19,21 @@ function fill_accounts_selector() {
     }
     if (accounts.length === 1) customer_nim_address_field.removeChild(customer_nim_address_field.getElementsByTagName('option')[0]);
 
-    // Hide loading message, unhide select, enable payment button
+    // Hide loading message
     document.getElementById('nim_account_loading_block').classList.add('hidden');
-    document.getElementById('nim_account_selector_block').classList.remove('hidden');
-    accounts_loaded = true;
+
+	// Check if tx hash is already set at the end of the event loop, to give woocommerce time to re-fill the field
+	setTimeout(function() {
+		if (document.getElementById('transaction_hash').value !== '') {
+			// Show success message
+			document.getElementById('nim_payment_complete_block').classList.remove('hidden');
+		} else {
+			// Show account selector
+    		document.getElementById('nim_account_selector_block').classList.remove('hidden');
+		}
+	});
+
+	accounts_loaded = true;
 }
 
 (async function() {
@@ -119,6 +130,9 @@ function fill_accounts_selector() {
             // When network returns, write transaction hash into the hidden input
             var transaction_hash_field = document.getElementById('transaction_hash');
             transaction_hash_field.value = base64ToHex(signed_transaction.hash);
+
+    		document.getElementById('nim_account_selector_block').classList.add('hidden');
+			document.getElementById('nim_payment_complete_block').classList.remove('hidden');
 
             nim_payment_completed = true;
 

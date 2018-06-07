@@ -3,11 +3,25 @@ iframe[name="network"] {
     display: none;
 }
 
-#nim_account_loading_block.hidden,
-#nim_account_selector_block.hidden {
+.payment_method_nimiq_gateway .hidden {
     display: none;
 }
 
 #customer_nim_address {
     padding: 0.6em 0.8em;
+}
+
+#nim_payment_complete_block {
+	text-align: center;
+}
+
+#nim_payment_complete_block .fa-check-circle {
+	color: seagreen;
+	font-size: 2em;
+	margin-bottom: 8px;
+	display: block;
+}
+
+#nim_payment_complete_block small {
+	display: block;
 }
