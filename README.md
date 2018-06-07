@@ -38,15 +38,15 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
-= 2018.06.06 - version 1.5.0 =
+= 2018.06.07 - version 1.5.0 =
  * Add "Payment complete" message
 
-= 2018.06.06 - version 1.4.0 =
+= 2018.06.07 - version 1.4.0 =
  * Fix network selector setting values
  * Fix checkout form multi submissions
  * Store transaction hashes in HEX format
 
-= 2018.06.06 - version 1.3.0 =
+= 2018.06.07 - version 1.3.0 =
  * Fix network-client urls
 
 = 2018.06.06 - version 1.2.2 =
