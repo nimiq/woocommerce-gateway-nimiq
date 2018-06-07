@@ -144,7 +144,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					'options'     => array( 'test', 'main' ),
+					'options'     => array( 'test' => 'test', 'main' => 'main' ),
 					'desc_tip'    => true,
 				),
 
