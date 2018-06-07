@@ -118,7 +118,7 @@ function fill_accounts_selector() {
 
             // When network returns, write transaction hash into the hidden input
             var transaction_hash_field = document.getElementById('transaction_hash');
-            transaction_hash_field.value = signed_transaction.hash;
+            transaction_hash_field.value = base64ToHex(signed_transaction.hash);
 
             nim_payment_completed = true;
 
@@ -186,3 +186,12 @@ function fill_accounts_selector() {
     // Fill select
     fill_accounts_selector();
 })();
+
+function base64ToHex(str) {
+    for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; i++) {
+        let tmp = bin.charCodeAt(i).toString(16);
+        if (tmp.length === 1) tmp = "0" + tmp;
+        hex[hex.length] = tmp;
+    }
+    return hex.join("");
+}
