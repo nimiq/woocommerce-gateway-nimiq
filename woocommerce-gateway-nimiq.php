@@ -102,6 +102,8 @@ function wc_nimiq_gateway_init() {
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions' );
 
+			$this->api_domain   = $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
+
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -130,15 +132,6 @@ function wc_nimiq_gateway_init() {
 					'default' => 'yes'
 				),
 
-				'nimiq_address' => array(
-					'title'       => __( 'Store NIM Address', 'wc-gateway-nimiq' ),
-					'type'        => 'text',
-					'description' => __( 'Your Nimiq address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
-					'default'     => '',
-					'placeholder' => 'NQ...',
-					'desc_tip'    => true,
-				),
-
 				'network' => array(
 					'title'       => __( 'Network', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -148,11 +141,37 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'nimiq_address' => array(
+					'title'       => __( 'Store NIM Address', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Your Nimiq address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => 'NQ...',
+					'desc_tip'    => true,
+				),
+
 				'message' => array(
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Enter a message that should be included in every transaction. 64 byte limit.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Thank you for shopping at shop.nimiq.com!', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
+				// FIXME: Becomes unecessary when API can retrieve mempool transactions
+				'tx_wait_duration' => array(
+					'title'       => __( 'Mempool Wait', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'How many minutes to wait for a transaction to be mined, before marking the order as failed.', 'wc-gateway-nimiq' ),
+					'default'     => 15,
+					'desc_tip'    => true,
+				),
+
+				'confirmations' => array(
+					'title'       => __( 'Required Confirmations', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'The number of confirmations required to accept a transaction.', 'wc-gateway-nimiq' ),
+					'default'     => 10,
 					'desc_tip'    => true,
 				),
 
@@ -196,7 +215,7 @@ function wc_nimiq_gateway_init() {
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
 				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
-				'API_PATH'      => $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch'    : 'https://test-api.nimiq.watch',
+				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'TX_MESSAGE'    => $this->get_option( 'message' )
 			));
@@ -301,7 +320,7 @@ function wc_nimiq_gateway_init() {
 			$order = wc_get_order( $order_id );
 
 			// Mark as on-hold (we're awaiting the payment)
-			$order->update_status( 'on-hold', __( 'Awaiting Nimiq payment', 'wc-gateway-nimiq' ) );
+			$order->update_status( 'on-hold', __( 'Awaiting Nimiq payment.', 'wc-gateway-nimiq' ) );
 
 			// Reduce stock levels
 			wc_reduce_stock_levels($order_id);
@@ -326,7 +345,150 @@ function wc_nimiq_gateway_init() {
 			}
 		}
 
+		public function do_bulk_validate_transactions() {
+			// Get current blockchain height
+			$current_height = wp_remote_get( $this->api_domain . '/latest/1' );
+			if ( $current_height instanceof WP_Error ) {
+				echo "ERROR: ";
+				var_dump( $current_height );
+				return;
+			}
+			$current_height = json_decode( $current_height[ 'body' ] );
+			if ( $current_height->error ) {
+				echo "ERROR: " . $current_height->error;
+				return;
+			}
+			$current_height = $current_height[ 0 ]->height;
+			// echo "Current height: " . $current_height . "\n";
+
+			$posts = $_GET[ 'post' ];
+
+			foreach ( $posts as $postID ) {
+				if ( !is_numeric( $postID ) ) {
+					continue;
+				}
+
+				// echo "Post ID: " . $postID . "\n";
+
+				$order = new WC_Order( (int) $postID );
+
+				// echo "Post status: " . $order->get_status() . "\n";
+				// Only continue if order status is currently 'on hold'
+				if ( $order->get_status() !== 'on-hold' ) continue;
+
+				// Convert HEX tx hash into base64
+				$transaction_hash = $order->get_meta('transaction_hash');
+				$transaction_hash = urlencode( base64_encode( pack( 'H*', $transaction_hash ) ) );
+				// echo "Hash conversion: " . $order->get_meta('transaction_hash') . ' => ' . $transaction_hash . "\n";
+
+				// Retrieve tx data from API
+				$url = $this->api_domain . '/transaction/' . $transaction_hash;
+				// echo "API URL: " . $url . "\n";
+				$transaction = wp_remote_get( $url);
+				if ( $transaction instanceof WP_Error ) {
+					echo "ERROR: ";
+					var_dump( $transaction );
+					continue;
+				}
+				$transaction = json_decode( $transaction[ 'body' ] );
+
+				// var_dump($transaction);
+
+				// FIXME: Obsolete when API returns mempool transactions
+				if ( $transaction->error === 'Transaction not found' ) {
+					// echo "ERROR: Transaction not found\n";
+					// Check if order date is earlier than setting(tx_wait_duration) ago
+					$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+					// echo "Order date: " . $order_date . "\n";
+
+					$time_limit = strtotime( '-' . $this->get_option( 'tx_wait_duration' ) . ' minutes' );
+					// echo "Time limit: " . $time_limit . "\n";
+					if ( $order_date < $time_limit ) {
+						// If order date is earlier, mark as failed
+						// echo "Tx not found => order failed\n";
+						$order->update_status( 'failed', 'Transaction not found within wait duration.', true );
+					}
+
+					continue;
+				} elseif ( $transaction->error ) {
+					echo "ERROR: " . $transaction->error . "($url)\n";
+					continue;
+				}
+
+				// If tx is returned, validate it
+
+				// echo "Transaction sender: " . $transaction->sender_address . "\n";
+				// echo "Order sender:       " . $order->get_meta('customer_nim_address') . "\n";
+				if ( $transaction->sender_address !== $order->get_meta('customer_nim_address') ) {
+					// echo "Transaction sender not equal order customer NIM address\n";
+					$order->update_status( 'failed', 'Transaction sender does not match.', true );
+					continue;
+				}
+				// echo "OK Transaction sender matches\n";
+
+				// echo "Transaction recipient: " . $transaction->receiver_address . "\n";
+				// echo "Store address:         " . $this->get_option( 'nimiq_address' ) . "\n";
+				if ( $transaction->receiver_address !== $this->get_option( 'nimiq_address' ) ) {
+					// echo "Transaction recipient not equal store NIM address\n";
+					$order->update_status( 'failed', 'Transaction recipient does not match.', true );
+					continue;
+				}
+				// echo "OK Transaction recipient matches\n";
+
+				// echo "Transaction value: " . $transaction->value . "\n";
+				// echo "Order value:       " . intval( $order->get_data()[ 'total' ] * 1e5 ) . "\n";
+				if ( $transaction->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
+					// echo "Transaction value and order value are not equal\n";
+					$order->update_status( 'failed', 'Transaction value does not match.', true );
+					continue;
+				}
+				// echo "OK Transaction value matches\n";
+
+				// and mark as 'processing' if confirmed
+				// echo "Transaction height: " . $transaction->block_height . "\n";
+				// echo "Confirmations setting: " . $this->get_option( 'confirmations' ) . "\n";
+				// echo "Transaction confirmations: " . ($current_height - $transaction->block_height) . "\n";
+				if ( empty( $transaction->block_height ) || $current_height - $transaction->block_height < $this->get_option( 'confirmations' ) ) {
+					// echo "Transaction valid but not yet confirmed\n";
+					continue;
+				}
+				// echo "OK Transaction confirmed\n";
+
+				$order->update_status( 'processing', 'Transaction validated and confirmed.', true );
+			}
+
+			wp_redirect( wp_get_referer() );
+		}
+
 	} // end \WC_Gateway_Nimiq class
 }
 
-include_once(plugin_dir_path( __FILE__ ) . 'nimiq_currency.php');
+
+function register_bulk_actions( $actions ) {
+	$actions[ 'validate-transactions' ] = 'Validate Transactions';
+	return $actions;
+}
+add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
+
+function do_bulk_validate_transactions() {
+	// Make sure that we on "Woocomerce orders list" page
+	if ( !isset($_GET['post_type']) || $_GET['post_type'] !== 'shop_order' ) {
+		return;
+	}
+
+	// Make sure that the correct action is submitted
+	if ( !isset($_GET['action']) || $_GET['action'] !== 'validate-transactions' ) {
+		return;
+	}
+
+	// Check nonce
+	if ( !check_admin_referer( 'bulk-posts' ) ) {
+		return;
+	}
+
+	$foo = new WC_Gateway_Nimiq();
+	$foo->do_bulk_validate_transactions();
+}
+add_action( 'admin_init', 'do_bulk_validate_transactions', 0 );
+
+include_once( plugin_dir_path( __FILE__ ) . 'nimiq_currency.php' );
