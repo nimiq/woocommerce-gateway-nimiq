@@ -520,6 +520,10 @@ function wc_nimiq_gateway_init() {
 				$changed++;
 			} // end for loop
 
+			add_action( 'admin_notices', function() {
+				echo '<div class="updated notice">' . $changed . ' orders updated.</div>';
+			} );
+
 			$redirect_to = add_query_arg(
 				array(
 					'bulk_action' => 'validated_transactions',
