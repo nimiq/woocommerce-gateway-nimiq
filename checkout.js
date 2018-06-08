@@ -1,18 +1,19 @@
-var accounts_loaded = false;
-var accounts = null;
+// Globals
+var nimiq_gateway_accounts_loaded = false;
+var nimiq_gateway_accounts = null;
 
 function fill_accounts_selector() {
     'use strict';
 
-    if (accounts === null) return;
+    if (nimiq_gateway_accounts === null) return;
 
     var customer_nim_address_field = document.getElementById('customer_nim_address');
-    for (var i = 0; i < accounts.length; i++) {
+    for (var i = 0; i < nimiq_gateway_accounts.length; i++) {
         var opt = document.createElement('option');
-        opt.textContent = accounts[i].address;
+        opt.textContent = nimiq_gateway_accounts[i].address;
         customer_nim_address_field.appendChild(opt);
     }
-    if (accounts.length === 1) customer_nim_address_field.removeChild(customer_nim_address_field.getElementsByTagName('option')[0]);
+    if (nimiq_gateway_accounts.length === 1) customer_nim_address_field.removeChild(customer_nim_address_field.getElementsByTagName('option')[0]);
 
     // Hide loading message
     document.getElementById('nim_account_loading_block').classList.add('hidden');
@@ -28,7 +29,7 @@ function fill_accounts_selector() {
 		}
 	});
 
-	accounts_loaded = true;
+    nimiq_gateway_accounts_loaded = true;
 }
 
 (async function() {
@@ -42,8 +43,8 @@ function fill_accounts_selector() {
 
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
-        if (!accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
         // TODO Disable submit button until ready
+        if (!nimiq_gateway_accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
 
         // Check if a sender NIM address is selected
         var sender_address = document.getElementById('customer_nim_address').value;
@@ -87,7 +88,7 @@ function fill_accounts_selector() {
         };
 
         // Find account type
-        var account = accounts.find(function(a) {
+        var account = nimiq_gateway_accounts.find(function(a) {
             return a.address === sender_address;
         });
 
@@ -198,7 +199,7 @@ function fill_accounts_selector() {
     );
 
     // Get accounts
-    accounts = await keyguard.list();
+    nimiq_gateway_accounts = await keyguard.list();
 
     // Fill select
     fill_accounts_selector();
