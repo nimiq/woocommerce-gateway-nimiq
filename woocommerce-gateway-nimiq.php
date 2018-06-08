@@ -484,6 +484,21 @@ function wc_nimiq_gateway_init() {
 				// echo "OK Transaction value matches\n";
 
 				// TODO Validate transaction extra data (Order ID)
+				// echo "Transaction data: " . $transaction->data . "\n";
+				$extraData = base64_decode( $transaction->data);
+				$message = mb_convert_encoding( $extraData, 'UTF-8' );
+				// echo "Transaction message: " . $message . "\n";
+				preg_match_all( '/\[(.*?)\]/', $message, $matches, PREG_SET_ORDER );
+				$order_id = intval( end( $matches )[1] );
+				// echo "Transaction order ID: " . $order_id . "\n";
+				// echo "Order ID: " . $order->id . "\n";
+				if ( $order_id !== $order->id ) {
+					// echo "Transaction order ID and order ID are not equal\n";
+					$order->update_status( 'failed', 'Transaction order ID does not match.', true );
+					$changed++;
+					continue;
+				}
+				// echo "OK Transaction order ID matches\n";
 
 				// Mark as 'processing' if confirmed
 				// echo "Transaction height: " . $transaction->block_height . "\n";
