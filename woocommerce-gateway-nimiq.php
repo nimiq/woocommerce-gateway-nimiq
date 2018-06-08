@@ -380,7 +380,7 @@ function wc_nimiq_gateway_init() {
 			}
 		}
 
-		public function do_bulk_validate_transactions() {
+		public function do_bulk_validate_transactions( $ids ) {
 			// Get current blockchain height
 			$current_height = wp_remote_get( $this->api_domain . '/latest/1' );
 			if ( $current_height instanceof WP_Error ) {
@@ -396,9 +396,9 @@ function wc_nimiq_gateway_init() {
 			$current_height = $current_height[ 0 ]->height;
 			// echo "Current height: " . $current_height . "\n";
 
-			$posts = $_GET[ 'post' ];
+			$changed = 0;
 
-			foreach ( $posts as $postID ) {
+			foreach ( $ids as $postID ) {
 				if ( !is_numeric( $postID ) ) {
 					continue;
 				}
@@ -442,6 +442,7 @@ function wc_nimiq_gateway_init() {
 						// If order date is earlier, mark as failed
 						// echo "Tx not found => order failed\n";
 						$order->update_status( 'failed', 'Transaction not found within wait duration.', true );
+						$changed++;
 					}
 
 					continue;
@@ -457,6 +458,7 @@ function wc_nimiq_gateway_init() {
 				if ( $transaction->sender_address !== $order->get_meta('customer_nim_address') ) {
 					// echo "Transaction sender not equal order customer NIM address\n";
 					$order->update_status( 'failed', 'Transaction sender does not match.', true );
+					$changed++;
 					continue;
 				}
 				// echo "OK Transaction sender matches\n";
@@ -466,6 +468,7 @@ function wc_nimiq_gateway_init() {
 				if ( $transaction->receiver_address !== $this->get_option( 'nimiq_address' ) ) {
 					// echo "Transaction recipient not equal store NIM address\n";
 					$order->update_status( 'failed', 'Transaction recipient does not match.', true );
+					$changed++;
 					continue;
 				}
 				// echo "OK Transaction recipient matches\n";
@@ -475,13 +478,14 @@ function wc_nimiq_gateway_init() {
 				if ( $transaction->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
 					// echo "Transaction value and order value are not equal\n";
 					$order->update_status( 'failed', 'Transaction value does not match.', true );
+					$changed++;
 					continue;
 				}
 				// echo "OK Transaction value matches\n";
 
 				// TODO Validate transaction extra data (Order ID)
 
-				// and mark as 'processing' if confirmed
+				// Mark as 'processing' if confirmed
 				// echo "Transaction height: " . $transaction->block_height . "\n";
 				// echo "Confirmations setting: " . $this->get_option( 'confirmations' ) . "\n";
 				// echo "Transaction confirmations: " . ($current_height - $transaction->block_height) . "\n";
@@ -492,10 +496,18 @@ function wc_nimiq_gateway_init() {
 				// echo "OK Transaction confirmed\n";
 
 				$order->update_status( 'processing', 'Transaction validated and confirmed.', true );
-			}
+				$changed++;
+			} // end for loop
 
-			wp_redirect( wp_get_referer() );
-		}
+			$redirect_to = add_query_arg(
+				array(
+					'bulk_action' => 'validated_transactions',
+					'changed'     => $changed
+				),
+				wp_get_referer()
+			);
+			wp_redirect( esc_url_raw( $redirect_to ) );
+		} // end do_bulk_validate_transactions()
 
 	} // end \WC_Gateway_Nimiq class
 }
@@ -507,25 +519,15 @@ function register_bulk_actions( $actions ) {
 }
 add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 
-function do_bulk_validate_transactions() {
-	// Make sure that we on "Woocomerce orders list" page
-	if ( !isset($_GET['post_type']) || $_GET['post_type'] !== 'shop_order' ) {
-		return;
-	}
-
+function do_bulk_validate_transactions( $redirect_to, $action, $ids ) {
 	// Make sure that the correct action is submitted
-	if ( !isset($_GET['action']) || $_GET['action'] !== 'validate-transactions' ) {
-		return;
-	}
-
-	// Check nonce
-	if ( !check_admin_referer( 'bulk-posts' ) ) {
+	if ( $action !== 'validate-transactions' ) {
 		return;
 	}
 
 	$foo = new WC_Gateway_Nimiq();
-	$foo->do_bulk_validate_transactions();
+	$foo->do_bulk_validate_transactions( $ids );
 }
-add_action( 'admin_init', 'do_bulk_validate_transactions', 0 );
+add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
 
 include_once( plugin_dir_path( __FILE__ ) . 'nimiq_currency.php' );
