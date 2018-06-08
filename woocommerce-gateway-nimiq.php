@@ -108,7 +108,6 @@ function wc_nimiq_gateway_init() {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
-			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta_data' ) );
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
@@ -153,7 +152,7 @@ function wc_nimiq_gateway_init() {
 				'message' => array(
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Enter a message that should be included in every transaction. 64 byte limit.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Thank you for shopping at shop.nimiq.com!', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
@@ -195,17 +194,21 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Instructions', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'You will receive another email after your payment has been confirmed and we sent your order.' ),
+					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
 				),
 			) );
 		}
 
 		public function payment_fields() {
-			// $description = $this->get_description();
-			// if ( $description ) {
-			// 	echo wpautop( wptexturize( $description ) );
-			// }
+
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				$description = $this->get_description();
+				if ( $description ) {
+					echo wpautop( wptexturize( $description ) );
+				}
+				return;
+			}
 
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'keyguard-client.js');
@@ -257,24 +260,47 @@ function wc_nimiq_gateway_init() {
 			<div id="nim_payment_complete_block" class="hidden">
 				<i class="fas fa-check-circle" style="color: seagreen;"></i>
 				Payment complete
-				<small>It is safe to place your order now.</small>
 			</div>
 
 			<script>
-				var STORE_CART_TOTAL = <?php echo WC()->cart->get_total(false); ?>;
+				<?php
+					$total = 0;
+					$order_id = 0;
+					if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+						$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+						$order = wc_get_order( $order_id );
+						$total = $order->get_total();
+					}
+					echo "var ORDER_TOTAL = $total;";
+					echo "var ORDER_ID = $order_id;"; // TODO: Hash the ID
+				?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
 			<?php
 		}
 
 		public function validate_fields() {
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				return true;
+			}
+
 			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
 			if ( ! $transaction_hash ) {
 				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
+				return false;
 			}
-			elseif ( strlen( $transaction_hash) !== 64 ) {
+
+			if ( strlen( $transaction_hash) !== 64 ) {
 				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.' ), 'error' );
+				return false;
 			}
+
+			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+				$this->update_order_meta_data( $order_id );
+			}
+
+			return true;
 		}
 
 		public function update_order_meta_data( $order_id ) {
@@ -318,14 +344,24 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			// Mark as on-hold (we're awaiting the payment)
-			$order->update_status( 'on-hold', __( 'Awaiting Nimiq payment.', 'wc-gateway-nimiq' ) );
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				// Remove cart
+				WC()->cart->empty_cart();
+
+				$order->update_status( 'pending-payment', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
+
+				// Return payment-page redirect
+				return array(
+					'result' 	=> 'success',
+					'redirect'	=> $order->get_checkout_payment_url( $on_checkout = false )
+				);
+			}
+
+			// Mark as on-hold (we're awaiting transaction validation)
+			$order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
 
 			// Reduce stock levels
 			wc_reduce_stock_levels($order_id);
-
-			// Remove cart
-			WC()->cart->empty_cart();
 
 			// Return thankyou redirect
 			return array(
@@ -442,6 +478,8 @@ function wc_nimiq_gateway_init() {
 					continue;
 				}
 				// echo "OK Transaction value matches\n";
+
+				// TODO Validate transaction extra data (Order ID)
 
 				// and mark as 'processing' if confirmed
 				// echo "Transaction height: " . $transaction->block_height . "\n";
