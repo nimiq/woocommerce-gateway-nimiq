@@ -152,7 +152,7 @@ function wc_nimiq_gateway_init() {
 				'message' => array(
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Enter a message that should be included in every transaction. 64 byte limit.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Thank you for shopping at shop.nimiq.com!', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
@@ -194,7 +194,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Instructions', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'You will receive another email after your payment has been confirmed and we sent your order.' ),
+					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
 				),
 			) );
@@ -260,7 +260,6 @@ function wc_nimiq_gateway_init() {
 			<div id="nim_payment_complete_block" class="hidden">
 				<i class="fas fa-check-circle" style="color: seagreen;"></i>
 				Payment complete
-				<small>It is safe to place your order now.</small>
 			</div>
 
 			<script>
@@ -479,6 +478,8 @@ function wc_nimiq_gateway_init() {
 					continue;
 				}
 				// echo "OK Transaction value matches\n";
+
+				// TODO Validate transaction extra data (Order ID)
 
 				// and mark as 'processing' if confirmed
 				// echo "Transaction height: " . $transaction->block_height . "\n";
