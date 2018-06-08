@@ -18,7 +18,7 @@ function fill_accounts_selector() {
 
     // Hide loading message
     document.getElementById('nim_account_loading_block').classList.add('hidden');
-        document.getElementById('nim_account_selector_block').classList.remove('hidden');
+    document.getElementById('nim_account_selector_block').classList.remove('hidden');
 
     nimiq_gateway_accounts_loaded = true;
     jQuery( 'button#place_order' ).attr("disabled", false);
@@ -119,25 +119,23 @@ function fill_accounts_selector() {
         network_events.on('nimiq-transaction-relayed', function(relayed_transaction) {
             if (relayed_transaction.hash !== signed_transaction.hash) return;
 
-			// This check stops the form from auto-submitting each time the tx is relayed to a new peer
-			if (awaiting_network_relaying === false) return;
+            // This check stops the form from auto-submitting each time the tx is relayed to a new peer
+            if (awaiting_network_relaying === false) return;
             awaiting_network_relaying = false;
 
             // When network returns, write transaction hash into the hidden input
             var transaction_hash_field = document.getElementById('transaction_hash');
             transaction_hash_field.value = base64ToHex(signed_transaction.hash);
 
-    		document.getElementById('nim_account_selector_block').classList.add('hidden');
-			document.getElementById('nim_payment_complete_block').classList.remove('hidden');
+            document.getElementById('nim_account_selector_block').classList.add('hidden');
+            document.getElementById('nim_payment_complete_block').classList.remove('hidden');
 
             nim_payment_completed = true;
 
-			// TODO Add a delay here to allow the tx to get relayed to more peers?
-
-            jQuery( 'form.checkout' ).removeClass( 'processing' ).submit();
-
-            // Let the user handle potential validation errors
-            // (DEBUG: check that the transaction_hash is still filled out on validation error)
+            // Submit form after short delay to allow more peers to request the transaction
+            setTimeout(function() {
+                checkout_form.submit();
+            }, 2000);
         });
 
         try {
