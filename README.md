@@ -6,7 +6,7 @@
  - Tested up to: 4.3
  - Requires WooCommerce at least: 3.0
  - Tested WooCommerce up to: 3.4
- - Stable Tag: 1.5.0
+ - Stable Tag: 1.6.0
  - License: GPLv3
  - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,6 +37,10 @@ The text domain is `wc-gateway-nimiq`.
 Please do! This is meant to be a simple starter Nimiq gateway, and can be modified easily.
 
 == Changelog ==
+
+= 2018.06.08 - version 1.6.0 =
+ * Handle Nimiq payment on separate page, after order has been placed
+ * Add bulk transaction validation action on 'Orders' page
 
 = 2018.06.07 - version 1.5.0 =
  * Add "Payment complete" message

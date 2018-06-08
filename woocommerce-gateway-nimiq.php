@@ -5,7 +5,7 @@
  * Description: Pay with Nimiq via the Nimiq Keyguard
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
- * Version: 1.5.0
+ * Version: 1.6.0
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  *
