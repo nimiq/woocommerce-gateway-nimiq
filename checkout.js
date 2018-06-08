@@ -30,10 +30,14 @@ function fill_accounts_selector() {
 	});
 
     nimiq_gateway_accounts_loaded = true;
+    jQuery( 'button#place_order' ).attr("disabled", false);
 }
 
 (async function() {
     'use strict';
+
+    // Disable submit button until ready
+    jQuery( 'button#place_order' ).attr("disabled", "disabled");
 
     // Status variables
     var awaiting_keyguard_signing = false;
@@ -43,7 +47,6 @@ function fill_accounts_selector() {
 
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
-        // TODO Disable submit button until ready
         if (!nimiq_gateway_accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
 
         // Check if a sender NIM address is selected
@@ -155,13 +158,6 @@ function fill_accounts_selector() {
     }
 
     // Add submit event listener to form, preventDefault()
-
-    // Disable submit button until accounts are loaded
-    // jQuery(document).on('update_checkout', function() {
-    //     console.log("disabling");
-    //     setTimeout(() => document.getElementById('place_order').disabled = true);
-    // });
-
     var checkout_form = jQuery('form#order_review');
     checkout_form.on( 'submit', checkout_pay_order_hook );
 
