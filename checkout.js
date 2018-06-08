@@ -109,7 +109,7 @@ function fill_accounts_selector() {
 
         awaiting_network_relaying = true;
         awaiting_keyguard_signing = false;
-        jQuery( 'form.checkout' ).addClass( 'processing' ).block({
+        jQuery( '#payment' ).block({
             message: null,
             overlayCSS: {
                 background: '#fff',
@@ -149,7 +149,7 @@ function fill_accounts_selector() {
         try {
             await network.relayTransaction(signed_transaction);
         } catch (e) {
-            jQuery( 'form.checkout' ).removeClass( 'processing' ).unblock();
+            jQuery( '#payment' ).unblock();
             alert(e.message || e);
         }
     }
