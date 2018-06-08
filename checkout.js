@@ -67,7 +67,7 @@ function fill_accounts_selector() {
         }
 
         // Process NIM payment (async)
-        process_payment(sender_address);
+        do_payment(sender_address);
 
         // In parallel, initialize network iframe
         networkClient.launch();
@@ -76,7 +76,7 @@ function fill_accounts_selector() {
         return false;
     }
 
-    var process_payment = async function(sender_address) {
+    var do_payment = async function(sender_address) {
         awaiting_keyguard_signing = true;
 
         // Generate transaction object
