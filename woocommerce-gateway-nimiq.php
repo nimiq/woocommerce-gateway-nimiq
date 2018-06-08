@@ -265,13 +265,16 @@ function wc_nimiq_gateway_init() {
 			</div>
 
 			<script>
-				var ORDER_TOTAL = <?php
+				<?php
 					$total = 0;
+					$order_id = 0;
 					if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
-						$order = wc_get_order( wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) ) );
+						$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+						$order = wc_get_order( $order_id );
 						$total = $order->get_total();
 					}
-					echo $total;
+					echo "var ORDER_TOTAL = $total;";
+					echo "var ORDER_ID = $order_id;"; // TODO: Hash the ID
 				?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>

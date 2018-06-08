@@ -81,7 +81,7 @@ function fill_accounts_selector() {
             value: ORDER_TOTAL,
             fee: 0,
             validityStartHeight: current_blockchain_height,
-            extraData: CONFIG.TX_MESSAGE,
+            extraData: CONFIG.TX_MESSAGE + ' [' + ORDER_ID + ']',
             network: CONFIG.NETWORK
         };
 
