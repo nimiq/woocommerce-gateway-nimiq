@@ -1,10 +1,5 @@
 var accounts_loaded = false;
 var accounts = null;
-var network_loaded = false;
-var awaiting_keyguard_signing = false;
-var awaiting_network_relaying = false;
-var nim_payment_completed = false;
-var current_blockchain_height = 0;
 
 function fill_accounts_selector() {
     'use strict';
@@ -38,6 +33,12 @@ function fill_accounts_selector() {
 
 (async function() {
     'use strict';
+
+    // Status variables
+    var awaiting_keyguard_signing = false;
+    var awaiting_network_relaying = false;
+    var nim_payment_completed = false;
+    var current_blockchain_height = 0;
 
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
