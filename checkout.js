@@ -9,7 +9,6 @@ function fill_accounts_selector() {
 
     var customer_nim_address_field = document.getElementById('customer_nim_address');
     for (var i = 0; i < nimiq_gateway_accounts.length; i++) {
-        // FIXME: Prevent adding submitted address again (after failed validation)
         var opt = document.createElement('option');
         opt.textContent = nimiq_gateway_accounts[i].address;
         customer_nim_address_field.appendChild(opt);
