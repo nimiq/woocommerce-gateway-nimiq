@@ -202,10 +202,14 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function payment_fields() {
-			// $description = $this->get_description();
-			// if ( $description ) {
-			// 	echo wpautop( wptexturize( $description ) );
-			// }
+
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				$description = $this->get_description();
+				if ( $description ) {
+					echo wpautop( wptexturize( $description ) );
+				}
+				return;
+			}
 
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'keyguard-client.js');
@@ -268,6 +272,10 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function validate_fields() {
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				return true;
+			}
+
 			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
 			if ( ! $transaction_hash ) {
 				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
@@ -318,14 +326,24 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			// Mark as on-hold (we're awaiting the payment)
-			$order->update_status( 'on-hold', __( 'Awaiting Nimiq payment.', 'wc-gateway-nimiq' ) );
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				// Remove cart
+				WC()->cart->empty_cart();
+
+				$order->update_status( 'pending-payment', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
+
+				// Return payment-page redirect
+				return array(
+					'result' 	=> 'success',
+					'redirect'	=> $order->get_checkout_payment_url( $on_checkout = false )
+				);
+			}
+
+			// Mark as on-hold (we're awaiting transaction validation)
+			$order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
 
 			// Reduce stock levels
 			wc_reduce_stock_levels($order_id);
-
-			// Remove cart
-			WC()->cart->empty_cart();
 
 			// Return thankyou redirect
 			return array(
