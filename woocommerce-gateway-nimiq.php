@@ -375,7 +375,7 @@ function wc_nimiq_gateway_init() {
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
 				if( $this->get_option( 'nimiq_address' ) == "" ) {
-					echo "<div class=\"error\"><p>". sprintf( __( "You must fill in your store's Nimiq address to be able to take payments in NIM. <a href=\"%s\">Set your Nimiq address here.</a>" ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) ."</p></div>";
+					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
 		}
@@ -383,14 +383,17 @@ function wc_nimiq_gateway_init() {
 		public function do_bulk_validate_transactions( $ids ) {
 			// Get current blockchain height
 			$current_height = wp_remote_get( $this->api_domain . '/latest/1' );
-			if ( $current_height instanceof WP_Error ) {
-				echo "ERROR: ";
-				var_dump( $current_height );
+			if ( is_wp_error( $current_height ) ) {
+				add_action( 'admin_notices', function() {
+					echo '<div class="error notice">ERROR: ' . $current_height->errors[ 0 ] . '</div>';
+				} );
 				return;
 			}
 			$current_height = json_decode( $current_height[ 'body' ] );
 			if ( $current_height->error ) {
-				echo "ERROR: " . $current_height->error;
+				add_action( 'admin_notices', function() {
+					echo '<div class="error notice">ERROR: ' . $current_height->error . '</div>';
+				} );
 				return;
 			}
 			$current_height = $current_height[ 0 ]->height;
@@ -420,9 +423,10 @@ function wc_nimiq_gateway_init() {
 				$url = $this->api_domain . '/transaction/' . $transaction_hash;
 				// echo "API URL: " . $url . "\n";
 				$transaction = wp_remote_get( $url);
-				if ( $transaction instanceof WP_Error ) {
-					echo "ERROR: ";
-					var_dump( $transaction );
+				if ( is_wp_error( $transaction ) ) {
+					add_action( 'admin_notices', function() {
+						echo '<div class="error notice">ERROR: ' . $transaction->errors[ 0 ] . '</div>';
+					} );
 					continue;
 				}
 				$transaction = json_decode( $transaction[ 'body' ] );
@@ -447,7 +451,9 @@ function wc_nimiq_gateway_init() {
 
 					continue;
 				} elseif ( $transaction->error ) {
-					echo "ERROR: " . $transaction->error . "($url)\n";
+					add_action( 'admin_notices', function() {
+						echo '<div class="error notice">ERROR: ' . $transaction->error . " ($url)" . '</div>';
+					} );
 					continue;
 				}
 
