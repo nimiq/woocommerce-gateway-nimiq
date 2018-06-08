@@ -451,8 +451,13 @@ function wc_nimiq_gateway_init() {
 					}
 
 					continue;
-				} elseif ( $transaction->error ) {
+				}
+				elseif ( $transaction->error ) {
 					$errors[] = $transaction->error . " ($url)";
+					continue;
+				}
+				elseif ( empty( $transaction ) ) {
+					$errors[] = 'Could not retrieve transaction information ' . "($url)";
 					continue;
 				}
 
