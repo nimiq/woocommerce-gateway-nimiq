@@ -163,7 +163,7 @@ function fill_accounts_selector() {
     // });
 
     // Fetch block height now and every 30 minutes
-    var block_height_getter = function() {
+    var get_current_block_height = function() {
         var request = new XMLHttpRequest();
         request.open('GET', CONFIG.API_PATH + '/latest/1', true);
 
@@ -173,19 +173,20 @@ function fill_accounts_selector() {
                 var data = JSON.parse(this.response);
                 current_blockchain_height = data[0].height;
                 console.log("Got blockheight from nimiq.watch:", current_blockchain_height);
+
+                setTimeout(get_current_block_height, 30 * 60 * 1000); // Update again in 30 minutes
             } else {
                 // We reached our target server, but it returned an error
-                setTimeout(block_height_getter, 5 * 1000); // Retry in 5 seconds
+                setTimeout(get_current_block_height, 5 * 1000); // Retry in 5 seconds
             }
         };
         request.onerror = function() {
             // There was a connection error of some sort
-            setTimeout(block_height_getter, 5 * 1000); // Retry in 5 seconds
+            setTimeout(get_current_block_height, 5 * 1000); // Retry in 5 seconds
         };
         request.send();
     }
-    setInterval(block_height_getter, 30* 60 * 1000); // 30 minutes
-    block_height_getter();
+    get_current_block_height();
 
     // Await keyguard-client connection
     window.keyguard = await keyguardClient.create(
