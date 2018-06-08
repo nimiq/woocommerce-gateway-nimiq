@@ -38,6 +38,9 @@ function fill_accounts_selector() {
 
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
+
+        event.preventDefault();
+
         if (!nimiq_gateway_accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
 
         // Check if a sender NIM address is selected
@@ -62,9 +65,6 @@ function fill_accounts_selector() {
 
         // In parallel, initialize network iframe
         networkClient.launch();
-
-        // Return false to prevent form submission
-        return false;
     }
 
     var do_payment = async function(sender_address) {
