@@ -108,7 +108,6 @@ function wc_nimiq_gateway_init() {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
-			add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta_data' ) );
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
@@ -289,10 +288,20 @@ function wc_nimiq_gateway_init() {
 			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
 			if ( ! $transaction_hash ) {
 				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
+				return false;
 			}
-			elseif ( strlen( $transaction_hash) !== 64 ) {
+
+			if ( strlen( $transaction_hash) !== 64 ) {
 				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.' ), 'error' );
+				return false;
 			}
+
+			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+				$this->update_order_meta_data( $order_id );
+			}
+
+			return true;
 		}
 
 		public function update_order_meta_data( $order_id ) {
