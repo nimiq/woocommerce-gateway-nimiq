@@ -265,7 +265,14 @@ function wc_nimiq_gateway_init() {
 			</div>
 
 			<script>
-				var STORE_CART_TOTAL = <?php echo WC()->cart->get_total(false); ?>;
+				var ORDER_TOTAL = <?php
+					$total = 0;
+					if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+						$order = wc_get_order( wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) ) );
+						$total = $order->get_total();
+					}
+					echo $total;
+				?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
 			<?php
