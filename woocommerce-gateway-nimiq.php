@@ -272,8 +272,7 @@ function wc_nimiq_gateway_init() {
 			if ( ! $transaction_hash ) {
 				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
 			}
-
-			if ( strlen( $transaction_hash) !== 64 ) {
+			elseif ( strlen( $transaction_hash) !== 64 ) {
 				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.' ), 'error' );
 			}
 		}
