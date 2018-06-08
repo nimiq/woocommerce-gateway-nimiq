@@ -28,8 +28,8 @@ function fill_accounts_selector() {
 			// Show success message
 			document.getElementById('nim_payment_complete_block').classList.remove('hidden');
 		} else {
-			// Show account selector
-    		document.getElementById('nim_account_selector_block').classList.remove('hidden');
+        // Show account selector
+        document.getElementById('nim_account_selector_block').classList.remove('hidden');
 		}
 	});
 
@@ -39,7 +39,7 @@ function fill_accounts_selector() {
 (async function() {
     'use strict';
 
-    var checkout_place_order_hook = function() {
+    var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
         if (!accounts_loaded || awaiting_keyguard_signing || awaiting_network_relaying) return false;
         // TODO Disable submit button until ready
@@ -153,14 +153,15 @@ function fill_accounts_selector() {
     }
 
     // Add submit event listener to form, preventDefault()
-    var checkout_form = jQuery('form.checkout');
-    checkout_form.on( 'checkout_place_order_nimiq_gateway', checkout_place_order_hook );
 
     // Disable submit button until accounts are loaded
     // jQuery(document).on('update_checkout', function() {
     //     console.log("disabling");
     //     setTimeout(() => document.getElementById('place_order').disabled = true);
     // });
+
+    var checkout_form = jQuery('form#order_review');
+    checkout_form.on( 'submit', checkout_pay_order_hook );
 
     // Fetch block height now and every 30 minutes
     var get_current_block_height = function() {
