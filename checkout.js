@@ -9,6 +9,7 @@ function fill_accounts_selector() {
 
     var customer_nim_address_field = document.getElementById('customer_nim_address');
     for (var i = 0; i < nimiq_gateway_accounts.length; i++) {
+        // FIXME: Prevent adding submitted address again (after failed validation)
         var opt = document.createElement('option');
         opt.textContent = nimiq_gateway_accounts[i].address;
         customer_nim_address_field.appendChild(opt);
@@ -17,17 +18,7 @@ function fill_accounts_selector() {
 
     // Hide loading message
     document.getElementById('nim_account_loading_block').classList.add('hidden');
-
-	// Check if tx hash is already set at the end of the event loop, to give woocommerce time to re-fill the field
-	setTimeout(function() {
-		if (document.getElementById('transaction_hash').value !== '') {
-			// Show success message
-			document.getElementById('nim_payment_complete_block').classList.remove('hidden');
-		} else {
-        // Show account selector
         document.getElementById('nim_account_selector_block').classList.remove('hidden');
-		}
-	});
 
     nimiq_gateway_accounts_loaded = true;
     jQuery( 'button#place_order' ).attr("disabled", false);
