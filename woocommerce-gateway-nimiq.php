@@ -381,25 +381,28 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function do_bulk_validate_transactions( $ids ) {
+
+			$changed = 0;
+			$errors = array();
+
 			// Get current blockchain height
 			$current_height = wp_remote_get( $this->api_domain . '/latest/1' );
 			if ( is_wp_error( $current_height ) ) {
-				add_action( 'admin_notices', function() {
-					echo '<div class="error notice">ERROR: ' . $current_height->errors[ 0 ] . '</div>';
-				} );
-				return;
+				$errors[] = $current_height->errors[ 0 ];
+				return [ 'changed' => $changed, 'errors' => $errors ];
 			}
 			$current_height = json_decode( $current_height[ 'body' ] );
 			if ( $current_height->error ) {
-				add_action( 'admin_notices', function() {
-					echo '<div class="error notice">ERROR: ' . $current_height->error . '</div>';
-				} );
-				return;
+				$errors[] = $current_height->error;
+				return [ 'changed' => $changed, 'errors' => $errors ];
 			}
 			$current_height = $current_height[ 0 ]->height;
-			// echo "Current height: " . $current_height . "\n";
 
-			$changed = 0;
+			if ( empty( $current_height ) ) {
+				$errors[] = 'Could not get the current blockchain height from the API.';
+				return [ 'changed' => $changed, 'errors' => $errors ];
+			}
+			// echo "Current height: " . $current_height . "\n";
 
 			foreach ( $ids as $postID ) {
 				if ( !is_numeric( $postID ) ) {
@@ -424,9 +427,7 @@ function wc_nimiq_gateway_init() {
 				// echo "API URL: " . $url . "\n";
 				$transaction = wp_remote_get( $url);
 				if ( is_wp_error( $transaction ) ) {
-					add_action( 'admin_notices', function() {
-						echo '<div class="error notice">ERROR: ' . $transaction->errors[ 0 ] . '</div>';
-					} );
+					$errors[] = $transaction->errors[ 0 ];
 					continue;
 				}
 				$transaction = json_decode( $transaction[ 'body' ] );
@@ -451,9 +452,7 @@ function wc_nimiq_gateway_init() {
 
 					continue;
 				} elseif ( $transaction->error ) {
-					add_action( 'admin_notices', function() {
-						echo '<div class="error notice">ERROR: ' . $transaction->error . " ($url)" . '</div>';
-					} );
+					$errors[] = $transaction->error . " ($url)";
 					continue;
 				}
 
@@ -520,18 +519,7 @@ function wc_nimiq_gateway_init() {
 				$changed++;
 			} // end for loop
 
-			add_action( 'admin_notices', function() {
-				echo '<div class="updated notice">' . $changed . ' orders updated.</div>';
-			} );
-
-			$redirect_to = add_query_arg(
-				array(
-					'bulk_action' => 'validated_transactions',
-					'changed'     => $changed
-				),
-				wp_get_referer()
-			);
-			wp_redirect( esc_url_raw( $redirect_to ) );
+			return [ 'changed' => $changed, 'errors' => $errors ];
 		} // end do_bulk_validate_transactions()
 
 	} // end \WC_Gateway_Nimiq class
@@ -539,20 +527,60 @@ function wc_nimiq_gateway_init() {
 
 
 function register_bulk_actions( $actions ) {
-	$actions[ 'validate-transactions' ] = 'Validate Transactions';
+	$actions[ 'validate_transactions' ] = 'Validate Transactions';
 	return $actions;
 }
 add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 
 function do_bulk_validate_transactions( $redirect_to, $action, $ids ) {
 	// Make sure that the correct action is submitted
-	if ( $action !== 'validate-transactions' ) {
+	if ( $action !== 'validate_transactions' ) {
 		return;
 	}
 
 	$foo = new WC_Gateway_Nimiq();
-	$foo->do_bulk_validate_transactions( $ids );
+	$validation_results = $foo->do_bulk_validate_transactions( $ids );
+
+	$redirect_to = add_query_arg( 'bulk_action', 'validated_transactions', $redirect_to );
+	$redirect_to = add_query_arg( 'changed', $validation_results[ 'changed' ], $redirect_to );
+
+	if ( empty( $validation_results[ 'errors' ] ) ) {
+		$redirect_to = remove_query_arg( 'errors', $redirect_to );
+	}
+	else {
+		$redirect_to = add_query_arg( 'errors', implode( '|' , $validation_results[ 'errors' ] ), $redirect_to );
+	}
+
+	wp_redirect( esc_url_raw( $redirect_to ) );
 }
 add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
+
+function handle_bulk_admin_notices_after_redirect() {
+	global $pagenow, $post_type;
+
+	if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
+		return;
+	}
+
+	$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
+
+	if ( $bulk_action !== 'validated_transactions' ) {
+		return;
+	}
+
+	$changed = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
+
+	$errors = isset( $_REQUEST['errors'] ) ? explode( '|', wc_clean( $_REQUEST['errors'] ) ) : [];
+	$errors = array_filter( $errors );
+
+	if ( count( $errors ) > 0 ) {
+		foreach( $errors as $error ) {
+			echo '<div class="error notice"><p><strong>ERROR:</strong> ' . $error . '</p></div>';
+		}
+	}
+
+	echo '<div class="updated notice"><p>' . _n( $changed . ' order updated.', $changed . ' orders updated.', $changed, 'woocommerce' ) . '</p></div>';
+}
+add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
 
 include_once( plugin_dir_path( __FILE__ ) . 'nimiq_currency.php' );
