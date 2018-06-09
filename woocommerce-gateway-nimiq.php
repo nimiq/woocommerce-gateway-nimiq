@@ -215,11 +215,17 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'js/network-client.js');
 
 			$total = 0;
-			$order_id = 0;
+			$order_hash = '';
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
 				$total = $order->get_total();
+
+				$order_hash = $order->get_meta( 'order_hash' );
+				if ( empty( $order_hash ) ) {
+					$order_hash = $this->compute_order_hash( $order );
+					update_post_meta( $order_id, 'order_hash', $order_hash );
+				}
 			}
 
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
@@ -230,7 +236,7 @@ function wc_nimiq_gateway_init() {
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $total,
 				'TX_MESSAGE'    => $this->get_option( 'message' ),
-				'ORDER_ID'      => $order_id
+				'ORDER_HASH'    => strtoupper( $this->get_short_order_hash( $order_hash ) )
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
 
@@ -279,6 +285,31 @@ function wc_nimiq_gateway_init() {
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
 			<?php
+		}
+
+		protected function compute_order_hash( $order ) {
+			$order_data = $order->get_data();
+
+			$serialized_order_data = implode(',', [
+				$order->get_id(),
+				$order_data[ 'date_created' ]->getTimestamp(),
+				$order_data[ 'currency' ],
+				$order->get_total(),
+				$order_data['billing']['first_name'],
+				$order_data['billing']['last_name'],
+				$order_data['billing']['address_1'],
+				$order_data['billing']['city'],
+				$order_data['billing']['state'],
+				$order_data['billing']['postcode'],
+				$order_data['billing']['country'],
+				$order_data['billing']['email'],
+			]);
+
+			return sha1( $serialized_order_data );
+		}
+
+		protected function get_short_order_hash( $long_hash ) {
+			return substr( $long_hash, 0, 6 );
 		}
 
 		public function validate_fields() {

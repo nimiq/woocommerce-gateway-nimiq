@@ -162,16 +162,18 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$message = mb_convert_encoding( $extraData, 'UTF-8' );
 		// echo "Transaction message: " . $message . "\n";
 		preg_match_all( '/\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
-		$order_id = intval( end( $matches )[1] );
-		// echo "Transaction order ID: " . $order_id . "\n";
-		// echo "Order ID: " . $order->id . "\n";
-		if ( $order_id !== $order->id ) {
-			// echo "Transaction order ID and order ID are not equal\n";
-			$order->update_status( 'failed', 'Transaction order ID does not match.', true );
+		$tx_order_hash = intval( end( $matches )[1] );
+		// echo "Transaction order hash: " . $tx_order_hash . "\n";
+		$order_hash = $order->get_meta('order_hash');
+		$order_hash = strtoupper ( $gateway->get_short_order_hash( $order_hash ) );
+		// echo "Order hash: " . $order_hash . "\n";
+		if ( $tx_order_hash !== $order_hash ) {
+			// echo "Transaction order hash and order hash are not equal\n";
+			$order->update_status( 'failed', 'Transaction order hash does not match.', true );
 			$changed++;
 			continue;
 		}
-		// echo "OK Transaction order ID matches\n";
+		// echo "OK Transaction order hash matches\n";
 
 		// Mark as 'processing' if confirmed
 		// echo "Transaction height: " . $transaction->block_height . "\n";
