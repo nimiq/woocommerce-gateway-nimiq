@@ -27,7 +27,8 @@ function fill_accounts_selector() {
     'use strict';
 
     // Disable submit button until ready
-    jQuery( 'button#place_order' ).attr("disabled", "disabled");
+    jQuery( 'button#place_order' ).attr('disabled', 'disabled');
+	jQuery( 'input#terms' ).prop('checked', true);
 
     // Status variables
     var awaiting_keyguard_signing = false;
@@ -146,7 +147,7 @@ function fill_accounts_selector() {
     }
 
     // Add submit event listener to form, preventDefault()
-    var checkout_form = jQuery('form#order_review');
+    var checkout_form = jQuery( 'form#order_review' );
     checkout_form.on( 'submit', checkout_pay_order_hook );
 
     // Fetch block height now and every 30 minutes

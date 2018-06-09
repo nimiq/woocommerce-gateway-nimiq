@@ -254,7 +254,10 @@ function wc_nimiq_gateway_init() {
 				?>
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
 
-				<small>The store does not currently check if the selected account has enough balance. Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.</small>
+				<p class="form-row">
+					The store does not currently check if the selected account has enough balance.
+					Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.
+				</p>
 			</div>
 
 			<div id="nim_payment_complete_block" class="hidden">

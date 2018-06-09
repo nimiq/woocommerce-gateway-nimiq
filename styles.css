@@ -25,3 +25,7 @@ iframe[name="network"] {
 #nim_payment_complete_block small {
 	display: block;
 }
+
+body.woocommerce-order-pay .woocommerce-terms-and-conditions-wrapper {
+	display: none;
+}
