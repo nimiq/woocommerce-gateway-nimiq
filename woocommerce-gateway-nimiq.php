@@ -211,10 +211,10 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'keyguard-client.js');
-			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'network-client.js');
+			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'js/keyguard-client.js');
+			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'js/network-client.js');
 
-			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'checkout.js');
+			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
 				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
@@ -385,5 +385,5 @@ function wc_nimiq_gateway_init() {
 	} // end \WC_Gateway_Nimiq class
 }
 
-include_once( plugin_dir_path( __FILE__ ) . 'nimiq_currency.php' );
-include_once( plugin_dir_path( __FILE__ ) . 'bulk_actions.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
