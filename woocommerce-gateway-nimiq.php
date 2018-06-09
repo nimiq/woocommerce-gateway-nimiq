@@ -214,12 +214,12 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'js/keyguard-client.js');
 			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'js/network-client.js');
 
-			$total = 0;
+			$order_total = 0;
 			$order_hash = '';
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
-				$total = $order->get_total();
+				$order_total = $order->get_total();
 
 				$order_hash = $order->get_meta( 'order_hash' );
 				if ( empty( $order_hash ) ) {
@@ -234,7 +234,7 @@ function wc_nimiq_gateway_init() {
 				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
 				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
-				'ORDER_TOTAL'   => $total,
+				'ORDER_TOTAL'   => $order_total,
 				'TX_MESSAGE'    => $this->get_option( 'message' ),
 				'ORDER_HASH'    => strtoupper( $this->get_short_order_hash( $order_hash ) )
 			));
