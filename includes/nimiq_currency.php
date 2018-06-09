@@ -3,12 +3,13 @@
  * Nimiq currency and currency symbol
  */
 
+add_filter( 'woocommerce_currencies', 'add_nimiq_currency' );
+add_filter( 'woocommerce_currency_symbol', 'add_nimiq_currency_symbol', 10, 2 );
+
 function add_nimiq_currency( $currencies ) {
 	$currencies['NIM'] = __( 'Nimiq', 'woocommerce' );
 	return $currencies;
 }
-
-add_filter( 'woocommerce_currencies', 'add_nimiq_currency' );
 
 function add_nimiq_currency_symbol( $currency_symbol, $currency ) {
 	switch( $currency ) {
@@ -16,5 +17,3 @@ function add_nimiq_currency_symbol( $currency_symbol, $currency ) {
 	}
 	return $currency_symbol;
 }
-
-add_filter('woocommerce_currency_symbol', 'add_nimiq_currency_symbol', 10, 2);
