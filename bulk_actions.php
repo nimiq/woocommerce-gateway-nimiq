@@ -12,11 +12,14 @@
  * admin_notices code to detect that and generate the notices.
  */
 
+add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
+add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
+add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
+
 function register_bulk_actions( $actions ) {
 	$actions[ 'validate_transactions' ] = 'Validate Transactions';
 	return $actions;
 }
-add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 
 function do_bulk_validate_transactions( $redirect_to, $action, $ids ) {
 	// Make sure that the correct action is submitted
@@ -39,36 +42,6 @@ function do_bulk_validate_transactions( $redirect_to, $action, $ids ) {
 
 	wp_redirect( esc_url_raw( $redirect_to ) );
 }
-add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
-
-function handle_bulk_admin_notices_after_redirect() {
-	global $pagenow, $post_type;
-
-	if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
-		return;
-	}
-
-	$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
-
-	if ( $bulk_action !== 'validated_transactions' ) {
-		return;
-	}
-
-	$changed = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
-
-	$errors = isset( $_REQUEST['errors'] ) ? explode( '|', wc_clean( $_REQUEST['errors'] ) ) : [];
-	$errors = array_filter( $errors );
-
-	if ( count( $errors ) > 0 ) {
-		foreach( $errors as $error ) {
-			echo '<div class="error notice"><p><strong>ERROR:</strong> ' . $error . '</p></div>';
-		}
-	}
-
-	echo '<div class="updated notice"><p>' . _n( $changed . ' order updated.', $changed . ' orders updated.', $changed, 'woocommerce' ) . '</p></div>';
-}
-add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
-
 
 function _do_bulk_validate_transactions( $gateway, $ids ) {
 
@@ -216,3 +189,30 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 	return [ 'changed' => $changed, 'errors' => $errors ];
 } // end _do_bulk_validate_transactions()
+
+function handle_bulk_admin_notices_after_redirect() {
+	global $pagenow, $post_type;
+
+	if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
+		return;
+	}
+
+	$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
+
+	if ( $bulk_action !== 'validated_transactions' ) {
+		return;
+	}
+
+	$changed = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
+
+	$errors = isset( $_REQUEST['errors'] ) ? explode( '|', wc_clean( $_REQUEST['errors'] ) ) : [];
+	$errors = array_filter( $errors );
+
+	if ( count( $errors ) > 0 ) {
+		foreach( $errors as $error ) {
+			echo '<div class="error notice"><p><strong>ERROR:</strong> ' . $error . '</p></div>';
+		}
+	}
+
+	echo '<div class="updated notice"><p>' . _n( $changed . ' order updated.', $changed . ' orders updated.', $changed, 'woocommerce' ) . '</p></div>';
+}
