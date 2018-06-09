@@ -214,13 +214,23 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'js/keyguard-client.js');
 			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'js/network-client.js');
 
+			$total = 0;
+			$order_id = 0;
+			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+				$order = wc_get_order( $order_id );
+				$total = $order->get_total();
+			}
+
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
 				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
 				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
-				'TX_MESSAGE'    => $this->get_option( 'message' )
+				'ORDER_TOTAL'   => $total,
+				'TX_MESSAGE'    => $this->get_option( 'message' ),
+				'ORDER_ID'      => $order_id
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
 
@@ -266,17 +276,6 @@ function wc_nimiq_gateway_init() {
 			</div>
 
 			<script>
-				<?php
-					$total = 0;
-					$order_id = 0;
-					if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
-						$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
-						$order = wc_get_order( $order_id );
-						$total = $order->get_total();
-					}
-					echo "var ORDER_TOTAL = $total;";
-					echo "var ORDER_ID = $order_id;"; // TODO: Hash the ID
-				?>;
 				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
 			</script>
 			<?php

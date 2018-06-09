@@ -74,10 +74,10 @@ function fill_accounts_selector() {
         var transaction = {
             sender: sender_address,
             recipient: CONFIG.STORE_ADDRESS,
-            value: ORDER_TOTAL,
+            value: CONFIG.ORDER_TOTAL,
             fee: 0,
             validityStartHeight: current_blockchain_height,
-            extraData: CONFIG.TX_MESSAGE + ' [' + ORDER_ID + ']',
+            extraData: CONFIG.TX_MESSAGE + ' [' + CONFIG.ORDER_ID + ']',
             network: CONFIG.NETWORK
         };
 
