@@ -141,7 +141,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'nimiq_address' => array(
-					'title'       => __( 'Store NIM Address', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Shop NIM Address', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Your Nimiq address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
 					'default'     => '',
@@ -158,7 +158,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'fee' => array(
-					'title'       => __( 'Transaction Fee', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Transaction Fee per Byte', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Nimtoshis per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
 					'default'     => 0,
@@ -167,7 +167,7 @@ function wc_nimiq_gateway_init() {
 
 				// FIXME: Becomes unecessary when API can retrieve mempool transactions
 				'tx_wait_duration' => array(
-					'title'       => __( 'Mempool Wait', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'How many minutes to wait for a transaction to be mined, before marking the order as failed.', 'wc-gateway-nimiq' ),
 					'default'     => 15,
@@ -183,7 +183,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'title' => array(
-					'title'       => __( 'Payment Title', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Payment Method Title', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'This controls the title for the payment method the customer sees during checkout.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Pay with Nimiq', 'wc-gateway-nimiq' ),
@@ -191,7 +191,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'description' => array(
-					'title'       => __( 'Description', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Payment Method Description', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Pay for your order with NIM via the Nimiq Keyguard.', 'wc-gateway-nimiq' ),
@@ -199,7 +199,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'instructions' => array(
-					'title'       => __( 'Instructions', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Email Instructions', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
