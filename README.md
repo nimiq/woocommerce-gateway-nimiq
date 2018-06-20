@@ -38,6 +38,12 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
+= 2018.06.20 - version 1.7.0 =
+ * Replace order ID with abbreviated order hash in transaction message
+ * Prevent users from having to accept T&C on pay-order page again
+ * Fix display of muliple transaction validation errors in admin backend
+ * Internal file reorganization
+
 = 2018.06.08 - version 1.6.0 =
  * Handle Nimiq payment on separate page, after order has been placed
  * Add bulk transaction validation action on 'Orders' page
