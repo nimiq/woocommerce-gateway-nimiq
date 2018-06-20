@@ -37,7 +37,7 @@ function do_bulk_validate_transactions( $redirect_to, $action, $ids ) {
 		$redirect_to = remove_query_arg( 'errors', $redirect_to );
 	}
 	else {
-		$redirect_to = add_query_arg( 'errors', implode( '|' , $validation_results[ 'errors' ] ), $redirect_to );
+		$redirect_to = add_query_arg( 'errors', implode( '--' , $validation_results[ 'errors' ] ), $redirect_to );
 	}
 
 	wp_redirect( esc_url_raw( $redirect_to ) );
@@ -207,7 +207,7 @@ function handle_bulk_admin_notices_after_redirect() {
 
 	$changed = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 
-	$errors = isset( $_REQUEST['errors'] ) ? explode( '|', wc_clean( $_REQUEST['errors'] ) ) : [];
+	$errors = isset( $_REQUEST['errors'] ) ? explode( '--', wc_clean( $_REQUEST['errors'] ) ) : [];
 	$errors = array_filter( $errors );
 
 	if ( count( $errors ) > 0 ) {
