@@ -157,6 +157,14 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'fee' => array(
+					'title'       => __( 'Transaction Fee', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Nimtoshis per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
+					'default'     => 0,
+					'desc_tip'    => true,
+				),
+
 				// FIXME: Becomes unecessary when API can retrieve mempool transactions
 				'tx_wait_duration' => array(
 					'title'       => __( 'Mempool Wait', 'wc-gateway-nimiq' ),
@@ -228,6 +236,9 @@ function wc_nimiq_gateway_init() {
 				}
 			}
 
+			$tx_message = ( !empty( $this->get_option( 'message' ) ) ? $this->get_option( 'message' ) . ' ' : '' )
+				. '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
+
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
@@ -235,8 +246,8 @@ function wc_nimiq_gateway_init() {
 				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $order_total,
-				'TX_MESSAGE'    => $this->get_option( 'message' ),
-				'ORDER_HASH'    => strtoupper( $this->get_short_order_hash( $order_hash ) )
+				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_MESSAGE'    => $tx_message
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
 

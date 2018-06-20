@@ -156,7 +156,6 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 		// echo "OK Transaction value matches\n";
 
-		// TODO Validate transaction extra data (Order ID)
 		// echo "Transaction data: " . $transaction->data . "\n";
 		$extraData = base64_decode( $transaction->data);
 		$message = mb_convert_encoding( $extraData, 'UTF-8' );

@@ -75,9 +75,9 @@ function fill_accounts_selector() {
             sender: sender_address,
             recipient: CONFIG.STORE_ADDRESS,
             value: CONFIG.ORDER_TOTAL,
-            fee: 0,
+            fee: CONFIG.TX_FEE,
             validityStartHeight: current_blockchain_height,
-            extraData: CONFIG.TX_MESSAGE + ' (' + CONFIG.ORDER_HASH + ')',
+            extraData: CONFIG.TX_MESSAGE,
             network: CONFIG.NETWORK
         };
 
