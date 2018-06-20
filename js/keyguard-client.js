@@ -303,56 +303,6 @@ class BasePolicy {
     }
 }
 
-const KeyType =  {
-    HIGH: 'high',
-    LOW: 'low'
-};
-
-class WalletPolicy extends BasePolicy {
-    constructor(limit) {
-        super('wallet');
-        this.limit = limit;
-    }
-
-    equals(otherPolicy) {
-        return super.equals(otherPolicy) && this.limit === otherPolicy.limit;
-    }
-
-    allows(method, args, state) {
-        switch (method) {
-            case 'triggerImport':
-            case 'persist':
-            case 'list':
-            case 'createWallet':
-                return true;
-            case 'sign':
-                const { accountNumber, recipient, value, fee } = args;
-                const key = state.keys.get(accountNumber);
-                if (key && key.type === KeyType.LOW) return true;
-                return false;
-            default:
-                throw new Error(`Unhandled method: ${method}`);
-        }
-    }
-
-    needsUi(method, args, state) {
-        switch (method) {
-            case 'triggerImport':
-            case 'persist':
-            case 'list':
-            case 'createVolatile':
-                return false;
-            case 'sign':
-            case 'createWallet':
-                return false;
-            default:
-                throw new Error(`Unhandled method: ${method}`);
-        }
-    }
-}
-
-// todo update
-
 class MinerPolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
@@ -377,6 +327,8 @@ class MinerPolicy extends BasePolicy {
         }
     }
 }
+
+// import KeyType from '../keys/key-type.js';
 
 class SafePolicy extends BasePolicy {
     allows(method, args, state) {
@@ -432,6 +384,36 @@ class SafePolicy extends BasePolicy {
     }
 }
 
+class PromoPolicy extends BasePolicy {
+    allows(method, args, state) {
+        switch (method) {
+            case 'importFromFile':
+            case 'importFromWords':
+            case 'list':
+            case 'createWallet':
+            case 'signSafe':
+            case 'signWallet':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    needsUi(method, args, state) {
+        switch (method) {
+            case 'createWallet':
+            case 'importFromFile':
+            case 'importFromWords':
+            case 'signSafe':
+            case 'signWallet':
+                return true;
+            case 'list':
+            default:
+                return false;
+        }
+    }
+}
+
 class ShopPolicy extends BasePolicy {
     allows(method, args, state) {
         switch (method) {
@@ -457,7 +439,7 @@ class ShopPolicy extends BasePolicy {
     }
 }
 
-// import GiveawayPolicy from './giveaway-policy.js';
+// import WalletPolicy from './wallet-policy.js';
 class Policy {
 
     static parse(serialized) {
@@ -474,7 +456,7 @@ class Policy {
 }
 
 Policy.predefined = {};
-for (const policy of [WalletPolicy, SafePolicy, MinerPolicy, /*GiveawayPolicy,*/ ShopPolicy]) {
+for (const policy of [/*WalletPolicy, */SafePolicy, MinerPolicy, PromoPolicy, ShopPolicy]) {
     Policy.predefined[policy.name] = policy;
 }
 
@@ -651,7 +633,7 @@ class KeyguardClient {
 
 		const promise = new Promise(resolve => self.addEventListener('message', readyListener(resolve)));
 
-		$iframe.src = this._keyguardSrc + '/iframe.html';
+		$iframe.src = this._keyguardSrc + 'iframe.html';
 		$iframe.name = 'keyguard';
 		document.body.appendChild($iframe);
 		return promise;

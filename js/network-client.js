@@ -405,16 +405,17 @@ class Config {
             if (Config.offlinePackaged) path = '/' + subdomain;
             else {
                 switch (subdomain) {
-                    case 'keyguard': path = '/libraries/keyguard'; break;
-                    case 'network': path = '/libraries/network'; break;
-                    case 'safe': path = '/apps/safe'; break;
-                    // case 'giveaway': path = '/apps/giveaway'; break;
-                    case 'shop': path = '/'; break;
+                    case 'keyguard': path = '/libraries/keyguard/'; break;
+                    case 'network': path = '/libraries/network/'; break;
+                    case 'safe': path = '/apps/safe/'; break;
+                    case 'promo': path = '/apps/promo/'; break;
                 }
+
                 if (location.pathname.includes('/dist')) {
-                    path += `/deployment-${subdomain}/dist`;
-                } else if (subdomain !== 'shop') {
-                    path += '/src';
+                    path += `deployment-${subdomain}/dist/`;
+                }
+                else if (['keyguard', 'network', 'safe'].includes(subdomain)) {
+                    path += 'src/';
                 }
             }
         }
@@ -423,7 +424,7 @@ class Config {
 
         const origin = ipMode ? location.hostname : `${subdomain}localhost`;
 
-        return `${location.protocol}//${origin}${location.port ? `:${location.port}` : ''}${path}`;
+        return `${location.protocol}//${origin}${location.port ? `:${location.port}` : ''}${path || (withPath && '/') || ''}`;
     }
 }
 

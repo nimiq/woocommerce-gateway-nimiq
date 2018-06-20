@@ -242,7 +242,7 @@ function wc_nimiq_gateway_init() {
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
-				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com' : 'https://keyguard.nimiq-testnet.com',
+				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com/' : 'https://keyguard.nimiq-testnet.com/',
 				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $order_total,
