@@ -246,7 +246,7 @@ function wc_nimiq_gateway_init() {
 				'API_PATH'      => $this->api_domain,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $order_total,
-				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ) / 1e5,
 				'TX_MESSAGE'    => $tx_message
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
