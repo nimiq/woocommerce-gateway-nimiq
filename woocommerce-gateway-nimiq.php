@@ -319,7 +319,7 @@ function wc_nimiq_gateway_init() {
 			return sha1( $serialized_order_data );
 		}
 
-		protected function get_short_order_hash( $long_hash ) {
+		public function get_short_order_hash( $long_hash ) {
 			return substr( $long_hash, 0, 6 );
 		}
 
