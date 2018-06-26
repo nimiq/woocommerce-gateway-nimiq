@@ -164,7 +164,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$tx_order_hash = end( $matches )[1];
 		// echo "Transaction order hash: " . $tx_order_hash . "\n";
 		$order_hash = $order->get_meta('order_hash');
-		$order_hash = strtoupper ( $gateway->get_short_order_hash( $order_hash ) );
+		$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
 		// echo "Order hash: " . $order_hash . "\n";
 		if ( $tx_order_hash !== $order_hash ) {
 			// echo "Transaction order hash and order hash are not equal\n";
