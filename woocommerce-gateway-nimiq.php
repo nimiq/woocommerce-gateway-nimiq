@@ -261,7 +261,7 @@ function wc_nimiq_gateway_init() {
 
             <div id="nim_no_account_block" class="hidden">
 				<p class="form-row">
-                    It seems that you don't have a Nimiq Account on this device. If you possess an account created on another device, please import it in <a href='https://safe.nimiq.com' target='_blank'>Nimiq Safe</a> and reload this page afterwards.
+                    It seems that you don't have a Nimiq Account on this device. If you have an account created on another device, please import it in <a href='https://safe.nimiq.com' target='_blank'>Nimiq Safe</a> and reload this page afterwards.
 				</p>
 			</div>
 
