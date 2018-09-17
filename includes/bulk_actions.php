@@ -109,7 +109,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
 				// echo "Tx not found => order failed\n";
-				$order->update_status( 'failed', 'Transaction not found within wait duration.', true );
+				fail_order( $order, 'Transaction not found within wait duration.', true );
 				$changed++;
 			}
 
@@ -130,7 +130,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// echo "Order sender:       " . $order->get_meta('customer_nim_address') . "\n";
 		if ( $transaction->sender_address !== $order->get_meta('customer_nim_address') ) {
 			// echo "Transaction sender not equal order customer NIM address\n";
-			$order->update_status( 'failed', 'Transaction sender does not match.', true );
+			fail_order( $order, 'Transaction sender does not match.', true );
 			$changed++;
 			continue;
 		}
@@ -140,7 +140,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// echo "Store address:         " . $gateway->get_option( 'nimiq_address' ) . "\n";
 		if ( $transaction->receiver_address !== $gateway->get_option( 'nimiq_address' ) ) {
 			// echo "Transaction recipient not equal store NIM address\n";
-			$order->update_status( 'failed', 'Transaction recipient does not match.', true );
+			fail_order( $order, 'Transaction recipient does not match.', true );
 			$changed++;
 			continue;
 		}
@@ -150,7 +150,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// echo "Order value:       " . intval( $order->get_data()[ 'total' ] * 1e5 ) . "\n";
 		if ( $transaction->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
 			// echo "Transaction value and order value are not equal\n";
-			$order->update_status( 'failed', 'Transaction value does not match.', true );
+			fail_order( $order, 'Transaction value does not match.', true );
 			$changed++;
 			continue;
 		}
@@ -168,7 +168,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// echo "Order hash: " . $order_hash . "\n";
 		if ( $tx_order_hash !== $order_hash ) {
 			// echo "Transaction order hash and order hash are not equal\n";
-			$order->update_status( 'failed', 'Transaction order hash does not match.', true );
+			fail_order( $order, 'Transaction order hash does not match.', true );
 			$changed++;
 			continue;
 		}
@@ -190,6 +190,27 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 	return [ 'changed' => $changed, 'errors' => $errors ];
 } // end _do_bulk_validate_transactions()
+
+function fail_order($order, $reason, $is_manual_change) {
+	$order->update_status( 'failed', $reason, $is_manual_change );
+
+	// Restock inventory
+	$line_items = $order->get_items();
+	foreach ( $line_items as $item_id => $item ) {
+		$product = $item->get_product();
+		if ( $product && $product->managing_stock() ) {
+			$old_stock = $product->get_stock_quantity();
+			$new_stock = wc_update_product_stock( $product, $item['qty'], 'increase' );
+			$order->add_order_note( sprintf(
+				__( '%1$s (%2$s) stock increased from %3$s to %4$s.', 'woocommerce' ),
+				$product->get_name(),
+				$product->get_sku(),
+				$old_stock,
+				$new_stock
+			) );
+		}
+	}
+} // end fail_order()
 
 function handle_bulk_admin_notices_after_redirect() {
 	global $pagenow, $post_type;
