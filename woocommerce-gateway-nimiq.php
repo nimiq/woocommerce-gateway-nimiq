@@ -5,7 +5,7 @@
  * Description: Pay with Nimiq via the Nimiq Keyguard
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
- * Version: 1.8.1
+ * Version: 1.8.2
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  *
@@ -257,6 +257,12 @@ function wc_nimiq_gateway_init() {
 				Loading your accounts, please wait...
 
 				<noscript><br><br><strong>Javascript is required to pay with NIM. Please activate Javascript to continue.</strong></noscript>
+			</div>
+
+            <div id="nim_no_account_block" class="hidden">
+				<p class="form-row">
+                    It seems that you don't have a Nimiq Account on this device. If you possess an account created on another device, please import it in <a href='https://safe.nimiq.com' target='_blank'>Nimiq Safe</a> and reload this page afterwards.
+				</p>
 			</div>
 
 			<div id="nim_account_selector_block" class="hidden">
