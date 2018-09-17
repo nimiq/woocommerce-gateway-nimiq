@@ -13,10 +13,19 @@ function fill_accounts_selector() {
         opt.textContent = nimiq_gateway_accounts[i].address;
         customer_nim_address_field.appendChild(opt);
     }
-    if (nimiq_gateway_accounts.length === 1) customer_nim_address_field.removeChild(customer_nim_address_field.getElementsByTagName('option')[0]);
 
     // Hide loading message
     document.getElementById('nim_account_loading_block').classList.add('hidden');
+
+    if (nimiq_gateway_accounts.length === 0) {
+        document.getElementById('nim_no_account_block').classList.remove('hidden');
+        return;
+    }
+
+    if (nimiq_gateway_accounts.length === 1) {
+        customer_nim_address_field.removeChild(customer_nim_address_field.getElementsByTagName('option')[0]);
+    }
+
     document.getElementById('nim_account_selector_block').classList.remove('hidden');
 
     nimiq_gateway_accounts_loaded = true;
@@ -96,6 +105,8 @@ function fill_accounts_selector() {
         } catch (e) {
             console.error(e);
             awaiting_keyguard_signing = false;
+            // Reenable checkout button
+            document.querySelector('button#place_order').removeAttribute('disabled');
             return;
         }
 
