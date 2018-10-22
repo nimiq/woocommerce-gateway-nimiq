@@ -38,6 +38,9 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
+= 2018.10.22 - version 1.9.1 =
+ * Update Nimiq logo
+
 = 2018.09.17 - version 1.9 =
  * Restock inventory when an order fails during bulk transaction-validation
 
