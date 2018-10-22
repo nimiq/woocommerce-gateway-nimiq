@@ -5,7 +5,7 @@
  * Description: Pay with Nimiq via the Nimiq Keyguard
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
- * Version: 1.9
+ * Version: 1.9.1
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  *
@@ -88,7 +88,13 @@ function wc_nimiq_gateway_init() {
 		public function __construct() {
 
 			$this->id                 = 'nimiq_gateway';
-			$this->icon               = "data:image/svg+xml,<svg width='499' height='440' xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'><path d='M389.33 20.73C382.65 9.28 366.48 0 353.24 0h-208c-13.26 0-29.4 9.28-36.09 20.73L5.33 198.87c-6.68 11.45-6.68 30.02 0 41.47l103.82 178.14c6.68 11.45 22.85 20.74 36.09 20.74h208c13.26 0 29.4-9.28 36.09-20.74l103.82-178.14c6.68-11.45 6.68-30.01 0-41.47L389.33 20.73zM272.6 347.45v41.1h-38.74v-39.53c-23.53-2.82-51.45-13.02-70.28-30.12l25.57-39.06c20.4 15.06 37.96 22.9 57.1 22.9 22.43 0 32.31-9.1 32.31-27.29 0-40.63-105.4-39.84-105.4-111.06 0-38.74 23.2-65.57 60.7-73.1V50.51h38.74v40c25.57 3.6 43.92 16.16 59.45 32.47l-29.49 33.26c-14.43-13.02-26.66-19.77-43.45-19.77-19.13 0-29.49 7.53-29.49 25.26 0 37.49 105.41 34.35 105.41 109.96-.15 37.8-21.33 67.13-62.43 75.76z' fill='%23FFC107' fill-rule='evenodd'/></svg>";
+			/**
+			 * Data URLs need to be escaped like this:
+			 * - all double quotes (") need to be single quotes (')
+			 * - :// needs to be %3A%2F%2F
+			 * - all slashes (/) need to be %2F
+			 */
+			$this->icon               = "data:image/svg+xml,<svg xmlns:svg='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' height='72' width='72' version='1.1' viewBox='0 0 72 72'><defs><radialGradient gradientTransform='matrix(0.99996243,0,0,1,0.00384744,3.9999988)' gradientUnits='userSpaceOnUse' r='72.019997' cy='63.169998' cx='54.169998' id='radial-gradient'><stop id='stop4' stop-color='%23ec991c' offset='0' /><stop id='stop6' stop-color='%23e9b213' offset='1' /></radialGradient></defs><path fill='url(%23radial-gradient)' stroke-width='0.99998122' d='M 71.201173,32.999999 56.201736,6.9999988 a 5.9997746,6 0 0 0 -5.199804,-3 H 21.003059 a 5.9997746,6 0 0 0 -5.189805,3 L 0.80381738,32.999999 a 5.9997746,6 0 0 0 0,6 l 14.99943662,26 a 5.9997746,6 0 0 0 5.199805,3 h 29.998873 a 5.9997746,6 0 0 0 5.189805,-3 l 14.999436,-26 a 5.9997746,6 0 0 0 0.01,-6 z' /></svg>";
 			$this->has_fields         = true;
 			$this->method_title       = __( 'Nimiq', 'wc-gateway-nimiq' );
 			$this->method_description = __( 'Allows Nimiq payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
