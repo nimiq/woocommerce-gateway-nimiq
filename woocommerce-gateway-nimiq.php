@@ -245,6 +245,8 @@ function wc_nimiq_gateway_init() {
 			$tx_message = ( !empty( $this->get_option( 'message' ) ) ? $this->get_option( 'message' ) . ' ' : '' )
 				. '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
 
+			$tx_message_bytes = unpack('C*', $tx_message);
+
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
@@ -253,7 +255,7 @@ function wc_nimiq_gateway_init() {
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $order_total,
 				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ) / 1e5,
-				'TX_MESSAGE'    => $tx_message
+				'TX_MESSAGE'    => '[' . implode(',', $tx_message_bytes) . ']',
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
 

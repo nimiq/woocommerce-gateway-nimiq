@@ -86,7 +86,7 @@ function fill_accounts_selector() {
             value: CONFIG.ORDER_TOTAL,
             fee: CONFIG.TX_FEE,
             validityStartHeight: current_blockchain_height,
-            extraData: CONFIG.TX_MESSAGE,
+            extraData: new Uint8Array(JSON.parse(CONFIG.TX_MESSAGE)),
             network: CONFIG.NETWORK
         };
 
