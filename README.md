@@ -38,6 +38,10 @@ Please do! This is meant to be a simple starter Nimiq gateway, and can be modifi
 
 == Changelog ==
 
+= 2018.11.15 - version 1.10.0 =
+ * Add tracking details, such as carrier and tracking number, to "completed" emails
+   (This should be moved to a separate plugin in the future, as this plugin should only be for the payment gateway.)
+
 = 2018.11.14 - version 1.9.2 =
  * Fix tx message not being displayed correctly in the Keyguard
 
