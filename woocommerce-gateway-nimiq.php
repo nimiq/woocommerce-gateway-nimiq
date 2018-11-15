@@ -385,9 +385,31 @@ function wc_nimiq_gateway_init() {
 		 * @param bool $plain_text
 		 */
 		public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
-
-			if ( $this->instructions && ! $sent_to_admin && $this->id === $order->get_payment_method() && $order->has_status( 'on-hold' ) ) {
+			if ( $this->instructions && ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'on-hold' ) ) {
 				echo wpautop( wptexturize( $this->instructions ) ) . PHP_EOL;
+			}
+
+			if ( ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'completed' ) ) {
+				$carrier = $order->get_meta( 'carrier' );
+				$tracking_number = $order->get_meta( 'tracking_number' );
+				$tracking_url = '';
+
+				if ( $carrier === 'DHL' ) {
+					$tracking_url = 'https://nolp.dhl.de/nextt-online-public/en/search?piececode=' . $tracking_number;
+				}
+
+				if ( $carrier === 'Deutsche Post' ) {
+					$tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB';
+				}
+
+				if ( $carrier && $tracking_number ) {
+					echo '<p>Your order is being shipped with <strong>' . $carrier . '</strong> and your tracking number is:</p>' . PHP_EOL .
+						 '<p><strong>' . $tracking_number . '</strong></p>' . PHP_EOL;
+
+					if ( $tracking_url ) {
+						echo '<p><a href="' . $tracking_url . '">Track your package here.</p>' . PHP_EOL;
+					}
+				}
 			}
 		}
 
