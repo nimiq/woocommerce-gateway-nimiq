@@ -1,23 +1,23 @@
 <?php
 /**
- * Plugin Name: WooCommerce Nimiq Gateway
+ * Plugin Name: WooCommerce Nimiq Gateway (next)
  * Plugin URI:
- * Description: Pay with Nimiq via the Nimiq Keyguard
+ * Description: Pay with your Nimiq wallet directly in the browser
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
  * Version: 1.10.0
- * Text Domain: wc-gateway-nimiq
+ * Text Domain: wc-gateway-nimiq-next
  * Domain Path: /i18n/languages/
  *
- * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, Nimiq Network Ltd.
+ * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, 2018 Nimiq Network Ltd.
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
- * @package   WC-Gateway-Nimiq
+ * @package   WC-Gateway-Nimiq-Next
  * @author    Nimiq
  * @category  Admin
- * @copyright Copyright (c) 2015-2016, SkyVerge, Inc. and WooCommerce, Nimiq Network Ltd.
+ * @copyright Copyright (c) 2015-2016, SkyVerge, Inc. and WooCommerce, 2018 Nimiq Network Ltd.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  * This Nimiq gateway forks the WooCommerce core "Cheque" payment gateway to create another payment method.
@@ -108,8 +108,6 @@ function wc_nimiq_gateway_init() {
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions' );
 
-			$this->api_domain   = $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
-
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -142,7 +140,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					'options'     => array( 'test' => 'test', 'main' => 'main' ),
+					'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
 					'desc_tip'    => true,
 				),
 
@@ -166,7 +164,7 @@ function wc_nimiq_gateway_init() {
 				'fee' => array(
 					'title'       => __( 'Transaction Fee per Byte', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Nimtoshis per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Luna per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
 					'default'     => 0,
 					'desc_tip'    => true,
 				),
@@ -192,7 +190,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Payment Method Title', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'This controls the title for the payment method the customer sees during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay with Nimiq', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay with Nimiq (next)', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -200,7 +198,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Payment Method Description', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay for your order with NIM via the Nimiq Keyguard.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay for your order with your Nimiq wallet directly in the browser.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -225,8 +223,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'js/keyguard-client.js');
-			wp_enqueue_script('NetworkClient',  plugin_dir_url( __FILE__ ) . 'js/network-client.js');
+			wp_enqueue_script('AccountsClient', plugin_dir_url( __FILE__ ) . 'js/AccountsClient.standalone.umd.js');
 
 			$order_total = 0;
 			$order_hash = '';
@@ -249,66 +246,30 @@ function wc_nimiq_gateway_init() {
 
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
-				'NETWORK'       => $this->get_option( 'network' ),
-				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com/' : 'https://keyguard.nimiq-testnet.com/',
-				'API_PATH'      => $this->api_domain,
-				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
-				'ORDER_TOTAL'   => $order_total,
-				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ) / 1e5,
-				'TX_MESSAGE'    => '[' . implode(',', $tx_message_bytes) . ']',
+				// 'NETWORK'        => $this->get_option( 'network' ) === 'main' ? 42 : 1,
+				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
+				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
+				'ORDER_TOTAL'    => floatval($order_total) * 1e5,
+				'TX_FEE'         => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_MESSAGE'     => '[' . implode(',', $tx_message_bytes) . ']',
 			));
-			wp_enqueue_script('NimiqCheckout', null, ['KeyguardClient']);
+			wp_enqueue_script('NimiqCheckout', null, ['AccountsClient']);
 
 			?>
 
-			<div id="nim_account_loading_block">
-				Loading your accounts, please wait...
+			<div id="nim_account_selector_block">
+				<noscript><strong>Javascript is required to pay with Nimiq. Please activate Javascript to continue.</strong></noscript>
 
-				<noscript><br><br><strong>Javascript is required to pay with NIM. Please activate Javascript to continue.</strong></noscript>
-			</div>
-
-            <div id="nim_no_account_block" class="hidden">
-				<p class="form-row">
-                    It seems that you don't have a Nimiq Account on this device. If you have an account created on another device, please import it in <a href='https://safe.nimiq.com' target='_blank'>Nimiq Safe</a> and reload this page afterwards.
-				</p>
-			</div>
-
-			<div id="nim_account_selector_block" class="hidden">
-				<?php
-
-					$select_options = array( '' => 'Please select' );
-					if ( sanitize_text_field( $_POST['customer_nim_address'] ) ) {
-						$select_options[] = sanitize_text_field( $_POST['customer_nim_address'] );
-					}
-
-					woocommerce_form_field(
-						'customer_nim_address',
-						array(
-							'type'          => 'select', // text, textarea, select, radio, checkbox, password, about custom validation a little later
-							'required'      => true, // actually this parameter just adds "*" to the field
-							'id'            => 'customer_nim_address',
-							'class'         => array(), // array only, read more about classes and styling in the previous step
-							'label'         => 'Please select the account you want to pay with:',
-							'options'       => $select_options,
-						), sanitize_text_field( $_POST['customer_nim_address'] )
-					);
-				?>
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
+				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
 
-				<p class="form-row">
-					The store does not currently check if the selected account has enough balance.
-					Please make sure that your selected account has enough balance, otherwise the order cannot be fulfilled.
-				</p>
+				<p class="form-row">Please click the big button below to pay with Nimiq.</p>
 			</div>
 
 			<div id="nim_payment_complete_block" class="hidden">
 				<i class="fas fa-check-circle" style="color: seagreen;"></i>
 				Payment complete
 			</div>
-
-			<script>
-				if (typeof fill_accounts_selector !== 'undefined' ) fill_accounts_selector();
-			</script>
 			<?php
 		}
 
