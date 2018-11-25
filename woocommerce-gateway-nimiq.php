@@ -5,7 +5,7 @@
  * Description: Pay with your Nimiq wallet directly in the browser
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
- * Version: 1.10.0
+ * Version: 2.0.0
  * Text Domain: wc-gateway-nimiq-next
  * Domain Path: /i18n/languages/
  *

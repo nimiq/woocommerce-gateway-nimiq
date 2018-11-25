@@ -6,7 +6,7 @@
  - Tested up to: 4.3
  - Requires WooCommerce at least: 3.0
  - Tested WooCommerce up to: 3.4
- - Stable Tag: 1.9.2
+ - Stable Tag: 2.0.0
  - License: GPLv3
  - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,6 +37,9 @@ The text domain is `wc-gateway-nimiq`.
 Please do! This is meant to be a simple starter Nimiq gateway, and can be modified easily.
 
 == Changelog ==
+
+= 2018.11.25 - version 2.0.0 =
+- Use new Nimiq Accounts checkout experience
 
 = 2018.11.15 - version 1.10.0 =
  * Add tracking details, such as carrier and tracking number, to "completed" emails
