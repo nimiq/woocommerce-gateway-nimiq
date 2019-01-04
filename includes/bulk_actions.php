@@ -160,7 +160,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$extraData = base64_decode( $transaction->data);
 		$message = mb_convert_encoding( $extraData, 'UTF-8' );
 		// echo "Transaction message: " . $message . "\n";
-		preg_match_all( '/\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
+		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
 		$tx_order_hash = end( $matches )[1];
 		// echo "Transaction order hash: " . $tx_order_hash . "\n";
 		$order_hash = $order->get_meta('order_hash');
