@@ -88,7 +88,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Retrieve tx data from API
 		$url = $gateway->api_domain . '/transaction/' . $transaction_hash;
 		// echo "API URL: " . $url . "\n";
-		$transaction = wp_remote_get( $url);
+		$transaction = wp_remote_get( $url );
 		if ( is_wp_error( $transaction ) ) {
 			$errors[] = $transaction->errors[ 0 ];
 			continue;
@@ -157,7 +157,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// echo "OK Transaction value matches\n";
 
 		// echo "Transaction data: " . $transaction->data . "\n";
-		$extraData = base64_decode( $transaction->data);
+		$extraData = base64_decode( $transaction->data );
 		$message = mb_convert_encoding( $extraData, 'UTF-8' );
 		// echo "Transaction message: " . $message . "\n";
 		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
