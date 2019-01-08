@@ -64,20 +64,14 @@ function wc_nimiq_gateway_plugin_links( $links ) {
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'wc_nimiq_gateway_plugin_links' );
 
 
-/**
- * Nimiq Payment Gateway
- *
- * Provides a Nimiq Payment Gateway.
- * We load it later to ensure WC is loaded first since we're extending it.
- *
- * @class 		WC_Gateway_Nimiq
- * @extends		WC_Payment_Gateway
- * @version		2.0.0
- * @package		WooCommerce/Classes/Payment
- * @author 		Nimiq
- */
+// We load the plugin later to ensure WC is loaded first since we're extending it.
 add_action( 'plugins_loaded', 'wc_nimiq_gateway_init', 11 );
 
+/**
+ * Initializes plugin
+ *
+ * @since 1.0.0
+ */
 function wc_nimiq_gateway_init() {
 
 	class WC_Gateway_Nimiq extends WC_Payment_Gateway {
