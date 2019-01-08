@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: WooCommerce Nimiq Gateway (next)
+ * Plugin Name: WooCommerce Nimiq Gateway
  * Plugin URI:
- * Description: Pay with your Nimiq wallet directly in the browser
+ * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
  * Author URI: http://www.nimiq.com/
  * Version: 2.0.0
- * Text Domain: wc-gateway-nimiq-next
+ * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  *
  * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, 2018 Nimiq Network Ltd.
@@ -14,10 +14,10 @@
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
- * @package   WC-Gateway-Nimiq-Next
+ * @package   WC-Gateway-Nimiq
  * @author    Nimiq
  * @category  Admin
- * @copyright Copyright (c) 2015-2016, SkyVerge, Inc. and WooCommerce, 2018 Nimiq Network Ltd.
+ * @copyright Copyright (c) 2015-2016, SkyVerge, Inc. and WooCommerce, 2018-2019, Nimiq Network Ltd.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  * This Nimiq gateway forks the WooCommerce core "Cheque" payment gateway to create another payment method.
@@ -67,12 +67,12 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'wc_nimiq_gate
 /**
  * Nimiq Payment Gateway
  *
- * Provides a Nimiq Payment Gateway; mainly for testing purposes.
+ * Provides a Nimiq Payment Gateway.
  * We load it later to ensure WC is loaded first since we're extending it.
  *
  * @class 		WC_Gateway_Nimiq
  * @extends		WC_Payment_Gateway
- * @version		1.0.0
+ * @version		2.0.0
  * @package		WooCommerce/Classes/Payment
  * @author 		Nimiq
  */
@@ -90,9 +90,10 @@ function wc_nimiq_gateway_init() {
 			$this->id                 = 'nimiq_gateway';
 			/**
 			 * Data URLs need to be escaped like this:
-			 * - all double quotes (") need to be single quotes (')
-			 * - :// needs to be %3A%2F%2F
-			 * - all slashes (/) need to be %2F
+			 * - all # must be %23
+			 * - all double quotes (") must be single quotes (')
+			 * - :// must be %3A%2F%2F
+			 * - all slashes (/) must be %2F
 			 */
 			$this->icon               = "data:image/svg+xml,<svg xmlns:svg='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' height='72' width='72' version='1.1' viewBox='0 0 72 72'><defs><radialGradient gradientTransform='matrix(0.99996243,0,0,1,0.00384744,3.9999988)' gradientUnits='userSpaceOnUse' r='72.019997' cy='63.169998' cx='54.169998' id='radial-gradient'><stop id='stop4' stop-color='%23ec991c' offset='0' /><stop id='stop6' stop-color='%23e9b213' offset='1' /></radialGradient></defs><path fill='url(%23radial-gradient)' stroke-width='0.99998122' d='M 71.201173,32.999999 56.201736,6.9999988 a 5.9997746,6 0 0 0 -5.199804,-3 H 21.003059 a 5.9997746,6 0 0 0 -5.189805,3 L 0.80381738,32.999999 a 5.9997746,6 0 0 0 0,6 l 14.99943662,26 a 5.9997746,6 0 0 0 5.199805,3 h 29.998873 a 5.9997746,6 0 0 0 5.189805,-3 l 14.999436,-26 a 5.9997746,6 0 0 0 0.01,-6 z' /></svg>";
 			$this->has_fields         = true;
@@ -140,7 +141,9 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
+					// FIXME: Enable mainnet when Accounts Manager is released to mainnet
+					// 'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
+					'options'     => array( 'test' => 'Testnet' ),
 					'desc_tip'    => true,
 				),
 
@@ -157,7 +160,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Thank you for shopping at shop.nimiq.com!', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Thank you for shopping with us!', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -169,12 +172,12 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
-				// FIXME: Becomes unecessary when API can retrieve mempool transactions
+				// TODO: Becomes unecessary when API can retrieve mempool transactions
 				'tx_wait_duration' => array(
 					'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'How many minutes to wait for a transaction to be mined, before marking the order as failed.', 'wc-gateway-nimiq' ),
-					'default'     => 15,
+					'default'     => 30,
 					'desc_tip'    => true,
 				),
 
@@ -182,7 +185,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Required Confirmations', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'The number of confirmations required to accept a transaction.', 'wc-gateway-nimiq' ),
-					'default'     => 10,
+					'default'     => 30,
 					'desc_tip'    => true,
 				),
 
@@ -190,7 +193,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Payment Method Title', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'This controls the title for the payment method the customer sees during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay with Nimiq (next)', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay with Nimiq', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -198,7 +201,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Payment Method Description', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay for your order with your Nimiq wallet directly in the browser.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay for your order with your Nimiq account directly in the browser.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -239,19 +242,20 @@ function wc_nimiq_gateway_init() {
 				}
 			}
 
+			// To uniquely identify the payment transaction, we add a shortened hash of
+			// the order details to the transaction message.
 			$tx_message = ( !empty( $this->get_option( 'message' ) ) ? $this->get_option( 'message' ) . ' ' : '' )
 				. '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
 
-			$tx_message_bytes = unpack('C*', $tx_message);
+			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
-				// 'NETWORK'        => $this->get_option( 'network' ) === 'main' ? 42 : 1,
 				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
-				'ORDER_TOTAL'    => floatval($order_total) * 1e5,
+				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
 				'TX_FEE'         => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
-				'TX_MESSAGE'     => '[' . implode(',', $tx_message_bytes) . ']',
+				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['AccountsClient']);
 
@@ -350,22 +354,23 @@ function wc_nimiq_gateway_init() {
 				echo wpautop( wptexturize( $this->instructions ) ) . PHP_EOL;
 			}
 
+			// If the order has meta info fields 'carrier' and 'tracking_number', we can add tracking details to the confirmation email
+			// TODO: Maybe this does not belong into this payment plugin and should be moved to a standalone plugin.
 			if ( ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'completed' ) ) {
 				$carrier = $order->get_meta( 'carrier' );
 				$tracking_number = $order->get_meta( 'tracking_number' );
-				$tracking_url = '';
-
-				if ( $carrier === 'DHL' ) {
-					$tracking_url = 'https://nolp.dhl.de/nextt-online-public/en/search?piececode=' . $tracking_number;
-				}
-
-				if ( $carrier === 'Deutsche Post' ) {
-					$tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB';
-				}
 
 				if ( $carrier && $tracking_number ) {
 					echo '<p>Your order is being shipped with <strong>' . $carrier . '</strong> and your tracking number is:</p>' . PHP_EOL .
 						 '<p><strong>' . $tracking_number . '</strong></p>' . PHP_EOL;
+
+					$tracking_url = '';
+
+					switch ( $carrier ) {
+						case 'DHL': $tracking_url = 'https://nolp.dhl.de/nextt-online-public/en/search?piececode=' . $tracking_number; break;
+						case 'Deutsche Post': $tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB'; break;
+						// TODO: Add carriers to this list
+					}
 
 					if ( $tracking_url ) {
 						echo '<p><a href="' . $tracking_url . '">Track your package here.</p>' . PHP_EOL;
@@ -404,14 +409,14 @@ function wc_nimiq_gateway_init() {
 			// Reduce stock levels
 			wc_reduce_stock_levels($order_id);
 
-			// Return thankyou redirect
+			// Return thank-you redirect
 			return array(
 				'result' 	=> 'success',
 				'redirect'	=> $this->get_return_url( $order )
 			);
 		}
 
-		// Check if the store NIM address is set
+		// Check if the store NIM address is set and show admin notice otherwise
 		// Custom function not required by the Gateway
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
@@ -420,8 +425,10 @@ function wc_nimiq_gateway_init() {
 				}
 			}
 		}
-	} // end \WC_Gateway_Nimiq class
-}
+
+	} // end WC_Gateway_Nimiq class
+
+} // end wc_nimiq_gateway_init()
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );

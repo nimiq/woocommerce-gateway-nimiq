@@ -30,7 +30,6 @@
             value: parseFloat(CONFIG.ORDER_TOTAL),
             fee: parseFloat(CONFIG.TX_FEE),
             extraData: new Uint8Array(JSON.parse(CONFIG.TX_MESSAGE)),
-            // networkId: CONFIG.NETWORK,
         };
 
         // Start Accounts action
