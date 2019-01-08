@@ -6,8 +6,13 @@ After an order is submitted via the Nimiq payment method, the order is placed "o
 Transactions need to be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page.
 When a transaction is validated, the order status is set to "processing".
 
-## Important note about currency conversion
+## Limitations
 
+### Testnet Only
+This plugin depends on the Nimiq Accounts Manager with third-party support, which is currently only available in
+the Nimiq testnet. This plugin can therefore **not** be used in the mainnet and to transact real value.
+
+### No Automatic Currency Conversion
 **This plugin does not currently include automatic currency conversion and requires the currency of the webshop to be set to NIM!**
 The currency setup is included in this plugin and NIM will be available to select under
 "WooCommerce &gt; Settings &gt; General &gt; Currency options" after activating this plugin.
@@ -113,3 +118,8 @@ The text domain is `wc-gateway-nimiq`.
 
 **2015.05.04 - version 1.0.0**
 - Initial Release
+
+## Legal Acknowledgement
+This Nimiq gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline),
+which in turn forks the WooCommerce core "Cheque" payment gateway.
+
