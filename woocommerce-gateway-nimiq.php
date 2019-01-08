@@ -254,7 +254,7 @@ function wc_nimiq_gateway_init() {
 				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
-				'TX_FEE'         => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['AccountsClient']);
