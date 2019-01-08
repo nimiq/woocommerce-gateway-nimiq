@@ -36,11 +36,17 @@ The text domain is `wc-gateway-nimiq`.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.0
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.0.0
+- Stable Tag: 2.1.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.01.08 - version 2.1.0**
+* Fix transaction message order hash detection to always match the *last* pair of round brackets
+* Calculate fee from byte array length, instead of string length
+* Use site title as appName in Accounts Manager request
+* Clean up code and comments for public release
 
 **2018.11.25 - version 2.0.0**
 - Use new Nimiq Accounts checkout experience
