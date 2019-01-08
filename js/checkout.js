@@ -25,7 +25,7 @@
 
         // Generate transaction object
         var request = {
-            appName: 'Nimiq Shop',
+            appName: CONFIG.SITE_TITLE,
             recipient: CONFIG.STORE_ADDRESS,
             value: parseFloat(CONFIG.ORDER_TOTAL),
             fee: parseFloat(CONFIG.TX_FEE),

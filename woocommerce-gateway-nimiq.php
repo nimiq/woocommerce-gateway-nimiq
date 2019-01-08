@@ -251,6 +251,7 @@ function wc_nimiq_gateway_init() {
 
 			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
+				'SITE_TITLE'     => get_bloginfo( 'name' ),
 				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
