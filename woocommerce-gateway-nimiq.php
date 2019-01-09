@@ -157,7 +157,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'How the user should visit the Accounts Manager.', 'wc-gateway-nimiq' ),
 					'default'     => 'popup',
-					'options'     => array( 'popup' => 'Popup', 'redirect' => 'Top-level redirect' ),
+					'options'     => array( 'popup' => 'Popup', 'redirect' => 'Redirect' ),
 					'desc_tip'    => true,
 				),
 
