@@ -152,6 +152,15 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'rpc_behavior' => array(
+					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'How the user should visit the Accounts Manager.', 'wc-gateway-nimiq' ),
+					'default'     => 'popup',
+					'options'     => array( 'popup' => 'Popup', 'redirect' => 'Top-level redirect' ),
+					'desc_tip'    => true,
+				),
+
 				'message' => array(
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
@@ -253,6 +262,7 @@ function wc_nimiq_gateway_init() {
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
 				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
+				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 			));
 			wp_enqueue_script('NimiqCheckout', null, ['AccountsClient']);
 
