@@ -12,6 +12,9 @@
  * admin_notices code to detect that and generate the notices.
  */
 
+// Backends
+include_once( '../backends/nimiq_watch.php' );
+
 add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
 add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
@@ -48,22 +51,18 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	$count_orders_updated = 0;
 	$errors = array();
 
-	// Get current blockchain height
-	$current_height = wp_remote_get( $gateway->api_domain . '/latest/1' );
-	if ( is_wp_error( $current_height ) ) {
-		$errors[] = $current_height->errors[ 0 ];
-		return [ 'changed' => $count_orders_updated, 'errors' => $errors ];
+	// Init backend
+	$backend = null;
+	switch ( $gateway->get_option( 'backend' ) ) {
+		case 'nimiq.watch': $backend = new WC_Gateway_Nimiq_Backend_Nimiqwatch( $gateway ); break;
+		// Register more backends here
+		default: return [ 'changed' => $count_orders_updated, 'errors' => [ 'No validation backend selected.' ] ];
 	}
-	$current_height = json_decode( $current_height[ 'body' ] );
-	if ( $current_height->error ) {
-		$errors[] = $current_height->error;
-		return [ 'changed' => $count_orders_updated, 'errors' => $errors ];
-	}
-	$current_height = $current_height[ 0 ]->height;
 
-	if ( empty( $current_height ) ) {
-		$errors[] = 'Could not get the current blockchain height from the API.';
-		return [ 'changed' => $count_orders_updated, 'errors' => $errors ];
+	// Get current blockchain height
+	$current_height = $backend->blockchain_height();
+	if ( is_wp_error( $current_height ) ) {
+		return [ 'changed' => $count_orders_updated, 'errors' => [ $current_height->get_error_message() ] ];
 	}
 
 	foreach ( $ids as $postID ) {
@@ -76,21 +75,16 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Only continue if order status is currently 'on hold'
 		if ( $order->get_status() !== 'on-hold' ) continue;
 
-		// Convert HEX tx hash into base64
 		$transaction_hash = $order->get_meta('transaction_hash');
-		$transaction_hash = urlencode( base64_encode( pack( 'H*', $transaction_hash ) ) );
 
-		// Retrieve tx data from API
-		$url = $gateway->api_domain . '/transaction/' . $transaction_hash;
-		$transaction = wp_remote_get( $url );
-		if ( is_wp_error( $transaction ) ) {
-			$errors[] = $transaction->errors[ 0 ];
+		$is_loaded = $backend->load_transaction( $transaction_hash );
+		if ( is_wp_error( $is_loaded ) ) {
+			$errors[] = $is_loaded->get_error_message();
 			continue;
 		}
-		$transaction = json_decode( $transaction[ 'body' ] );
 
 		// TODO: Obsolete when API returns mempool transactions
-		if ( $transaction->error === 'Transaction not found' ) {
+		if ( !$backend->transaction_found() ) {
 			// Check if order date is earlier than setting(tx_wait_duration) ago
 			$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
@@ -102,38 +96,33 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 			continue;
 		}
-		elseif ( $transaction->error ) {
-			$errors[] = $transaction->error . " ($url)";
-			continue;
-		}
-		elseif ( empty( $transaction ) ) {
-			$errors[] = 'Could not retrieve transaction information ' . "($url)";
+		elseif ( $backend->error ) {
+			$errors[] = $backend->error;
 			continue;
 		}
 
 		// If a tx is returned, validate it
 
-		if ( $transaction->sender_address !== $order->get_meta('customer_nim_address') ) {
+		if ( $backend->sender_address !== $order->get_meta('customer_nim_address') ) {
 			fail_order( $order, 'Transaction sender does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $transaction->receiver_address !== $gateway->get_option( 'nimiq_address' ) ) {
+		if ( $backend->recipient_address !== $gateway->get_option( 'nimiq_address' ) ) {
 			fail_order( $order, 'Transaction recipient does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $transaction->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
+		if ( $backend->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
 			fail_order( $order, 'Transaction value does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
 		// Validate transaction data to include correct shortened order hash
-		$extraData = base64_decode( $transaction->data );
-		$message = mb_convert_encoding( $extraData, 'UTF-8' );
+		$message = $backend->message;
 		// Look for the last pair of round brackets in the tx message
 		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
 		$tx_order_hash = end( $matches )[1];
@@ -146,7 +135,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $transaction->block_height ) || $current_height - $transaction->block_height < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $backend->block_height ) || $current_height - $backend->block_height < $gateway->get_option( 'confirmations' ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}
