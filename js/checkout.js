@@ -33,24 +33,26 @@
         };
 
         // Start Accounts action
-        var signed_transaction;
         try {
-            signed_transaction = await accountsClient.checkout(request);
+            var signed_transaction = await accountsClient.checkout(request);
+            on_signed_transaction(signed_transaction);
         } catch (e) {
-            console.error(e);
-            awaiting_transaction_signing = false;
-            // Reenable checkout button
-            document.querySelector('button#place_order').removeAttribute('disabled');
+            on_signing_error(e);
             return;
         }
+    }
 
+    var on_signed_transaction = function(signed_transaction) {
         console.log("signed_transaction", signed_transaction);
+
+        // Make sure payment button is disabled when receiving a redirect response
+        document.querySelector('button#place_order').setAttribute('disabled', 'disabled');
 
         // Write transaction hash and sender address into the hidden inputs
         var transaction_hash_field = document.getElementById('transaction_hash');
         transaction_hash_field.value = base64ToHex(signed_transaction.hash);
-        var customer_nim_address = document.getElementById('customer_nim_address');
-        customer_nim_address.value = signed_transaction.sender;
+        var customer_nim_address_field = document.getElementById('customer_nim_address');
+        customer_nim_address_field.value = signed_transaction.sender;
 
         awaiting_transaction_signing = false;
 
@@ -62,14 +64,30 @@
         checkout_form.submit();
     }
 
+    var on_signing_error = function(e) {
+        console.error(e);
+        awaiting_transaction_signing = false;
+        // Reenable checkout button
+        document.querySelector('button#place_order').removeAttribute('disabled');
+    }
+
     // Add submit event listener to form, preventDefault()
     var checkout_form = jQuery( 'form#order_review' );
     checkout_form.on( 'submit', checkout_pay_order_hook );
 
-    // TODO Define redirect behavior if option is set
+    let redirectBehavior = null;
+    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
+        redirectBehavior = new AccountsClient.RedirectRequestBehavior(window.location.href);
+    }
 
     // Initialize AccountsClient
-    window.accountsClient = new AccountsClient(CONFIG.ACCOUNTS_URL);
+    window.accountsClient = new AccountsClient(CONFIG.ACCOUNTS_URL, redirectBehavior);
+
+    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
+        // Check for a redirect response
+        accountsClient.on(AccountsClient.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
+        accountsClient.checkRedirectResponse();
+    }
 })();
 
 function base64ToHex(str) {
