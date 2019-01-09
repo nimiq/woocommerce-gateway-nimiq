@@ -161,6 +161,17 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'shop_logo_url' => array(
+					'title'       => __( 'Shop Logo URL (optional)', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'An image that should be displayed instead of the shop\'s identicon. ' .
+										 'The URL must be under the same domain as the webshop. ' .
+										 'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => 'No image set',
+					'desc_tip'    => true,
+				),
+
 				'message' => array(
 					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
@@ -258,6 +269,7 @@ function wc_nimiq_gateway_init() {
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'SITE_TITLE'     => get_bloginfo( 'name' ),
 				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
+				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
 				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),

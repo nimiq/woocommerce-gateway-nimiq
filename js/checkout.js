@@ -26,6 +26,7 @@
         // Generate transaction object
         var request = {
             appName: CONFIG.SITE_TITLE,
+            shopLogoUrl: CONFIG.SHOP_LOGO_URL || undefined,
             recipient: CONFIG.STORE_ADDRESS,
             value: parseFloat(CONFIG.ORDER_TOTAL),
             fee: parseFloat(CONFIG.TX_FEE),
