@@ -113,3 +113,5 @@ class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_In
         return $this->transaction->block_height;
     }
 }
+
+$backend = new WC_Gateway_Nimiq_Backend_Nimiqwatch( $gateway );

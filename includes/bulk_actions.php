@@ -12,9 +12,6 @@
  * admin_notices code to detect that and generate the notices.
  */
 
-// Backends
-include_once( '../backends/nimiq_watch.php' );
-
 add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
 add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
@@ -52,12 +49,8 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	$errors = array();
 
 	// Init backend
-	$backend = null;
-	switch ( $gateway->get_option( 'backend' ) ) {
-		case 'nimiq.watch': $backend = new WC_Gateway_Nimiq_Backend_Nimiqwatch( $gateway ); break;
-		// Register more backends here
-		default: return [ 'changed' => $count_orders_updated, 'errors' => [ 'No validation backend selected.' ] ];
-	}
+	$backend_slug = $gateway->get_option( 'backend' );
+	include_once( '../backends/' . $backend_slug . '.php' );
 
 	// Get current blockchain height
 	$current_height = $backend->blockchain_height();
