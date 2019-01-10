@@ -150,6 +150,18 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'backend' => array(
+					'title'       => __( 'Validation Backend', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which service to use for transaction validation.', 'wc-gateway-nimiq' ),
+					'default'     => 'nimiq_watch',
+					'options'     => array(
+						// List available backends here. The option value must match the file name.
+						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
+					),
+					'desc_tip'    => true,
+				),
+
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
