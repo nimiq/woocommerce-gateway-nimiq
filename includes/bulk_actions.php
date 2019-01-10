@@ -50,7 +50,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 	// Init backend
 	$backend_slug = $gateway->get_option( 'backend' );
-	include_once( '../backends/' . $backend_slug . '.php' );
+	include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'backends' . DIRECTORY_SEPARATOR . $backend_slug . '.php' );
 
 	// Get current blockchain height
 	$current_height = $backend->blockchain_height();

@@ -1,5 +1,5 @@
 <?php
-include_once( './interface.php' );
+include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
 class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_Interface {
     /**
