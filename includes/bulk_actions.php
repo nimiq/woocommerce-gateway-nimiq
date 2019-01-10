@@ -89,33 +89,33 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 			continue;
 		}
-		elseif ( $backend->error ) {
-			$errors[] = $backend->error;
+		elseif ( $backend->error() ) {
+			$errors[] = $backend->error();
 			continue;
 		}
 
 		// If a tx is returned, validate it
 
-		if ( $backend->sender_address !== $order->get_meta('customer_nim_address') ) {
+		if ( $backend->sender_address() !== $order->get_meta('customer_nim_address') ) {
 			fail_order( $order, 'Transaction sender does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $backend->recipient_address !== $gateway->get_option( 'nimiq_address' ) ) {
+		if ( $backend->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
 			fail_order( $order, 'Transaction recipient does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $backend->value !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
+		if ( $backend->value() !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
 			fail_order( $order, 'Transaction value does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
 		// Validate transaction data to include correct shortened order hash
-		$message = $backend->message;
+		$message = $backend->message();
 		// Look for the last pair of round brackets in the tx message
 		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
 		$tx_order_hash = end( $matches )[1];
@@ -128,7 +128,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $backend->block_height ) || $current_height - $backend->block_height < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $backend->block_height() ) || $current_height - $backend->block_height() < $gateway->get_option( 'confirmations' ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}
