@@ -151,7 +151,7 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'backend' => array(
-					'title'       => __( 'Validation Backend', 'wc-gateway-nimiq' ),
+					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
 					'description' => __( 'Which service to use for transaction validation.', 'wc-gateway-nimiq' ),
 					'default'     => 'nimiq_watch',
