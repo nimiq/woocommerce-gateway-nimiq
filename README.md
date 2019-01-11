@@ -1,6 +1,6 @@
 # WooCommerce Nimiq Payment Gateway
 
-This is a plugin for Wordpress WooCommerce, to handle payments in the Nimiq (NIM) cryptocurrency.
+This is a plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
 
 After an order is submitted via the Nimiq payment method, the order is placed "on-hold".
 Transactions need to be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page.
@@ -8,11 +8,11 @@ When a transaction is validated, the order status is set to "processing".
 
 ## Limitations
 
-### Testnet only
+### Testnet only!
 This plugin depends on the Nimiq Accounts Manager with third-party support, which is currently only available in
-the Nimiq testnet. This plugin can therefore **not** be used in the mainnet and to transact real value.
+the Nimiq testnet. This plugin can therefore **not** be used in the mainnet to transact real value.
 
-### No automatic currency conversion
+### No automatic currency conversion!
 **This plugin does not currently include automatic currency conversion and requires the currency of the webshop to be set to NIM!**
 The currency setup is included in this plugin and NIM will be available to select under
 "WooCommerce &gt; Settings &gt; General &gt; Currency options" after activating this plugin.
@@ -128,15 +128,9 @@ of the service definition.
 - Prepare for online deployment
 
 **2018.06.05 - version 1.1.0**
-- Adapted for payments with Nimiq
+- Adapted [plugin](https://github.com/bekarice/woocommerce-gateway-offline) for payments with Nimiq
 
-**2015.07.27 - version 1.0.1**
-- Misc: WooCommerce 2.4 Compatibility
-
-**2015.05.04 - version 1.0.0**
-- Initial Release
-
-## Legal Acknowledgement
+## Legal acknowledgement
 This Nimiq gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline),
 which in turn forks the WooCommerce core "Cheque" payment gateway.
 
