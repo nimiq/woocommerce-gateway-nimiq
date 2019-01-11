@@ -3,7 +3,7 @@ include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
 class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_Interface {
     /**
-     * Initializes the driver for the given HEX transaction hash
+     * Initializes the backend
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
      * @return {void}
      */
@@ -37,7 +37,7 @@ class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_In
     }
 
     /**
-     * Load a transaction from the backend
+     * Loads a transaction from the backend
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @return {void|WP_Error}
      */

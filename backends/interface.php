@@ -2,7 +2,7 @@
 
 interface WC_Gateway_Nimiq_Backend_Interface {
     /**
-     * Initializes the driver for the given HEX transaction hash
+     * Initializes the backend
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
      * @return {void}
      */
@@ -15,7 +15,7 @@ interface WC_Gateway_Nimiq_Backend_Interface {
     public function blockchain_height();
 
     /**
-     * Load a transaction from the backend
+     * Loads a transaction from the backend
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @return {void|WP_Error}
      */
