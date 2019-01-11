@@ -44,6 +44,8 @@ it to the new service.
 The new service then also needs to be registered in the `validation_service` setting.
 The value of the setting must match the file name (without the `.php` extension)
 of the service definition.
+If the new service requires additional setting fields, [`settings.js`](./js/settings.js)
+also needs to be adapted to show/hide those fields conditionally.
 
 ## Meta
 

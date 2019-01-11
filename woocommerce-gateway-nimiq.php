@@ -107,6 +107,7 @@ function wc_nimiq_gateway_init() {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_settings_script' ) );
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
@@ -459,6 +460,17 @@ function wc_nimiq_gateway_init() {
 					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
+		}
+
+		/**
+		 * Enqueue script on WooCommerce settings pages
+		 *
+		 * @since 2.2.1
+		 * @param string $hook - Name of the current admin page.
+		 */
+		public function enqueue_admin_settings_script( $hook ) {
+			if ( $hook !== 'woocommerce_page_wc-settings' ) return;
+			wp_enqueue_script( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'js/settings.js', [ 'jquery' ], $this->version(), true );
 		}
 
 	} // end WC_Gateway_Nimiq class
