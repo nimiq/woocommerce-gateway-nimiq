@@ -48,12 +48,12 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	$count_orders_updated = 0;
 	$errors = array();
 
-	// Init backend
-	$backend_slug = $gateway->get_option( 'backend' );
-	include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'backends' . DIRECTORY_SEPARATOR . $backend_slug . '.php' );
+	// Init validation service
+	$service_slug = $gateway->get_option( 'validation_service' );
+	include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
 
 	// Get current blockchain height
-	$current_height = $backend->blockchain_height();
+	$current_height = $service->blockchain_height();
 	if ( is_wp_error( $current_height ) ) {
 		return [ 'changed' => $count_orders_updated, 'errors' => [ $current_height->get_error_message() ] ];
 	}
@@ -70,14 +70,14 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		$transaction_hash = $order->get_meta('transaction_hash');
 
-		$is_loaded = $backend->load_transaction( $transaction_hash );
+		$is_loaded = $service->load_transaction( $transaction_hash );
 		if ( is_wp_error( $is_loaded ) ) {
 			$errors[] = $is_loaded->get_error_message();
 			continue;
 		}
 
 		// TODO: Obsolete when API returns mempool transactions
-		if ( !$backend->transaction_found() ) {
+		if ( !$service->transaction_found() ) {
 			// Check if order date is earlier than setting(tx_wait_duration) ago
 			$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
@@ -89,33 +89,33 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 			continue;
 		}
-		elseif ( $backend->error() ) {
-			$errors[] = $backend->error();
+		elseif ( $service->error() ) {
+			$errors[] = $service->error();
 			continue;
 		}
 
 		// If a tx is returned, validate it
 
-		if ( $backend->sender_address() !== $order->get_meta('customer_nim_address') ) {
+		if ( $service->sender_address() !== $order->get_meta('customer_nim_address') ) {
 			fail_order( $order, 'Transaction sender does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $backend->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
+		if ( $service->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
 			fail_order( $order, 'Transaction recipient does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $backend->value() !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
+		if ( $service->value() !== intval( $order->get_data()[ 'total' ] * 1e5 ) ) {
 			fail_order( $order, 'Transaction value does not match.', true );
 			$count_orders_updated++;
 			continue;
 		}
 
 		// Validate transaction data to include correct shortened order hash
-		$message = $backend->message();
+		$message = $service->message();
 		// Look for the last pair of round brackets in the tx message
 		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
 		$tx_order_hash = end( $matches )[1];
@@ -128,7 +128,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $backend->block_height() ) || $current_height - $backend->block_height() < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $service->block_height() ) || $current_height - $service->block_height() < $gateway->get_option( 'confirmations' ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}

@@ -1,9 +1,9 @@
 <?php
 include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
-class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_Interface {
+class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_Interface {
     /**
-     * Initializes the backend
+     * Initializes the validation service
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
      * @return {void}
      */
@@ -26,18 +26,18 @@ class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_In
         $current_height = json_decode( $api_response[ 'body' ] );
 
         if ( $current_height->error ) {
-            return new WP_Error('backend', $current_height->error);
+            return new WP_Error('service', $current_height->error);
         }
 
         if ( empty( $current_height ) ) {
-            return new WP_Error('backend', 'Could not get the current blockchain height from NIMIQ.WATCH.');
+            return new WP_Error('service', 'Could not get the current blockchain height from NIMIQ.WATCH.');
         }
 
         return $current_height[ 0 ]->height;
     }
 
     /**
-     * Loads a transaction from the backend
+     * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @return {void|WP_Error}
      */
@@ -62,7 +62,7 @@ class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_In
     }
 
     /**
-     * Returns any error that the backend returned
+     * Returns any error that the service returned
      * @return {string|false}
      */
     public function error() {
@@ -114,4 +114,4 @@ class WC_Gateway_Nimiq_Backend_Nimiqwatch implements WC_Gateway_Nimiq_Backend_In
     }
 }
 
-$backend = new WC_Gateway_Nimiq_Backend_Nimiqwatch( $gateway );
+$service = new WC_Gateway_Nimiq_Service_Nimiqwatch( $gateway );

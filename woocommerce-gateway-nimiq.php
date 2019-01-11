@@ -150,13 +150,13 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
-				'backend' => array(
+				'validation_service' => array(
 					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
 					'description' => __( 'Which service to use for transaction validation.', 'wc-gateway-nimiq' ),
 					'default'     => 'nimiq_watch',
 					'options'     => array(
-						// List available backends here. The option value must match the file name.
+						// List available validation services here. The option value must match the file name.
 						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
 					),
 					'desc_tip'    => true,

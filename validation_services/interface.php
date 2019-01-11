@@ -1,8 +1,8 @@
 <?php
 
-interface WC_Gateway_Nimiq_Backend_Interface {
+interface WC_Gateway_Nimiq_Service_Interface {
     /**
-     * Initializes the backend
+     * Initializes the validation service
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
      * @return {void}
      */
@@ -15,7 +15,7 @@ interface WC_Gateway_Nimiq_Backend_Interface {
     public function blockchain_height();
 
     /**
-     * Loads a transaction from the backend
+     * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @return {void|WP_Error}
      */
@@ -28,7 +28,7 @@ interface WC_Gateway_Nimiq_Backend_Interface {
     public function transaction_found();
 
     /**
-     * Returns any error that the backend returned
+     * Returns any error that the service returned
      * @return {string|false}
      */
     public function error();

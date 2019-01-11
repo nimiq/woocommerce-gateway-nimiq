@@ -8,11 +8,11 @@ When a transaction is validated, the order status is set to "processing".
 
 ## Limitations
 
-### Testnet Only
+### Testnet only
 This plugin depends on the Nimiq Accounts Manager with third-party support, which is currently only available in
 the Nimiq testnet. This plugin can therefore **not** be used in the mainnet and to transact real value.
 
-### No Automatic Currency Conversion
+### No automatic currency conversion
 **This plugin does not currently include automatic currency conversion and requires the currency of the webshop to be set to NIM!**
 The currency setup is included in this plugin and NIM will be available to select under
 "WooCommerce &gt; Settings &gt; General &gt; Currency options" after activating this plugin.
@@ -32,6 +32,16 @@ Please do! Issues and pull requests are very welcome! Or just adapt the plugin t
 
 **What is the text domain for translations?**
 The text domain is `wc-gateway-nimiq`.
+
+## Adding a new validation service
+
+Validation services are defined under `./validation_services/`. Each service
+class must implement the `WC_Gateway_Nimiq_Service_Interface`, defined in
+`./validation_services/interface.php`. The easiest way to start is to take an existing
+service (e.g. `nimiq_watch.php`) and rename and adapt it to the new service.
+The new service then also needs to be registered in the `validation_service`
+setting. The value of the setting needs to match the file name (without the
+`.php` extension) of the service definition.
 
 ## Meta
 
