@@ -51,11 +51,16 @@ setting. The value of the setting needs to match the file name (without the
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.0
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.1.0
+- Stable Tag: 2.2.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.01.11 - version 2.2.0**
+* Add setting for checkout behavior: popup or redirect
+* Add setting for displaying an image (e.g. the shop's logo) during checkout
+* Enable easy addition and configuration of transaction validation services
 
 **2019.01.08 - version 2.1.0**
 * Fix transaction message order hash detection to always match the *last* pair of round brackets
