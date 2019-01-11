@@ -55,11 +55,14 @@ also needs to be adapted to show/hide those fields conditionally.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.0
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.2.0
+- Stable Tag: 2.2.1
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.01.11 - version 2.2.1**
+* Add script to settings page with scaffolding for showing/hiding conditional fields
 
 **2019.01.11 - version 2.2.0**
 * Add setting for checkout behavior: popup or redirect
