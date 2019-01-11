@@ -1,8 +1,8 @@
-(async function() {
+(async function($) {
     'use strict';
 
     // Disable submit button until ready
-	jQuery( 'input#terms' ).prop('checked', true);
+	$('input#terms').prop('checked', true);
 
     // Status variables
     var awaiting_transaction_signing = false;
@@ -21,7 +21,7 @@
 
     var do_payment = async function() {
         awaiting_transaction_signing = true;
-        document.querySelector('button#place_order').setAttribute('disabled', 'disabled');
+        $('button#place_order').prop('disabled', true);
 
         // Generate transaction object
         var request = {
@@ -47,18 +47,16 @@
         console.log("signed_transaction", signed_transaction);
 
         // Make sure payment button is disabled when receiving a redirect response
-        document.querySelector('button#place_order').setAttribute('disabled', 'disabled');
+        $('button#place_order').prop('disabled', true);
 
         // Write transaction hash and sender address into the hidden inputs
-        var transaction_hash_field = document.getElementById('transaction_hash');
-        transaction_hash_field.value = base64ToHex(signed_transaction.hash);
-        var customer_nim_address_field = document.getElementById('customer_nim_address');
-        customer_nim_address_field.value = signed_transaction.sender;
+        $('#transaction_hash').val(base64ToHex(signed_transaction.hash));
+        $('#customer_nim_address').val(signed_transaction.sender);
 
         awaiting_transaction_signing = false;
 
-        document.getElementById('nim_account_selector_block').classList.add('hidden');
-        document.getElementById('nim_payment_complete_block').classList.remove('hidden');
+        $('#nim_account_selector_block').addClass('hidden');
+        $('#nim_payment_complete_block').removeClass('hidden');
 
         nim_payment_completed = true;
 
@@ -69,12 +67,12 @@
         console.error(e);
         awaiting_transaction_signing = false;
         // Reenable checkout button
-        document.querySelector('button#place_order').removeAttribute('disabled');
+        $('button#place_order').prop('disabled', false);
     }
 
     // Add submit event listener to form, preventDefault()
-    var checkout_form = jQuery( 'form#order_review' );
-    checkout_form.on( 'submit', checkout_pay_order_hook );
+    var checkout_form = $('form#order_review');
+    checkout_form.on('submit', checkout_pay_order_hook);
 
     let redirectBehavior = null;
     if (CONFIG.RPC_BEHAVIOR === 'redirect') {
@@ -89,7 +87,7 @@
         accountsClient.on(AccountsClient.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
         accountsClient.checkRedirectResponse();
     }
-})();
+})(jQuery);
 
 function base64ToHex(str) {
     for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; i++) {

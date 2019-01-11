@@ -115,6 +115,12 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_style('NimiqPayment', plugin_dir_url( __FILE__ ) . 'styles.css');
 		}
 
+		/**
+		 * Returns current plugin version
+		 */
+		public function version() {
+			return get_plugin_data( __FILE__, false, false )[ 'Version' ];
+		}
 
 		/**
 		 * Initialize Gateway Settings Form Fields
@@ -252,7 +258,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('AccountsClient', plugin_dir_url( __FILE__ ) . 'js/AccountsClient.standalone.umd.js');
+			wp_enqueue_script('AccountsClient', plugin_dir_url( __FILE__ ) . 'js/AccountsClient.standalone.umd.js', [], $this->version(), true );
 
 			$order_total = 0;
 			$order_hash = '';
@@ -275,8 +281,8 @@ function wc_nimiq_gateway_init() {
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-			wp_register_script('NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js');
-			wp_localize_script('NimiqCheckout', 'CONFIG', array(
+			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'AccountsClient' ], $this->version(), true );
+			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
 				'SITE_TITLE'     => get_bloginfo( 'name' ),
 				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
@@ -285,8 +291,8 @@ function wc_nimiq_gateway_init() {
 				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
-			));
-			wp_enqueue_script('NimiqCheckout', null, ['AccountsClient']);
+			) );
+			wp_enqueue_script( 'NimiqCheckout' );
 
 			?>
 
