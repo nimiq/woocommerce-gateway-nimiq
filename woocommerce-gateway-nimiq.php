@@ -103,8 +103,6 @@ function wc_nimiq_gateway_init() {
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions' );
 
-			$this->api_domain   = $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
-
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -149,6 +147,18 @@ function wc_nimiq_gateway_init() {
 					'description' => __( 'Your Nimiq address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
 					'default'     => '',
 					'placeholder' => 'NQ...',
+					'desc_tip'    => true,
+				),
+
+				'backend' => array(
+					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which service to use for transaction validation.', 'wc-gateway-nimiq' ),
+					'default'     => 'nimiq_watch',
+					'options'     => array(
+						// List available backends here. The option value must match the file name.
+						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
+					),
 					'desc_tip'    => true,
 				),
 
