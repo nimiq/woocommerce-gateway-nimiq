@@ -170,6 +170,14 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'nimiqx_api_key' => array(
+					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Token for accessing the NimiqX validation service.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Without the token you will not be able to connect to the validation service.' ),
+					'desc_tip'    => true, 
+				),
+
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -245,16 +253,6 @@ function wc_nimiq_gateway_init() {
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
-				),
-
-				// Conditional fields
-
-				'api_key' => array(
-					'title'       => __( 'API Key', 'wc-gateway-nimiq' ),
-					'type'        => 'textarea',
-					'description' => __( 'Token for accessing the validation service. (NimiqX)', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Without the token you will not be able to connect to the validation service.' ),
-					'desc_tip'    => true, 
 				),
 			) );
 		}

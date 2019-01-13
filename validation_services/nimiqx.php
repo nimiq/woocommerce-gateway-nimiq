@@ -10,7 +10,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
     public function __construct( $gateway ) {
         $this->transaction = null;
 
-        $this->api_key = $gateway->get_option( 'api_key' );
+        $this->api_key = $gateway->get_option( 'nimiqx_api_key' );
         if ( empty( $this->api_key ) ) {
             throw new WP_Error('connection', 'API key not set.');
         }
