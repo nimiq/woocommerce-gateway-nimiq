@@ -40,7 +40,10 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {void|WP_Error}
      */
     public function load_transaction( $transaction_hash ) {
-        // TODO Injection vuln?
+        if ( !ctype_xdigit( $transaction_hash ) ) {
+            return new WP_Error('connection', 'Invalid transaction hash');
+        }
+
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
 
         $api_response = wp_remote_post( $this->api_domain, array( 'body' => $call ) );
@@ -104,8 +107,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
             return '';
         }
 
-        // TODO Is this really base64?
-        $extraData = base64_decode( $this->transaction->data );
+        $extraData = hex2bin( $this->transaction->data );
         return mb_convert_encoding( $extraData, 'UTF-8' );
     }
 

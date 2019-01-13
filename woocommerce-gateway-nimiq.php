@@ -165,6 +165,7 @@ function wc_nimiq_gateway_init() {
 					'options'     => array(
 						// List available validation services here. The option value must match the file name.
 						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
+						'json_rpc' => 'Node JSON-RPC API',
 					),
 					'desc_tip'    => true,
 				),
