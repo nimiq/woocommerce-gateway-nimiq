@@ -246,6 +246,16 @@ function wc_nimiq_gateway_init() {
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
 				),
+
+				// Conditional fields
+
+				'api_key' => array(
+					'title'       => __( 'API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'textarea',
+					'description' => __( 'Token for accessing the validation service. (NimiqX)', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Without the token you will not be able to connect to the validation service.' ),
+					'desc_tip'    => true, 
+				),
 			) );
 		}
 
