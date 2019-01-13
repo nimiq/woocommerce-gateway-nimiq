@@ -9,10 +9,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
-        $this->api_key = '420';
-        $this->api_domain = 'https://api.nimiqx.com';
 
-        // Check if API key is genuine (URL injection)
+        $this->api_key = $gateway->get_option( 'api_key' );
+        if ( empty( $this->api_key ) ) {
+            throw new WP_Error('connection', 'API key not set.');
+        }
         if ( !ctype_xdigit( $this->api_key ) ) {
             throw new WP_Error('service', 'Invalid API key');
         }
@@ -23,7 +24,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      * @return {number|WP_Error}
      */
     public function blockchain_height() {
-        $request_uri = $this->api_domain . '/network-stats/?api_key=' . $this->api_key;
+        $request_uri = 'https://api.nimiqx.com/network-stats/?api_key=' . $this->api_key;
         $api_response = wp_remote_get( $request_uri );
 
         if ( is_wp_error( $api_response ) ) {
@@ -49,7 +50,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
             return new WP_Error('service', 'Invalid transaction hash');
         }
 
-        $request_uri = $this->api_domain . '/transaction/' . $transaction_hash . '?api_key=' . $this->api_key;
+        $request_uri = 'https://api.nimiqx.com/transaction/' . $transaction_hash . '?api_key=' . $this->api_key;
         
         $api_response = wp_remote_get( $request_uri );
         if ( is_wp_error( $api_response ) ) {
