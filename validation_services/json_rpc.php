@@ -9,7 +9,10 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
-        $this->api_domain = 'http://localhost:8648';
+        $this->api_domain = $gateway->get_option( 'url' );
+        if ( empty( $this->api_domain ) ) {
+            throw new WP_Error('connection', 'API URL not set.');
+        }
     }
 
     /**
