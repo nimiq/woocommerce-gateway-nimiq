@@ -31,7 +31,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $current_height = json_decode( $api_response[ 'body' ] );
 
         if ( $current_height->error ) {
-            return new WP_Error('service', $current_height->error);
+            return new WP_Error('service', $current_height->error->message);
         }
 
         return $current_height[ 0 ]->result;
@@ -74,7 +74,10 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         if ( empty( $this->transaction ) ) {
             return 'Could not retrieve transaction information from Nimiq node.';
         }
-        return $this->transaction->error || false;
+        if ( !$this->transaction->error ) {
+            return false;
+        }
+        return $this->transaction->error->message;
     }
 
     /**
