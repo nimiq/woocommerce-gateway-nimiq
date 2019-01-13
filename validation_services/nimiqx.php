@@ -119,3 +119,5 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
         return $this->transaction->height;
     }
 }
+
+$service = new WC_Gateway_Nimiq_Service_NimiqX( $gateway );
