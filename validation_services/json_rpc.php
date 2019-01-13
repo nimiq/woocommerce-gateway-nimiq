@@ -119,3 +119,5 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         return $this->transaction->blockNumber;
     }
 }
+
+$service = new WC_Gateway_Nimiq_Service_Jsonrpc( $gateway );
