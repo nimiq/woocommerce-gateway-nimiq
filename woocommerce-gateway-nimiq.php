@@ -120,7 +120,7 @@ function wc_nimiq_gateway_init() {
 		 * Returns current plugin version
 		 */
 		public function version() {
-			return get_plugin_data( __FILE__, false, false )[ 'Version' ];
+			return get_file_data( __FILE__, [ 'Version' ], 'plugin')[ 0 ];
 		}
 
 		/**
