@@ -9,7 +9,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
-        $this->api_domain = $gateway->get_option( 'url' );
+        $this->api_domain = $gateway->get_option( 'jsonrpc_url' );
         if ( empty( $this->api_domain ) ) {
             throw new WP_Error('connection', 'API URL not set.');
         }
@@ -109,11 +109,11 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {string}
      */
     public function message() {
-        if ( $this->transaction->data === null ) {
+        if ( $this->transaction->result->data === null ) {
             return '';
         }
 
-        $extraData = hex2bin( $this->transaction->data );
+        $extraData = hex2bin( $this->transaction->result->data );
         return mb_convert_encoding( $extraData, 'UTF-8' );
     }
 

@@ -6,7 +6,7 @@
 
         // Disable all conditional fields
         var conditional_fields = [
-            '#url',
+            '#woocommerce_nimiq_gateway_jsonrpc_url',
             // '#conditional_field_id',
         ];
         $(conditional_fields.join(',')).closest('tr').addClass('hidden');
@@ -15,7 +15,7 @@
         switch (service_slug) {
             case 'nimiq_watch': break;
             case 'json_rpc':
-                $('#url').closest('tr').removeClass('hidden');
+                $('#woocommerce_nimiq_gateway_jsonrpc_url').closest('tr').removeClass('hidden');
                 break;
             // case '': $('#conditional_field_id').closest('tr').removeClass('hidden'); break;
         }

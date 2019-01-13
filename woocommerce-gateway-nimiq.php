@@ -170,6 +170,14 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'jsonrpc_url' => array(
+					'title'       => __( 'Validation Service URL', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'The service at this URL will be used verify the transactions. (JSON-RPC)', 'wc-gateway-nimiq' ),
+					'default'     => __( 'http://localhost:8648' ),
+					'desc_tip'    => true, 
+				),
+
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -245,16 +253,6 @@ function wc_nimiq_gateway_init() {
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
-				),
-
-				// Conditional fields
-
-				'url' => array(
-					'title'       => __( 'Validation Service URL', 'wc-gateway-nimiq' ),
-					'type'        => 'textarea',
-					'description' => __( 'The service at this URL will be used verify the transactions. (JSON-RPC)', 'wc-gateway-nimiq' ),
-					'default'     => __( 'http://localhost:8648' ),
-					'desc_tip'    => true, 
 				),
 			) );
 		}
