@@ -20,17 +20,17 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
         $api_response = wp_remote_get( $this->api_domain . '/latest/1' );
 
         if ( is_wp_error( $api_response ) ) {
-            return new WP_Error('connection', $api_response->errors[ 0 ]);
+            return $api_response;
         }
 
         $current_height = json_decode( $api_response[ 'body' ] );
 
         if ( $current_height->error ) {
-            return new WP_Error('service', $current_height->error);
+            return new WP_Error( 'service', $current_height->error );
         }
 
         if ( empty( $current_height ) ) {
-            return new WP_Error('service', 'Could not get the current blockchain height from NIMIQ.WATCH.');
+            return new WP_Error( 'service', 'Could not get the current blockchain height from NIMIQ.WATCH.' );
         }
 
         return $current_height[ 0 ]->height;
@@ -46,6 +46,7 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
         $transaction_hash = urlencode( base64_encode( pack( 'H*', $transaction_hash ) ) );
 
         $api_response = wp_remote_get( $this->api_domain . '/transaction/' . $transaction_hash );
+
         if ( is_wp_error( $api_response ) ) {
             return $api_response;
         }
