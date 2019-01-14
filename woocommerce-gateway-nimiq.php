@@ -165,7 +165,17 @@ function wc_nimiq_gateway_init() {
 					'options'     => array(
 						// List available validation services here. The option value must match the file name.
 						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
+						'json_rpc'    => 'Nimiq JSON-RPC API',
 					),
+					'desc_tip'    => true,
+				),
+
+				'jsonrpc_url' => array(
+					'title'       => __( 'Validation JSON-RPC URL', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'URL (including port) of the JSON-RPC server used to verify transactions.', 'wc-gateway-nimiq' ),
+					'default'     => 'http://localhost:8648',
+					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
