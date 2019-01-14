@@ -11,7 +11,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $this->transaction = null;
         $this->api_domain = $gateway->get_option( 'jsonrpc_url' );
         if ( empty( $this->api_domain ) ) {
-            throw new WP_Error('connection', 'API URL not set.');
+            throw new WP_Error( 'connection', 'API URL not set.' );
         }
     }
 
@@ -25,16 +25,20 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $api_response = wp_remote_post( $this->api_domain, array( 'body' => $call ) );
 
         if ( is_wp_error( $api_response ) ) {
-            return new WP_Error('connection', $api_response->errors[ 0 ]);
+            return $api_response;
         }
 
         $current_height = json_decode( $api_response[ 'body' ] );
 
         if ( $current_height->error ) {
-            return new WP_Error('service', $current_height->error->message);
+            return new WP_Error( 'service', 'JSON-RPC replied: ' . $current_height->error->message );
         }
 
-        return $current_height[ 0 ]->result;
+        if ( empty( $current_height ) ) {
+            return new WP_Error( 'service', 'Could not get the current blockchain height from JSON-RPC. (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+        }
+
+        return $current_height->result;
     }
 
     /**
@@ -44,7 +48,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error('connection', 'Invalid transaction hash');
+            return new WP_Error( 'connection', 'Invalid transaction hash' );
         }
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
@@ -52,7 +56,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $api_response = wp_remote_post( $this->api_domain, array( 'body' => $call ) );
 
         if ( is_wp_error( $api_response ) ) {
-            return new WP_Error('connection', $api_response->errors[ 0 ]);
+            return $api_response;
         }
 
         $this->transaction = json_decode( $api_response[ 'body' ] );
