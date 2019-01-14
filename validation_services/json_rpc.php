@@ -59,7 +59,17 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
             return $api_response;
         }
 
-        $this->transaction = json_decode( $api_response[ 'body' ] );
+        $response = json_decode( $api_response[ 'body' ] );
+
+        if ( $response->error ) {
+            return new WP_Error( 'service', 'JSON-RPC replied: ' . $response->error->message );
+        }
+
+        if ( empty( $response ) ) {
+            return new WP_Error( 'service', 'Could not retrieve transaction information from JSON-RPC. (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+        }
+
+        $this->transaction = $response->result;
     }
 
     /**
@@ -67,7 +77,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {boolean}
      */
     public function transaction_found() {
-        return $this->transaction->result !== null;
+        return !empty( $this->transaction );
     }
 
     /**
@@ -75,13 +85,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {string|false}
      */
     public function error() {
-        if ( empty( $this->transaction ) ) {
-            return 'Could not retrieve transaction information from Nimiq node.';
-        }
-        if ( !$this->transaction->error ) {
-            return false;
-        }
-        return $this->transaction->error->message;
+        return $this->transaction->error ? $this->transaction->error->message : false;
     }
 
     /**
@@ -89,7 +93,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {string}
      */
     public function sender_address() {
-        return $this->transaction->result->fromAddress;
+        return $this->transaction->fromAddress;
     }
 
     /**
@@ -97,7 +101,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {string}
      */
     public function recipient_address() {
-        return $this->transaction->result->toAddress;
+        return $this->transaction->toAddress;
     }
 
     /**
@@ -105,7 +109,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {number}
      */
     public function value() {
-        return $this->transaction->result->value;
+        return $this->transaction->value;
     }
 
     /**
@@ -113,11 +117,11 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {string}
      */
     public function message() {
-        if ( $this->transaction->result->data === null ) {
+        if ( $this->transaction->data === null ) {
             return '';
         }
 
-        $extraData = hex2bin( $this->transaction->result->data );
+        $extraData = hex2bin( $this->transaction->data );
         return mb_convert_encoding( $extraData, 'UTF-8' );
     }
 
