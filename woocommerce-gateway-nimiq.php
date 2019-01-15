@@ -299,7 +299,7 @@ function wc_nimiq_gateway_init() {
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
-				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) ?: 0 ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 			) );
@@ -489,3 +489,4 @@ function wc_nimiq_gateway_init() {
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
