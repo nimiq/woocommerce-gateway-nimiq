@@ -464,3 +464,4 @@ function wc_nimiq_gateway_init() {
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
