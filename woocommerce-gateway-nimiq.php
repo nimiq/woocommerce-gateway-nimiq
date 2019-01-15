@@ -1,13 +1,17 @@
 <?php
 /**
  * Plugin Name: WooCommerce Nimiq Gateway
- * Plugin URI:
+ * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
- * Author URI: http://www.nimiq.com/
- * Version: 2.2.1
+ * Author URI: http://www.nimiq.com
+ * Version: 2.3.0
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
+ * Requires at least: 4.9
+ * Tested up to: 5.0
+ * WC requires at least: 3.5
+ * WC tested up to: 3.5
  *
  * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, 2018 Nimiq Network Ltd.
  *

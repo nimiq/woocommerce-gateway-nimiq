@@ -51,15 +51,20 @@ also needs to be adapted to show/hide those fields conditionally.
 
 - Contributors: skyverge, beka.rice, nimiq
 - Tags: woocommerce, payment gateway, gateway, nimiq, cryptocurrency
-- Requires at least: 3.8
+- Requires at least: 4.9
 - Tested up to: 5.0
-- Requires WooCommerce at least: 3.0
+- Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.2.1
+- Stable Tag: 2.3.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.01.15 - version 2.3.0**
+* Fix error displayed in front-end
+* Add JSON-RPC as a validation service (thanks to @terorie)
+* Add scheduled automatic transaction validation
 
 **2019.01.11 - version 2.2.1**
 * Add script to settings page with scaffolding for showing/hiding conditional fields
