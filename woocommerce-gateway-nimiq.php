@@ -192,6 +192,24 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'jsonrpc_username' => array(
+					'title'       => __( 'Validation JSON-RPC Username', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( '(Optional) Username for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( '', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
+				'jsonrpc_password' => array(
+					'title'       => __( 'Validation JSON-RPC Password', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( '(Optional) Password for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( '', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
