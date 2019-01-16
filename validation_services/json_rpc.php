@@ -58,7 +58,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $headers = array( );
     
         if ( !empty( $username ) || !empty( $password ) ) {
-            $authorization = 'Basic ' . base64_encode( $username . $password );
+            $authorization = 'Basic ' . base64_encode( $username . ":" . $password );
             $headers['Authorization'] = $authorization;
         }
 

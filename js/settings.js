@@ -17,11 +17,10 @@
         switch (service_slug) {
             case 'nimiq_watch': break;
             case 'json_rpc':
-                [
-                    '#woocommerce_nimiq_gateway_jsonrpc_url',
-                    '#woocommerce_nimiq_gateway_jsonrpc_username',
-                    '#woocommerce_nimiq_gateway_jsonrpc_password'
-                ].forEach(tag => $(tag).closest('tr').removeClass('hidden'));
+                $('#woocommerce_nimiq_gateway_jsonrpc_url, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_username, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_password')
+                    .closest('tr').removeClass('hidden');
                 break;
             // case '': $('#conditional_field_id').closest('tr').removeClass('hidden'); break;
         }
