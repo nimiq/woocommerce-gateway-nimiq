@@ -108,12 +108,11 @@ function wc_nimiq_gateway_init() {
 			$this->description  = $this->get_option( 'description' );
 			$this->instructions = $this->get_option( 'instructions' );
 
-			$this->api_domain   = $this->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
-
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
+			add_action( 'admin_notices', array( $this, 'do_store_nimiqx_api_key_check' ) );
 
 			// Customer Emails
 			add_action( 'woocommerce_email_before_order_table', array( $this, 'email_instructions' ), 10, 3 );
@@ -211,6 +210,15 @@ function wc_nimiq_gateway_init() {
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
 					'desc_tip'    => true,
 				),
+
+				'nimiqx_api_key' => array(
+					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'API key for NimiqX to retrieve blockchain height during checkout.', 'wc-gateway-nimiq' ),
+					'placeholder' => 'Required!',
+					'default'     => '',
+					'desc_tip'    => true,
+				),
 			) );
 		}
 
@@ -223,6 +231,18 @@ function wc_nimiq_gateway_init() {
 				}
 				return;
 			}
+
+			// Get blockchain height
+			$height = 0;
+			try {
+				$response = wp_remote_get( 'https://api.nimiqx.com/network-stats/?api_key=' . $this->get_option( 'nimiqx_api_key' ) );
+				$body = '{ height: 0 }';
+				if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+					$body = $response['body']; // use the content
+				}
+				$result = json_decode( $body );
+				$height = $result->height;
+			} catch (Exception $e) {}
 
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('KeyguardClient', plugin_dir_url( __FILE__ ) . 'js/keyguard-client.js');
@@ -251,7 +271,7 @@ function wc_nimiq_gateway_init() {
 			wp_localize_script('NimiqCheckout', 'CONFIG', array(
 				'NETWORK'       => $this->get_option( 'network' ),
 				'KEYGUARD_PATH' => $this->get_option( 'network' ) === 'main' ? 'https://keyguard.nimiq.com/' : 'https://keyguard.nimiq-testnet.com/',
-				'API_PATH'      => $this->api_domain,
+				'HEIGHT'        => $height,
 				'STORE_ADDRESS' => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'   => $order_total,
 				'TX_FEE'        => ( 166 + strlen( $tx_message ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ) / 1e5,
@@ -451,11 +471,19 @@ function wc_nimiq_gateway_init() {
 		}
 
 		// Check if the store NIM address is set
-		// Custom function not required by the Gateway
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
 				if( $this->get_option( 'nimiq_address' ) == "" ) {
 					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
+				}
+			}
+		}
+
+		// Check if the NimiqX API key is set
+		public function do_store_nimiqx_api_key_check() {
+			if( $this->enabled == "yes" ) {
+				if( $this->get_option( 'nimiqx_api_key' ) == "" ) {
+					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your NimiqX API key to be able to take payments in NIM. <a href="%s">Set your API key here.</a>' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
 		}

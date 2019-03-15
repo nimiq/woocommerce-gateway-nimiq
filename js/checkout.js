@@ -43,7 +43,8 @@ function fill_accounts_selector() {
     var awaiting_keyguard_signing = false;
     var awaiting_network_relaying = false;
     var nim_payment_completed = false;
-    var current_blockchain_height = 0;
+    var current_blockchain_height = CONFIG.HEIGHT;
+    console.log('Got blockheight from nimiqx:', current_blockchain_height);
 
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
@@ -160,32 +161,6 @@ function fill_accounts_selector() {
     // Add submit event listener to form, preventDefault()
     var checkout_form = jQuery( 'form#order_review' );
     checkout_form.on( 'submit', checkout_pay_order_hook );
-
-    // Fetch block height now and every 30 minutes
-    var get_current_block_height = function() {
-        var request = new XMLHttpRequest();
-        request.open('GET', CONFIG.API_PATH + '/latest/1', true);
-
-        request.onload = function() {
-            if (this.status >= 200 && this.status < 400) {
-                // Success!
-                var data = JSON.parse(this.response);
-                current_blockchain_height = data[0].height;
-                console.log("Got blockheight from nimiq.watch:", current_blockchain_height);
-
-                setTimeout(get_current_block_height, 30 * 60 * 1000); // Update again in 30 minutes
-            } else {
-                // We reached our target server, but it returned an error
-                setTimeout(get_current_block_height, 5 * 1000); // Retry in 5 seconds
-            }
-        };
-        request.onerror = function() {
-            // There was a connection error of some sort
-            setTimeout(get_current_block_height, 5 * 1000); // Retry in 5 seconds
-        };
-        request.send();
-    }
-    get_current_block_height();
 
     // Await keyguard-client connection
     window.keyguard = await keyguardClient.create(
