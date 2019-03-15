@@ -406,7 +406,7 @@ function wc_nimiq_gateway_init() {
 
 			// If the order has meta info fields 'carrier' and 'tracking_number', we can add tracking details to the confirmation email
 			// TODO: Maybe this does not belong into this payment plugin and should be moved to a standalone plugin.
-			if ( ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'completed' ) ) {
+			if ( ! $sent_to_admin && $order->has_status( 'completed' ) ) {
 				$carrier = $order->get_meta( 'carrier' );
 				$tracking_number = $order->get_meta( 'tracking_number' );
 
@@ -419,6 +419,7 @@ function wc_nimiq_gateway_init() {
 					switch ( $carrier ) {
 						case 'DHL': $tracking_url = 'https://nolp.dhl.de/nextt-online-public/en/search?piececode=' . $tracking_number; break;
 						case 'Deutsche Post': $tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB'; break;
+						case 'DPD': $tracking_url = 'https://my.dpd.de/myParcel.aspx?parcelno=' . $tracking_number; break;
 						// TODO: Add carriers to this list
 					}
 
