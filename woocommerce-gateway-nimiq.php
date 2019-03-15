@@ -409,7 +409,7 @@ function wc_nimiq_gateway_init() {
 				echo wpautop( wptexturize( $this->instructions ) ) . PHP_EOL;
 			}
 
-			if ( ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'completed' ) ) {
+			if ( ! $sent_to_admin && $order->has_status( 'completed' ) ) {
 				$carrier = $order->get_meta( 'carrier' );
 				$tracking_number = $order->get_meta( 'tracking_number' );
 				$tracking_url = '';
@@ -420,6 +420,10 @@ function wc_nimiq_gateway_init() {
 
 				if ( $carrier === 'Deutsche Post' ) {
 					$tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB';
+				}
+
+				if ( $carrier === 'DPD' ) {
+					$tracking_url = 'https://my.dpd.de/myParcel.aspx?parcelno=' . $tracking_number;
 				}
 
 				if ( $carrier && $tracking_number ) {
