@@ -43,7 +43,7 @@ function fill_accounts_selector() {
     var awaiting_keyguard_signing = false;
     var awaiting_network_relaying = false;
     var nim_payment_completed = false;
-    var current_blockchain_height = CONFIG.HEIGHT;
+    var current_blockchain_height = parseInt(CONFIG.HEIGHT);
     console.log('Got blockheight from nimiqx:', current_blockchain_height);
 
     var checkout_pay_order_hook = function(event) {
