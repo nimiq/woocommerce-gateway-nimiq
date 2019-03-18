@@ -6,7 +6,7 @@
  - Tested up to: 4.3
  - Requires WooCommerce at least: 3.0
  - Tested WooCommerce up to: 3.4
- - Stable Tag: 1.12.0
+ - Stable Tag: 1.12.1
  - License: GPLv3
  - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,6 +37,9 @@ The text domain is `wc-gateway-nimiq`.
 Please do! This is meant to be a simple starter Nimiq gateway, and can be modified easily.
 
 == Changelog ==
+
+= 2019.03.18 - version 1.12.1 =
+ * Fix bug where blockchain height was used as a string, preventing Keyguard signing
 
 = 2019.03.15 - version 1.12.0 =
  * Add DPD carrier tracking, include tracking code in all completed emails
