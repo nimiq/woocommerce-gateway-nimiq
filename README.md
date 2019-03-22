@@ -55,11 +55,15 @@ also needs to be adapted to show/hide those fields conditionally.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.3.0
+- Stable Tag: 2.4.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.03.22 - version 2.4.0**
+- Update to new Nimiq Accounts API
+- Add DPD carrier handling for tracking links
 
 **2019.01.15 - version 2.3.0**
 - Fix error displayed in front-end
