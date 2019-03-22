@@ -62,23 +62,23 @@ also needs to be adapted to show/hide those fields conditionally.
 ## Changelog
 
 **2019.01.15 - version 2.3.0**
-* Fix error displayed in front-end
-* Add JSON-RPC as a validation service (thanks to @terorie)
-* Add scheduled automatic transaction validation
+- Fix error displayed in front-end
+- Add JSON-RPC as a validation service (thanks to @terorie)
+- Add scheduled automatic transaction validation
 
 **2019.01.11 - version 2.2.1**
-* Add script to settings page with scaffolding for showing/hiding conditional fields
+- Add script to settings page with scaffolding for showing/hiding conditional fields
 
 **2019.01.11 - version 2.2.0**
-* Add setting for checkout behavior: popup or redirect
-* Add setting for displaying an image (e.g. the shop's logo) during checkout
-* Enable easy addition and configuration of transaction validation services
+- Add setting for checkout behavior: popup or redirect
+- Add setting for displaying an image (e.g. the shop's logo) during checkout
+- Enable easy addition and configuration of transaction validation services
 
 **2019.01.08 - version 2.1.0**
-* Fix transaction message order hash detection to always match the *last* pair of round brackets
-* Calculate fee from byte array length, instead of string length
-* Use site title as appName in Accounts Manager request
-* Clean up code and comments for public release
+- Fix transaction message order hash detection to always match the *last* pair of round brackets
+- Calculate fee from byte array length, instead of string length
+- Use site title as appName in Accounts Manager request
+- Clean up code and comments for public release
 
 **2018.11.25 - version 2.0.0**
 - Use new Nimiq Accounts checkout experience
