@@ -50,8 +50,8 @@
         $('button#place_order').prop('disabled', true);
 
         // Write transaction hash and sender address into the hidden inputs
-        $('#transaction_hash').val(base64ToHex(signed_transaction.hash));
-        $('#customer_nim_address').val(signed_transaction.sender);
+        $('#transaction_hash').val(signed_transaction.hash);
+        $('#customer_nim_address').val(signed_transaction.raw.sender);
 
         awaiting_transaction_signing = false;
 
@@ -88,12 +88,3 @@
         accountsClient.checkRedirectResponse();
     }
 })(jQuery);
-
-function base64ToHex(str) {
-    for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; i++) {
-        let tmp = bin.charCodeAt(i).toString(16);
-        if (tmp.length === 1) tmp = "0" + tmp;
-        hex[hex.length] = tmp;
-    }
-    return hex.join("");
-}
