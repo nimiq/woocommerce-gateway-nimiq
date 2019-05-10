@@ -8,6 +8,10 @@
     var awaiting_transaction_signing = false;
     var nim_payment_completed = false;
 
+    var use_redirect = function() {
+        return CONFIG.RPC_BEHAVIOR === 'redirect';
+    }
+
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
 
@@ -36,6 +40,7 @@
         // Start Accounts action
         try {
             var signed_transaction = await accountsClient.checkout(request);
+            if (use_redirect()) return;
             on_signed_transaction(signed_transaction);
         } catch (e) {
             on_signing_error(e);
@@ -75,14 +80,14 @@
     checkout_form.on('submit', checkout_pay_order_hook);
 
     let redirectBehavior = null;
-    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
+    if (use_redirect()) {
         redirectBehavior = new AccountsClient.RedirectRequestBehavior(window.location.href);
     }
 
     // Initialize AccountsClient
     window.accountsClient = new AccountsClient(CONFIG.ACCOUNTS_URL, redirectBehavior);
 
-    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
+    if (use_redirect()) {
         // Check for a redirect response
         accountsClient.on(AccountsClient.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
         accountsClient.checkRedirectResponse();
