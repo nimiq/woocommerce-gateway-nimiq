@@ -132,12 +132,12 @@ function wc_nimiq_gateway_init() {
 		 */
 		public function init_form_fields() {
 
-		    $redirect_behaviour_options = [
-		            'popup' => 'Popup'
-            ];
+			$redirect_behaviour_options = [
+				'popup' => 'Popup'
+			];
 
 
-			if($_SERVER['HTTPS'] === 'on') {
+			if ( $_SERVER['HTTPS'] === 'on' ) {
 				$redirect_behaviour_options['redirect'] = 'Redirect';
 			}
 
