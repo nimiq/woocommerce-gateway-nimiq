@@ -132,6 +132,15 @@ function wc_nimiq_gateway_init() {
 		 */
 		public function init_form_fields() {
 
+		    $redirect_behaviour_options = [
+		            'popup' => 'Popup'
+            ];
+
+
+			if($_SERVER['HTTPS'] === 'on') {
+				$redirect_behaviour_options['redirect'] = 'Redirect';
+			}
+
 			$this->form_fields = apply_filters( 'wc_nimiq_form_fields', array(
 
 				'enabled' => array(
@@ -188,7 +197,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'How the user should visit the Accounts Manager.', 'wc-gateway-nimiq' ),
 					'default'     => 'popup',
-					'options'     => array( 'popup' => 'Popup', 'redirect' => 'Redirect' ),
+					'options'     => $redirect_behaviour_options,
 					'desc_tip'    => true,
 				),
 
