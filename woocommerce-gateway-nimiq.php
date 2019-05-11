@@ -168,6 +168,18 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'price_service' => array(
+					'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which service to use for fetching price information.', 'wc-gateway-nimiq' ),
+					'default'     => 'none',
+					'options'     => array(
+						// List available price services here. The option value must match the file name.
+						'none' => 'None',
+						'nimiqx' => 'NimiqX',
+					),
+					'desc_tip'    => true,
+				),
 				'validation_service' => array(
 					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -179,6 +191,15 @@ function wc_nimiq_gateway_init() {
 						'json_rpc'    => 'Nimiq JSON-RPC API',
 						'nimiqx'      => 'NimiqX (mainnet)',
 					),
+					'desc_tip'    => true,
+				),
+
+				'nimiqx_api_key' => array(
+					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'NimiqX is used to convert the order amount to NIM when currency is not NIM', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => '',
 					'desc_tip'    => true,
 				),
 
