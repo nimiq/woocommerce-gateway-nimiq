@@ -307,13 +307,21 @@ function wc_nimiq_gateway_init() {
 
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
-
 			$order_total = 0;
 			$order_hash = '';
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
 				$order_total = $order->get_total();
+				$order_currency = $order->get_currency();
+
+				update_post_meta( $order_id, 'order_total_in_nim', $order_total );
+				if( $order_currency !== 'NIM' ) {
+				    // @TODO: Fetch price info from some api
+                    error_log('Fetching Nimiq price info');
+					update_post_meta( $order_id, 'nim_price', $order_hash );
+					update_post_meta( $order_id, 'order_total_in_nim', $order_total );
+				}
 
 				$order_hash = $order->get_meta( 'order_hash' );
 				if ( empty( $order_hash ) ) {
