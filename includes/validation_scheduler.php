@@ -8,8 +8,15 @@ add_action( 'wc_nimiq_scheduled_validation', 'wc_nimiq_validate_orders' );
 
 function wc_nimiq_start_validation_schedule() {
     if ( ! as_next_scheduled_action( 'wc_nimiq_scheduled_validation' ) ) {
-        $next_quarter_hour = ceil(time() / (15 * 60)) * (15 * 60);
-        $interval = 15 * 60; // 15 minutes
+	    require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'woocommerce-gateway-nimiq.php';
+	    wc_nimiq_gateway_init();
+	    $gateway           = new WC_Gateway_Nimiq();
+	    $next_quarter_hour = ceil( time() / ( 15 * 60 ) ) * ( 15 * 60 );
+	    $interval_minutes  = $gateway->get_option( 'validation_interval' );
+	    if ( ! $interval_minutes ) {
+		    $interval_minutes = 15;
+	    }
+	    $interval = $interval_minutes * 60; // 15 minutes
         as_schedule_recurring_action( $next_quarter_hour, $interval, 'wc_nimiq_scheduled_validation' );
     }
 }

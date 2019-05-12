@@ -167,7 +167,6 @@ function wc_nimiq_gateway_init() {
 					'placeholder' => 'NQ...',
 					'desc_tip'    => true,
 				),
-
 				'price_service' => array(
 					'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -175,8 +174,9 @@ function wc_nimiq_gateway_init() {
 					'default'     => 'none',
 					'options'     => array(
 						// List available price services here. The option value must match the file name.
-						'none' => 'None',
-						'nimiqx' => 'NimiqX',
+						'none'      => 'None',
+						'coingecko' => 'Coingecko',
+						'nimiqx'    => 'NimiqX',
 					),
 					'desc_tip'    => true,
 				),
@@ -191,6 +191,14 @@ function wc_nimiq_gateway_init() {
 						'json_rpc'    => 'Nimiq JSON-RPC API',
 						'nimiqx'      => 'NimiqX (mainnet)',
 					),
+					'desc_tip'    => true,
+				),
+
+				'validation_interval' => array(
+					'title'       => __( 'Validation interval', 'wc-gateway-nimiq' ),
+					'type'        => 'number',
+					'description' => __( 'Interval in minutes to validate transactions. If you change this, disable and enable to make the change in effect.', 'wc-gateway-nimiq' ),
+					'default'     => 15,
 					'desc_tip'    => true,
 				),
 
@@ -330,17 +338,27 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
 			$order_total = 0;
 			$order_hash = '';
+			$nim_price = 0;
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
 				$order_total = $order->get_total();
 				$order_currency = $order->get_currency();
+				$price_service  = $this->get_option( 'price_service' );
 
 				update_post_meta( $order_id, 'order_total_in_nim', $order_total );
-				if( $order_currency !== 'NIM' ) {
-				    // @TODO: Fetch price info from some api
-                    error_log('Fetching Nimiq price info');
-					update_post_meta( $order_id, 'nim_price', $order_hash );
+				if ( $order_currency !== 'NIM' && $price_service !== 'none' ) {
+					// @TODO: Fetch price info from some api
+					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
+					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
+
+					$price_service = new $class( $this );
+					$nim_price     = $price_service->getCurrentPrice( $order_currency );
+					$order_total   = $order_total / $nim_price;
+
+					error_log( 'Fetching Nimiq price info' );
+					update_post_meta( $order_id, 'nim_price', $nim_price );
+					update_post_meta( $order_id, 'nim_price_currency', $order_currency );
 					update_post_meta( $order_id, 'order_total_in_nim', $order_total );
 				}
 
@@ -379,7 +397,14 @@ function wc_nimiq_gateway_init() {
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
 				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
 
-				<p class="form-row">Please click the big button below to pay with Nimiq.</p>
+				<p class="form-row">
+                    Your order amount is: <?= number_format( $order_total, 2, '.', ' ' ); ?> NIM.<br/>
+					<?php if ( $nim_price !== 0 ): ?>
+                        Conversion rate: 1 NIM = <?= wc_price( $nim_price, [ 'decimals' => 5 ] ); ?>
+                        <br/>
+					<?php endif; ?>
+                    Please click the big button below to pay with Nimiq.
+                </p>
 			</div>
 
 			<div id="nim_payment_complete_block" class="hidden">

@@ -2,7 +2,7 @@
     'use strict';
 
     function on_price_service_change(service_slug){
-        console.debug('Validation service selected:', service_slug);
+        console.debug('Price service selected:', service_slug);
 
         // Disable all conditional fields
         var conditional_fields = [
