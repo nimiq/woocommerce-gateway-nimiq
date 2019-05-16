@@ -39,7 +39,7 @@
 
         // Start Accounts action
         try {
-            var signed_transaction = await accountsClient.checkout(request);
+            var signed_transaction = await hubApi.checkout(request);
             if (use_redirect()) return;
             on_signed_transaction(signed_transaction);
         } catch (e) {
@@ -60,7 +60,7 @@
 
         awaiting_transaction_signing = false;
 
-        $('#nim_account_selector_block').addClass('hidden');
+        $('#nim_gateway_info_block').addClass('hidden');
         $('#nim_payment_complete_block').removeClass('hidden');
 
         nim_payment_completed = true;
@@ -81,15 +81,15 @@
 
     let redirectBehavior = null;
     if (use_redirect()) {
-        redirectBehavior = new AccountsClient.RedirectRequestBehavior(window.location.href);
+        redirectBehavior = new HubApi.RedirectRequestBehavior(window.location.href);
     }
 
-    // Initialize AccountsClient
-    window.accountsClient = new AccountsClient(CONFIG.ACCOUNTS_URL, redirectBehavior);
+    // Initialize HubApi
+    window.hubApi = new HubApi(CONFIG.ACCOUNTS_URL, redirectBehavior);
 
     if (use_redirect()) {
         // Check for a redirect response
-        accountsClient.on(AccountsClient.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
-        accountsClient.checkRedirectResponse();
+        hubApi.on(HubApi.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
+        hubApi.checkRedirectResponse();
     }
 })(jQuery);

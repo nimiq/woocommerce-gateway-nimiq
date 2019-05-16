@@ -155,7 +155,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					// FIXME: Enable mainnet when Accounts Manager is released to mainnet
+					// FIXME: Enable mainnet when Hub API is released to mainnet
 					// 'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
 					'options'     => array( 'test' => 'Testnet' ),
 					'desc_tip'    => true,
@@ -213,7 +213,7 @@ function wc_nimiq_gateway_init() {
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
-					'description' => __( 'How the user should visit the Accounts Manager.', 'wc-gateway-nimiq' ),
+					'description' => __( 'How the user should visit the Nimiq Checkout.', 'wc-gateway-nimiq' ),
 					'default'     => 'popup',
 					'options'     => $redirect_behaviour_options,
 					'desc_tip'    => true,
@@ -300,7 +300,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('AccountsClient', plugin_dir_url( __FILE__ ) . 'js/AccountsClient.standalone.umd.js', [], $this->version(), true );
+			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
 
 			$order_total = 0;
 			$order_hash = '';
@@ -323,10 +323,10 @@ function wc_nimiq_gateway_init() {
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'AccountsClient' ], $this->version(), true );
+			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'HubApi' ], $this->version(), true );
 			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
 				'SITE_TITLE'     => get_bloginfo( 'name' ),
-				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
+				'HUB_URL'        => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com/' : 'https://hub.nimiq-testnet.com/',
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
@@ -338,7 +338,7 @@ function wc_nimiq_gateway_init() {
 
 			?>
 
-			<div id="nim_account_selector_block">
+			<div id="nim_gateway_info_block">
 				<noscript><strong>Javascript is required to pay with Nimiq. Please activate Javascript to continue.</strong></noscript>
 
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
