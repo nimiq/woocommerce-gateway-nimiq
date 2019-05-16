@@ -55,11 +55,17 @@ also needs to be adapted to show/hide those fields conditionally.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.4.0
+- Stable Tag: 2.5.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.05.17 - version 2.5.0**
+- Bug fix for JS error
+- Disable redirect option on non-SSL sites
+- Allow using Basic Auth with a Nimiq RPC server
+- Update to Nimiq Hub API RC5
 
 **2019.03.22 - version 2.4.0**
 - Update to new Nimiq Accounts API
