@@ -155,9 +155,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					// FIXME: Enable mainnet when Hub API is released to mainnet
-					// 'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
-					'options'     => array( 'test' => 'Testnet' ),
+					'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
 					'desc_tip'    => true,
 				),
 
