@@ -55,11 +55,14 @@ also needs to be adapted to show/hide those fields conditionally.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.5.0
+- Stable Tag: 2.6.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
+
+**2019.05.23 - version 2.6.0**
+- Enable mainnet option
 
 **2019.05.17 - version 2.5.0**
 - Bug fix for JS error
