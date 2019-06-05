@@ -10,12 +10,16 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
     public function __construct( $gateway ) {
         $this->transaction = null;
 
+        if ( $gateway->get_option( 'network' ) !== 'main' ) {
+            throw new WP_Error('connection', 'NimiqX can only be used in mainnet.');
+        }
+
         $this->api_key = $gateway->get_option( 'nimiqx_api_key' );
         if ( empty( $this->api_key ) ) {
             throw new WP_Error('connection', 'API key not set.');
         }
         if ( !ctype_xdigit( $this->api_key ) ) {
-            throw new WP_Error('service', 'Invalid API key');
+            throw new WP_Error('service', 'Invalid API key.');
         }
     }
 
@@ -24,20 +28,19 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      * @return {number|WP_Error}
      */
     public function blockchain_height() {
-        $request_uri = 'https://api.nimiqx.com/network-stats/?api_key=' . $this->api_key;
-        $api_response = wp_remote_get( $request_uri );
+        $api_response = wp_remote_get( $this->makeUrl( 'network-stats' ) );
 
         if ( is_wp_error( $api_response ) ) {
-            return new WP_Error('connection', $api_response->errors[ 0 ]);
+            return $api_response;
         }
 
-        $current_height = json_decode( $api_response[ 'body' ] );
+        $network_stats = json_decode( $api_response[ 'body' ] );
 
-        if ( $current_height->error ) {
-            return new WP_Error('service', $current_height->error);
+        if ( $network_stats->error ) {
+            return new WP_Error( 'service', $network_stats->error );
         }
 
-        return $current_height[ 0 ]->height;
+        return $network_stats[ 0 ]->height;
     }
 
     /**
@@ -47,12 +50,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error('service', 'Invalid transaction hash');
+            return new WP_Error('service', 'Invalid transaction hash.');
         }
 
-        $request_uri = 'https://api.nimiqx.com/transaction/' . $transaction_hash . '?api_key=' . $this->api_key;
-        
-        $api_response = wp_remote_get( $request_uri );
+        $api_response = wp_remote_get( $this->makeUrl( 'transaction/' . $transaction_hash ) );
+
         if ( is_wp_error( $api_response ) ) {
             return $api_response;
         }
@@ -118,6 +120,10 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function block_height() {
         return $this->transaction->height;
+    }
+
+    private function makeUrl( $path ) {
+        return 'https://api.nimiqx.com/' . $path . '?api_key=' . $this->api_key;
     }
 }
 

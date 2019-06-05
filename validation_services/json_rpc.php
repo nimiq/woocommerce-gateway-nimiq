@@ -28,17 +28,17 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
             return $api_response;
         }
 
-        $current_height = json_decode( $api_response[ 'body' ] );
+        $block_number = json_decode( $api_response[ 'body' ] );
 
-        if ( $current_height->error ) {
-            return new WP_Error( 'service', 'JSON-RPC replied: ' . $current_height->error->message );
+        if ( $block_number->error ) {
+            return new WP_Error( 'service', 'JSON-RPC replied: ' . $block_number->error->message );
         }
 
-        if ( empty( $current_height ) ) {
+        if ( empty( $block_number ) ) {
             return new WP_Error( 'service', 'Could not get the current blockchain height from JSON-RPC. (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
         }
 
-        return $current_height->result;
+        return $block_number->result;
     }
 
     /**
@@ -48,7 +48,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error( 'connection', 'Invalid transaction hash' );
+            return new WP_Error( 'connection', 'Invalid transaction hash.' );
         }
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
@@ -56,7 +56,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $username = $gateway->get_option( 'jsonrpc_username' );
         $password = $gateway->get_option( 'jsonrpc_password' );
         $headers = array( );
-    
+
         if ( !empty( $username ) || !empty( $password ) ) {
             $authorization = 'Basic ' . base64_encode( $username . ":" . $password );
             $headers['Authorization'] = $authorization;
