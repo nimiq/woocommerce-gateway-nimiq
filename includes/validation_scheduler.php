@@ -1,6 +1,7 @@
 <?php
 
 $plugin_main_file = dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'woocommerce-gateway-nimiq.php';
+require_once( $plugin_main_file );
 
 register_activation_hook( $plugin_main_file, 'wc_nimiq_start_validation_schedule' );
 register_deactivation_hook( $plugin_main_file, 'wc_nimiq_end_validation_schedule' );
@@ -8,15 +9,14 @@ add_action( 'wc_nimiq_scheduled_validation', 'wc_nimiq_validate_orders' );
 
 function wc_nimiq_start_validation_schedule() {
     if ( ! as_next_scheduled_action( 'wc_nimiq_scheduled_validation' ) ) {
-	    require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'woocommerce-gateway-nimiq.php';
-	    wc_nimiq_gateway_init();
-	    $gateway           = new WC_Gateway_Nimiq();
-	    $next_quarter_hour = ceil( time() / ( 15 * 60 ) ) * ( 15 * 60 );
-	    $interval_minutes  = $gateway->get_option( 'validation_interval' );
-	    if ( ! $interval_minutes ) {
-		    $interval_minutes = 15;
-	    }
-	    $interval = $interval_minutes * 60; // 15 minutes
+        $next_quarter_hour = ceil(time() / (15 * 60)) * (15 * 60);
+
+        wc_nimiq_gateway_init();
+        $gateway = new WC_Gateway_Nimiq();
+
+        $interval_minutes = intval( $gateway->get_option( 'validation_interval' ) ) ?: 30;
+        $interval = $interval_minutes * 60; // Convert to seconds
+
         as_schedule_recurring_action( $next_quarter_hour, $interval, 'wc_nimiq_scheduled_validation' );
     }
 }
@@ -49,7 +49,7 @@ function wc_nimiq_validate_orders() {
     $gateway = new WC_Gateway_Nimiq();
     $validation_results = _do_bulk_validate_transactions( $gateway, $ids );
 
-	if ( ! empty( $validation_results[ 'errors' ] ) ) {
+    if ( ! empty( $validation_results[ 'errors' ] ) ) {
         foreach ( $validation_results[ 'errors' ] as $error ) {
             $logger->error( $error, $log_context );
         }

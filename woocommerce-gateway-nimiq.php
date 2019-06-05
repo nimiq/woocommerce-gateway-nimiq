@@ -199,8 +199,9 @@ function wc_nimiq_gateway_init() {
 				'validation_interval' => array(
 					'title'       => __( 'Validation interval', 'wc-gateway-nimiq' ),
 					'type'        => 'number',
-					'description' => __( 'Interval in minutes to validate transactions. If you change this, disable and enable to make the change in effect.', 'wc-gateway-nimiq' ),
-					'default'     => 15,
+					'description' => __( 'Interval in minutes to validate transactions. If you change this, disable and enable this plugin to put the change into effect.', 'wc-gateway-nimiq' ),
+					'default'     => 30,
+					'placeholder' => 'Default: 30',
 					'desc_tip'    => true,
 				),
 
