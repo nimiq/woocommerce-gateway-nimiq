@@ -111,7 +111,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			continue;
 		}
 
-		if ( $service->value() !== intval( $order->get_meta('order_total_in_nim') * 1e5 ) ) {
+		if ( $service->value() !== intval( $order->get_meta('order_total_nim') * 1e5 ) ) {
 			fail_order( $order, 'Transaction value does not match.', true );
 			$count_orders_updated++;
 			continue;

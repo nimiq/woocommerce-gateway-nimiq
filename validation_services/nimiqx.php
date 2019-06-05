@@ -59,7 +59,13 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
             return $api_response;
         }
 
-        $this->transaction = json_decode( $api_response[ 'body' ] );
+        $transaction = json_decode( $api_response[ 'body' ] );
+
+        if ( $transaction->error ) {
+            return new WP_Error( 'service', $transaction->error );
+        }
+
+        $this->transaction = $transaction;
     }
 
     /**

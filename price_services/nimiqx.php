@@ -15,24 +15,45 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
      */
     public function __construct( $gateway ) {
         $this->gateway = $gateway;
+
         $this->api_key = $gateway->get_option( 'nimiqx_api_key' );
+        if ( empty( $this->api_key ) ) {
+            throw new WP_Error('connection', 'API key not set.');
+        }
+        if ( !ctype_xdigit( $this->api_key ) ) {
+            throw new WP_Error('service', 'Invalid API key.');
+        }
     }
 
     /**
-     * @param $currency
-     *
-     * @return float
-     * @throws Exception
+     * @param {string} $currency
+     * @return {float}
      */
     public function getCurrentPrice( $currency ) {
-        if ( ! $this->api_key ) {
-            throw new Exception( new WP_Error( 'Invalid NimiqX api key!' ) );
-        }
         $currency = strtolower( $currency );
-        $output   = file_get_contents( $this->api_endpoint . 'price/btc,' . $currency . '?api_key=' . $this->api_key );
-        $data     = json_decode( $output, true );
+        $api_response = wp_remote_get( $this->makeUrl( 'price/' . $currency ) );
 
-        return ( $data[ $currency ] ) ? $data[ $currency ] : 0;
+        if ( is_wp_error( $api_response ) ) {
+            return $api_response;
+        }
+
+        $result = json_decode( $api_response[ 'body' ], true );
+
+        if ( $result->error ) {
+            return new WP_Error( 'service', $result->error );
+        }
+
+        $price = $result[ $currency ];
+
+        if ( empty( $price ) ) {
+            return new WP_Error( 'service', 'The currency ' . strtoupper( $currency ) . ' is not supported by NimiqX.' );
+        };
+
+        return $price;
+    }
+
+    private function makeUrl( $path ) {
+        return 'https://api.nimiqx.com/' . $path . '?api_key=' . $this->api_key;
     }
 }
 
