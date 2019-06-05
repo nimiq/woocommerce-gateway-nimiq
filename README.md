@@ -8,14 +8,11 @@ When a transaction is validated, the order status is set to "processing".
 
 ## Limitations
 
-### Testnet only!
-This plugin depends on the Nimiq Accounts Manager with third-party support, which is currently only available in
-the Nimiq testnet. This plugin can therefore **not** be used in the mainnet to transact real value.
-
 ### No automatic currency conversion!
 **This plugin does not currently include automatic currency conversion and requires the currency of the webshop to be set to NIM!**
 The currency setup is included in this plugin and NIM will be available to select under
 "WooCommerce &gt; Settings &gt; General &gt; Currency options" after activating this plugin.
+Update: [Automatic currency conversion is coming!](https://github.com/nimiq/woocommerce-gateway-nimiq/pull/14)
 
 ## Installation
 
@@ -51,29 +48,47 @@ also needs to be adapted to show/hide those fields conditionally.
 
 - Contributors: skyverge, beka.rice, nimiq
 - Tags: woocommerce, payment gateway, gateway, nimiq, cryptocurrency
-- Requires at least: 3.8
+- Requires at least: 4.9
 - Tested up to: 5.0
-- Requires WooCommerce at least: 3.0
+- Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.2.1
+- Stable Tag: 2.6.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 ## Changelog
 
+**2019.05.23 - version 2.6.0**
+- Enable mainnet option
+
+**2019.05.17 - version 2.5.0**
+- Bug fix for JS error
+- Disable redirect option on non-SSL sites
+- Allow using Basic Auth with a Nimiq RPC server
+- Update to Nimiq Hub API RC5
+
+**2019.03.22 - version 2.4.0**
+- Update to new Nimiq Accounts API
+- Add DPD carrier handling for tracking links
+
+**2019.01.15 - version 2.3.0**
+- Fix error displayed in front-end
+- Add JSON-RPC as a validation service (thanks to @terorie)
+- Add scheduled automatic transaction validation
+
 **2019.01.11 - version 2.2.1**
-* Add script to settings page with scaffolding for showing/hiding conditional fields
+- Add script to settings page with scaffolding for showing/hiding conditional fields
 
 **2019.01.11 - version 2.2.0**
-* Add setting for checkout behavior: popup or redirect
-* Add setting for displaying an image (e.g. the shop's logo) during checkout
-* Enable easy addition and configuration of transaction validation services
+- Add setting for checkout behavior: popup or redirect
+- Add setting for displaying an image (e.g. the shop's logo) during checkout
+- Enable easy addition and configuration of transaction validation services
 
 **2019.01.08 - version 2.1.0**
-* Fix transaction message order hash detection to always match the *last* pair of round brackets
-* Calculate fee from byte array length, instead of string length
-* Use site title as appName in Accounts Manager request
-* Clean up code and comments for public release
+- Fix transaction message order hash detection to always match the *last* pair of round brackets
+- Calculate fee from byte array length, instead of string length
+- Use site title as appName in Accounts Manager request
+- Clean up code and comments for public release
 
 **2018.11.25 - version 2.0.0**
 - Use new Nimiq Accounts checkout experience

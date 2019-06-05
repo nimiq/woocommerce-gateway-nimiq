@@ -8,6 +8,10 @@
     var awaiting_transaction_signing = false;
     var nim_payment_completed = false;
 
+    var use_redirect = function() {
+        return CONFIG.RPC_BEHAVIOR === 'redirect';
+    }
+
     var checkout_pay_order_hook = function(event) {
         if (nim_payment_completed) return true;
 
@@ -35,7 +39,8 @@
 
         // Start Accounts action
         try {
-            var signed_transaction = await accountsClient.checkout(request);
+            var signed_transaction = await hubApi.checkout(request);
+            if (use_redirect()) return;
             on_signed_transaction(signed_transaction);
         } catch (e) {
             on_signing_error(e);
@@ -50,12 +55,12 @@
         $('button#place_order').prop('disabled', true);
 
         // Write transaction hash and sender address into the hidden inputs
-        $('#transaction_hash').val(base64ToHex(signed_transaction.hash));
-        $('#customer_nim_address').val(signed_transaction.sender);
+        $('#transaction_hash').val(signed_transaction.hash);
+        $('#customer_nim_address').val(signed_transaction.raw.sender);
 
         awaiting_transaction_signing = false;
 
-        $('#nim_account_selector_block').addClass('hidden');
+        $('#nim_gateway_info_block').addClass('hidden');
         $('#nim_payment_complete_block').removeClass('hidden');
 
         nim_payment_completed = true;
@@ -75,25 +80,16 @@
     checkout_form.on('submit', checkout_pay_order_hook);
 
     let redirectBehavior = null;
-    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
-        redirectBehavior = new AccountsClient.RedirectRequestBehavior(window.location.href);
+    if (use_redirect()) {
+        redirectBehavior = new HubApi.RedirectRequestBehavior(window.location.href);
     }
 
-    // Initialize AccountsClient
-    window.accountsClient = new AccountsClient(CONFIG.ACCOUNTS_URL, redirectBehavior);
+    // Initialize HubApi
+    window.hubApi = new HubApi(CONFIG.ACCOUNTS_URL, redirectBehavior);
 
-    if (CONFIG.RPC_BEHAVIOR === 'redirect') {
+    if (use_redirect()) {
         // Check for a redirect response
-        accountsClient.on(AccountsClient.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
-        accountsClient.checkRedirectResponse();
+        hubApi.on(HubApi.RequestType.CHECKOUT, on_signed_transaction, on_signing_error);
+        hubApi.checkRedirectResponse();
     }
 })(jQuery);
-
-function base64ToHex(str) {
-    for (var i = 0, bin = atob(str.replace(/[ \r\n]+$/, "")), hex = []; i < bin.length; i++) {
-        let tmp = bin.charCodeAt(i).toString(16);
-        if (tmp.length === 1) tmp = "0" + tmp;
-        hex[hex.length] = tmp;
-    }
-    return hex.join("");
-}

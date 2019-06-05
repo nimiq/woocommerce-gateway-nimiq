@@ -53,7 +53,20 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
 
-        $api_response = wp_remote_post( $this->api_domain, array( 'body' => $call ) );
+        $username = $gateway->get_option( 'jsonrpc_username' );
+        $password = $gateway->get_option( 'jsonrpc_password' );
+        $headers = array( );
+    
+        if ( !empty( $username ) || !empty( $password ) ) {
+            $authorization = 'Basic ' . base64_encode( $username . ":" . $password );
+            $headers['Authorization'] = $authorization;
+        }
+
+        $api_response = wp_remote_post($this->api_domain, array(
+                'headers' => $headers,
+                'body' => $call,
+            )
+        );
 
         if ( is_wp_error( $api_response ) ) {
             return $api_response;

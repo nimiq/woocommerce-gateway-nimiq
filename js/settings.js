@@ -7,6 +7,8 @@
         // Disable all conditional fields
         var conditional_fields = [
             '#woocommerce_nimiq_gateway_jsonrpc_url',
+            '#woocommerce_nimiq_gateway_jsonrpc_username',
+            '#woocommerce_nimiq_gateway_jsonrpc_password',
             '#woocommerce_nimiq_gateway_nimiqx_api_key',
             // '#conditional_field_id',
         ];
@@ -16,7 +18,10 @@
         switch (service_slug) {
             case 'nimiq_watch': break;
             case 'json_rpc':
-                $('#woocommerce_nimiq_gateway_jsonrpc_url').closest('tr').removeClass('hidden');
+                $('#woocommerce_nimiq_gateway_jsonrpc_url, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_username, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_password')
+                    .closest('tr').removeClass('hidden');
                 break;
             case 'nimiqx':
                 $('#woocommerce_nimiq_gateway_nimiqx_api_key').closest('tr').removeClass('hidden');

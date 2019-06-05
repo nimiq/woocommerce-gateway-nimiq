@@ -1,13 +1,17 @@
 <?php
 /**
  * Plugin Name: WooCommerce Nimiq Gateway
- * Plugin URI:
+ * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
- * Author URI: http://www.nimiq.com/
- * Version: 2.2.1
+ * Author URI: http://www.nimiq.com
+ * Version: 2.6.0
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
+ * Requires at least: 4.9
+ * Tested up to: 5.0
+ * WC requires at least: 3.5
+ * WC tested up to: 3.5
  *
  * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, 2018 Nimiq Network Ltd.
  *
@@ -128,6 +132,15 @@ function wc_nimiq_gateway_init() {
 		 */
 		public function init_form_fields() {
 
+			$redirect_behaviour_options = [
+				'popup' => 'Popup'
+			];
+
+
+			if ( $_SERVER['HTTPS'] === 'on' ) {
+				$redirect_behaviour_options['redirect'] = 'Redirect';
+			}
+
 			$this->form_fields = apply_filters( 'wc_nimiq_form_fields', array(
 
 				'enabled' => array(
@@ -142,9 +155,7 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'select',
 					'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
 					'default'     => 'test',
-					// FIXME: Enable mainnet when Accounts Manager is released to mainnet
-					// 'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
-					'options'     => array( 'test' => 'Testnet' ),
+					'options'     => array( 'test' => 'Testnet', 'main' => 'Mainnet' ),
 					'desc_tip'    => true,
 				),
 
@@ -180,20 +191,37 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'jsonrpc_username' => array(
+					'title'       => __( 'Validation JSON-RPC Username', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( '(Optional) Username for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( '', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
+				'jsonrpc_password' => array(
+					'title'       => __( 'Validation JSON-RPC Password', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( '(Optional) Password for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( '', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+        
 				'nimiqx_api_key' => array(
 					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Token for accessing the NimiqX validation service.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Without the token you will not be able to connect to the validation service.' ),
+					'placeholder' => __( 'This field is required.' ),
 					'desc_tip'    => true, 
-				),
 
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
-					'description' => __( 'How the user should visit the Accounts Manager.', 'wc-gateway-nimiq' ),
+					'description' => __( 'How the user should visit the Nimiq Checkout.', 'wc-gateway-nimiq' ),
 					'default'     => 'popup',
-					'options'     => array( 'popup' => 'Popup', 'redirect' => 'Redirect' ),
+					'options'     => $redirect_behaviour_options,
 					'desc_tip'    => true,
 				),
 
@@ -278,7 +306,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('AccountsClient', plugin_dir_url( __FILE__ ) . 'js/AccountsClient.standalone.umd.js', [], $this->version(), true );
+			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
 
 			$order_total = 0;
 			$order_hash = '';
@@ -301,14 +329,14 @@ function wc_nimiq_gateway_init() {
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'AccountsClient' ], $this->version(), true );
+			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'HubApi' ], $this->version(), true );
 			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
 				'SITE_TITLE'     => get_bloginfo( 'name' ),
-				'ACCOUNTS_URL'   => $this->get_option( 'network' ) === 'main' ? 'https://accounts.nimiq.com/' : 'https://accounts.nimiq-testnet.com/',
+				'HUB_URL'        => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com/' : 'https://hub.nimiq-testnet.com/',
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( floatval( $order_total ) * 1e5 ),
-				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) || 0 ),
+				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) ?: 0 ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 			) );
@@ -316,7 +344,7 @@ function wc_nimiq_gateway_init() {
 
 			?>
 
-			<div id="nim_account_selector_block">
+			<div id="nim_gateway_info_block">
 				<noscript><strong>Javascript is required to pay with Nimiq. Please activate Javascript to continue.</strong></noscript>
 
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
@@ -411,7 +439,7 @@ function wc_nimiq_gateway_init() {
 
 			// If the order has meta info fields 'carrier' and 'tracking_number', we can add tracking details to the confirmation email
 			// TODO: Maybe this does not belong into this payment plugin and should be moved to a standalone plugin.
-			if ( ! $sent_to_admin && $order->get_payment_method() === $this->id && $order->has_status( 'completed' ) ) {
+			if ( ! $sent_to_admin && $order->has_status( 'completed' ) ) {
 				$carrier = $order->get_meta( 'carrier' );
 				$tracking_number = $order->get_meta( 'tracking_number' );
 
@@ -424,6 +452,7 @@ function wc_nimiq_gateway_init() {
 					switch ( $carrier ) {
 						case 'DHL': $tracking_url = 'https://nolp.dhl.de/nextt-online-public/en/search?piececode=' . $tracking_number; break;
 						case 'Deutsche Post': $tracking_url = 'https://www.deutschepost.de/sendung/simpleQuery.html?locale=en_GB'; break;
+						case 'DPD': $tracking_url = 'https://my.dpd.de/myParcel.aspx?parcelno=' . $tracking_number; break;
 						// TODO: Add carriers to this list
 					}
 
@@ -498,3 +527,4 @@ function wc_nimiq_gateway_init() {
 
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );

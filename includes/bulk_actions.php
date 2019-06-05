@@ -65,6 +65,9 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		$order = new WC_Order( (int) $postID );
 
+		// Only continue if payment method is this plugin
+		if ( $order->get_payment_method() !== $gateway->id ) continue;
+
 		// Only continue if order status is currently 'on hold'
 		if ( $order->get_status() !== 'on-hold' ) continue;
 
@@ -188,5 +191,5 @@ function handle_bulk_admin_notices_after_redirect() {
 		}
 	}
 
-	echo '<div class="updated notice"><p>' . _n( $count_orders_updated . ' order updated.', $count_orders_updated . ' orders updated.', $count_orders_updated, 'woocommerce' ) . '</p></div>';
+	echo '<div class="updated notice"><p>Updated ' . _n( $count_orders_updated . ' order', $count_orders_updated . ' orders', $count_orders_updated, 'woocommerce' ) . '.</p></div>';
 }
