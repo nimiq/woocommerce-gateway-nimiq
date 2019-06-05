@@ -167,10 +167,11 @@ function wc_nimiq_gateway_init() {
 					'placeholder' => 'NQ...',
 					'desc_tip'    => true,
 				),
+
 				'price_service' => array(
 					'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
-					'description' => __( 'Which service to use for fetching price information.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Which service to use for fetching price information for automatic currency conversion.', 'wc-gateway-nimiq' ),
 					'default'     => 'none',
 					'options'     => array(
 						// List available price services here. The option value must match the file name.
@@ -180,6 +181,7 @@ function wc_nimiq_gateway_init() {
 					),
 					'desc_tip'    => true,
 				),
+
 				'validation_service' => array(
 					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -199,15 +201,6 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'number',
 					'description' => __( 'Interval in minutes to validate transactions. If you change this, disable and enable to make the change in effect.', 'wc-gateway-nimiq' ),
 					'default'     => 15,
-					'desc_tip'    => true,
-				),
-
-				'nimiqx_api_key' => array(
-					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
-					'type'        => 'text',
-					'description' => __( 'NimiqX is used to convert the order amount to NIM when currency is not NIM', 'wc-gateway-nimiq' ),
-					'default'     => '',
-					'placeholder' => '',
 					'desc_tip'    => true,
 				),
 
@@ -237,13 +230,15 @@ function wc_nimiq_gateway_init() {
 					'placeholder' => __( '', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
-        
+
 				'nimiqx_api_key' => array(
 					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Token for accessing the NimiqX validation service.', 'wc-gateway-nimiq' ),
-					'placeholder' => __( 'This field is required.' ),
-					'desc_tip'    => true, 
+					'description' => __( 'Token for accessing the NimiqX price and validation service.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
 
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
