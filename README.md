@@ -48,7 +48,7 @@ also needs to be adapted to show/hide those fields conditionally.
 - Tested up to: 5.0
 - Requires WooCommerce at least: 3.5
 - Tested WooCommerce up to: 3.5
-- Stable Tag: 2.6.0
+- Stable Tag: 2.7.0
 - License: GPLv3
 - License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,7 +60,12 @@ The text domain is `wc-gateway-nimiq`.
 
 ## Changelog
 
+**2019.06.05 - version 2.7.0**
+- Enable automatic currency conversion to NIM on checkout
+- Make transaction validation interval configurable
+
 **2019.05.23 - version 2.6.0**
+- Update to Nimiq Hub API 1.0.0
 - Enable mainnet option
 
 **2019.05.17 - version 2.5.0**
