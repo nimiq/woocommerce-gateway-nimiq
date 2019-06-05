@@ -1,10 +1,11 @@
-# WooCommerce Nimiq Payment Gateway
+# Nimiq Payment Gateway for WooCommerce
 
-This is a plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
+A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
 
 After an order is submitted via the Nimiq payment method, the order is placed "on-hold".
-Transactions need to be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page.
-When a transaction is validated, the order status is set to "processing".
+Transactions are validated automatically on a short interval, but can also be validated
+manually with a *Validate Transactions* bulk action from the *Orders* admin page.
+When a transaction is validated, the order status changes to "processing".
 
 ## Installation
 
@@ -22,8 +23,8 @@ This plugin supports automatically converting from your store currency to NIM
 upon checkout. Here is a list of supported currencies for the available conversion
 services:
 
-[NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420),
-[Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
+- [NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420)
+- [Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
 
 ## Adding a new validation service
 
