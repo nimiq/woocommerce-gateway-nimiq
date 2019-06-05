@@ -9,6 +9,7 @@
             '#woocommerce_nimiq_gateway_jsonrpc_url',
             '#woocommerce_nimiq_gateway_jsonrpc_username',
             '#woocommerce_nimiq_gateway_jsonrpc_password',
+            '#woocommerce_nimiq_gateway_nimiqx_api_key',
             // '#conditional_field_id',
         ];
         $(conditional_fields.join(',')).closest('tr').addClass('hidden');
@@ -21,6 +22,9 @@
                   '#woocommerce_nimiq_gateway_jsonrpc_username, ' +
                   '#woocommerce_nimiq_gateway_jsonrpc_password')
                     .closest('tr').removeClass('hidden');
+                break;
+            case 'nimiqx':
+                $('#woocommerce_nimiq_gateway_nimiqx_api_key').closest('tr').removeClass('hidden');
                 break;
             // case '': $('#conditional_field_id').closest('tr').removeClass('hidden'); break;
         }

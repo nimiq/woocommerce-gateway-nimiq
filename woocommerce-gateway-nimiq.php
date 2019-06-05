@@ -177,6 +177,7 @@ function wc_nimiq_gateway_init() {
 						// List available validation services here. The option value must match the file name.
 						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
 						'json_rpc'    => 'Nimiq JSON-RPC API',
+						'nimiqx'      => 'NimiqX (mainnet)',
 					),
 					'desc_tip'    => true,
 				),
@@ -207,6 +208,13 @@ function wc_nimiq_gateway_init() {
 					'placeholder' => __( '', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
+        
+				'nimiqx_api_key' => array(
+					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Token for accessing the NimiqX validation service.', 'wc-gateway-nimiq' ),
+					'placeholder' => __( 'This field is required.' ),
+					'desc_tip'    => true, 
 
 				'rpc_behavior' => array(
 					'title'       => __( 'Behavior', 'wc-gateway-nimiq' ),
