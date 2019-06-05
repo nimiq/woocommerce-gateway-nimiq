@@ -8,14 +8,11 @@ When a transaction is validated, the order status is set to "processing".
 
 ## Limitations
 
-### Testnet only!
-This plugin depends on the Nimiq Accounts Manager with third-party support, which is currently only available in
-the Nimiq testnet. This plugin can therefore **not** be used in the mainnet to transact real value.
-
 ### No automatic currency conversion!
 **This plugin does not currently include automatic currency conversion and requires the currency of the webshop to be set to NIM!**
 The currency setup is included in this plugin and NIM will be available to select under
 "WooCommerce &gt; Settings &gt; General &gt; Currency options" after activating this plugin.
+Update: [Automatic currency conversion is coming!](https://github.com/nimiq/woocommerce-gateway-nimiq/pull/14)
 
 ## Installation
 
