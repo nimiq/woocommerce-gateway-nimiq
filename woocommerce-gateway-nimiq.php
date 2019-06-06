@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce Nimiq Gateway
+ * Plugin Name: Nimiq Payments for WooCommerce
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
