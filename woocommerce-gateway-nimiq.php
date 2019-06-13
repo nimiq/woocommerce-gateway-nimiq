@@ -4,16 +4,16 @@
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
- * Author URI: http://www.nimiq.com
+ * Author URI: https://nimiq.com
  * Version: 2.7.0
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  * Requires at least: 4.9
- * Tested up to: 5.0
+ * Tested up to: 5.2
  * WC requires at least: 3.5
- * WC tested up to: 3.5
+ * WC tested up to: 3.6
  *
- * Copyright: (c) 2015-2016 SkyVerge, Inc. (info@skyverge.com) and WooCommerce, 2018 Nimiq Network Ltd.
+ * Copyright: (c) 2018-2019 Nimiq Network Ltd., 2015-2016 SkyVerge, Inc. and WooCommerce
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -21,7 +21,7 @@
  * @package   WC-Gateway-Nimiq
  * @author    Nimiq
  * @category  Admin
- * @copyright Copyright (c) 2015-2016, SkyVerge, Inc. and WooCommerce, 2018-2019, Nimiq Network Ltd.
+ * @copyright Copyright (c) 2018-2019 Nimiq Network Ltd., 2015-2016 SkyVerge, Inc. and WooCommerce
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
  *
  * This Nimiq gateway forks the WooCommerce core "Cheque" payment gateway to create another payment method.

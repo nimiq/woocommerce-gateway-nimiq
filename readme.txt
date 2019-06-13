@@ -2,7 +2,7 @@
 
 Contributors: nimiq, skyverge, beka.rice
 Tags: woocommerce, payment gateway, gateway, nimiq, cryptocurrency
-Requires at least: 4.6
+Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.6
@@ -25,7 +25,7 @@ Features include:
 * Configurable confirmation times with sane defaults
 * Includes the NIM currency for WooCommerce
 
-= Automatic Currency Conversion
+= Automatic Currency Conversion =
 
 This plugin can automatically convert from your store currency to NIM during checkout.
 Here is a list of supported currencies for the included conversion services:
