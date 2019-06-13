@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.6
-Stable tag: v2.7.0
+Stable tag: v2.7.1
 Requires PHP: 5.2.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -50,6 +50,11 @@ When a transaction is validated, the order status changes to "processing".
    to configure this plugin.
 
 == Changelog ==
+
+= 2.7.1 - 2019.06.13 =
+* Fix wrong variable name preventing use of plugin outside of nimiq.com and nimiq-testnet.com
+* Remove package tracking code
+* Normalize tested WP and WC version numbers between readme and plugin file
 
 = 2.7.0 - 2019.06.05 =
 
