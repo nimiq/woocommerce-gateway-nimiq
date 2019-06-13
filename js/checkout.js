@@ -86,7 +86,7 @@
     }
 
     // Initialize HubApi
-    window.hubApi = new HubApi(CONFIG.ACCOUNTS_URL, redirectBehavior);
+    window.hubApi = new HubApi(CONFIG.HUB_URL, redirectBehavior);
 
     if (use_redirect()) {
         // Check for a redirect response
