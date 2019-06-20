@@ -1,6 +1,6 @@
 <?php
 
-$plugin_main_file = dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'woocommerce-gateway-nimiq.php';
+$plugin_main_file = dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'woo-nimiq-gateway.php';
 require_once( $plugin_main_file );
 
 register_activation_hook( $plugin_main_file, 'wc_nimiq_start_validation_schedule' );

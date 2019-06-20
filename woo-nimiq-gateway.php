@@ -172,10 +172,9 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
 					'description' => __( 'Which service to use for fetching price information for automatic currency conversion.', 'wc-gateway-nimiq' ),
-					'default'     => 'none',
+					'default'     => 'coingecko',
 					'options'     => array(
 						// List available price services here. The option value must match the file name.
-						'none'      => 'None',
 						'coingecko' => 'Coingecko',
 						'nimiqx'    => 'NimiqX',
 					),
@@ -347,7 +346,7 @@ function wc_nimiq_gateway_init() {
 				if ( $order_currency === 'NIM') {
 					$order_total_nim = $order_total;
 					update_post_meta( $order_id, 'order_total_nim', $order_total_nim );
-				} elseif ( $price_service !== 'none' ) {
+				} else {
 					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
 					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
 
@@ -364,8 +363,6 @@ function wc_nimiq_gateway_init() {
 						update_post_meta( $order_id, 'nim_price_currency', $order_currency );
 						update_post_meta( $order_id, 'order_total_nim', $order_total_nim );
 					}
-				} else {
-					$nim_price = new WP_Error( 'connection', 'No price conversion service configured.' );
 				}
 
 				$order_hash = $order->get_meta( 'order_hash' );
