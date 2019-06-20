@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.6
-Stable tag: v2.7.1
+Stable tag: v2.7.2
 Requires PHP: 5.2.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -44,6 +44,10 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
 == Changelog ==
+
+= 2.7.2 - 2019.06.20 =
+* Select Coingecko price service by default to reduce setup effort
+* Add assets and adapt README for WordPress plugin page (https://wordpress.org/plugins/woo-nimiq-gateway)
 
 = 2.7.1 - 2019.06.13 =
 * Fix wrong variable name preventing use of plugin outside of nimiq.com and nimiq-testnet.com

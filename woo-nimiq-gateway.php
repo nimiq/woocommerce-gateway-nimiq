@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Nimiq Payments for WooCommerce
+ * Plugin Name: Nimiq Checkout for WooCommerce
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 2.7.1
+ * Version: 2.7.2
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  * Requires at least: 4.9
