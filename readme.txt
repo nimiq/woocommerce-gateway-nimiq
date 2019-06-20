@@ -1,7 +1,7 @@
-=== Nimiq Payments for WooCommerce ===
+=== Nimiq Checkout for WooCommerce ===
 
-Contributors: nimiq, skyverge, beka.rice
-Tags: woocommerce, payment gateway, gateway, nimiq, cryptocurrency
+Contributors: nimiq
+Tags: woocommerce, payment gateway, checkout, gateway, nimiq, crypto, cryptocurrency
 Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
@@ -27,27 +27,21 @@ Features include:
 
 = Automatic Currency Conversion =
 
-This plugin can automatically convert from your store currency to NIM during checkout.
-Here is a list of supported currencies for the included conversion services:
+This plugin can automatically convert from your store currency to NIM during checkout. Here is a list of supported currencies for the included conversion services:
 
 * [NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420)
 * [Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
 
 = Order Status Updates =
 
-After an order is submitted using the Nimiq payment method, the order is placed "on-hold".
-Transactions are validated automatically on a short interval, and can also be validated
-manually with a *Validate Transactions* bulk action from the *Orders* admin page.
-When a transaction is validated, the order status changes to "processing".
+After an order is submitted using the Nimiq payment method, the order is placed "on-hold". Transactions are validated automatically on a short interval, and can also be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page. When a transaction is validated, the order status changes to "processing".
 
 == Installation ==
 
 1. Be sure you're running WooCommerce 3.5 or higher in your shop.
-2. Upload the [latest release .zip file](https://github.com/nimiq/woocommerce-gateway-nimiq/releases)
-   with the plugin files under **Plugins &gt; Add New &gt; Upload**.
+2. Upload the [latest release .zip file](https://github.com/nimiq/woocommerce-gateway-nimiq/releases) with the plugin files under **Plugins &gt; Add New &gt; Upload**.
 3. Activate the plugin through the **Plugins** menu in WordPress.
-4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method
-   to configure this plugin.
+4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
 == Changelog ==
 
@@ -96,8 +90,7 @@ When a transaction is validated, the order status changes to "processing".
 
 = 2.1.0 - 2019.01.08 =
 
-* Fix transaction message order hash detection to always match the *last* pair of
-  round brackets
+* Fix transaction message order hash detection to always match the *last* pair of round brackets
 * Calculate fee from byte array length, instead of string length
 * Use site title as appName in Accounts Manager request
 * Clean up code and comments for public release
@@ -108,9 +101,7 @@ When a transaction is validated, the order status changes to "processing".
 
 = 1.10.0 - 2018.11.15 =
 
-* Add tracking details, such as carrier and tracking number, to "completed" emails
-  (This should be moved to a separate plugin in the future, as this plugin should
-  only be for the payment gateway.)
+* Add tracking details, such as carrier and tracking number, to "completed" emails (This should be moved to a separate plugin in the future, as this plugin should only be for the payment gateway.)
 
 = 1.9.2 - 2018.11.14 =
 
@@ -177,33 +168,20 @@ When a transaction is validated, the order status changes to "processing".
 
 = 1.1.0 - 2018.06.05 =
 
-* Adapted [plugin](https://github.com/bekarice/woocommerce-gateway-offline) for payments
-  with Nimiq
+* Adapted [plugin](https://github.com/bekarice/woocommerce-gateway-offline) for payments with Nimiq
 
 == Upgrade Notice ==
 
 = 2.7.0 =
 
-This version adds the ability to automatically convert from the store currency to
-NIM during checkout.
+This version adds the ability to automatically convert from the store currency to NIM during checkout.
 
 == Development ==
 
 = Adding A New Validation Service =
 
-Validation services are defined under [`./validation_services/`](./validation_services/).
-Each service class must implement the `WC_Gateway_Nimiq_Service_Interface`, defined
-in [`./validation_services/interface.php`](./validation_services/interface.php).
-The easiest way to start is to take an existing service (e.g.
-[`nimiq_watch.php`](./validation_services/nimiq_watch.php)) and rename and adapt
-it to the new service.
-The new service then also needs to be registered in the `validation_service` setting.
-The value of the setting must match the file name (without the `.php` extension)
-of the service definition.
-If the new service requires additional setting fields, [`settings.js`](./js/settings.js)
-also needs to be adapted to show/hide those fields conditionally.
+Validation services are defined under [`./validation_services/`](./validation_services/). Each service class must implement the `WC_Gateway_Nimiq_Service_Interface`, defined in [`./validation_services/interface.php`](./validation_services/interface.php). The easiest way to start is to take an existing service (e.g. [`nimiq_watch.php`](./validation_services/nimiq_watch.php)) and rename and adapt it to the new service. The new service then also needs to be registered in the `validation_service` setting. The value of the setting must match the file name (without the `.php` extension) of the service definition. If the new service requires additional setting fields, [`settings.js`](./js/settings.js) also needs to be adapted to show/hide those fields conditionally.
 
-== Legal Acknowledgement ==
+== Acknowledgement ==
 
-This Nimiq gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline),
-which in turn forks the WooCommerce core "Cheque" payment gateway.
+This Nimiq gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline), which in turn forks the WooCommerce core "Cheque" payment gateway.
