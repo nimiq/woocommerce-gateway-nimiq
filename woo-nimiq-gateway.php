@@ -5,7 +5,7 @@
  * Description: Let customers pay with their Nimiq account directly in the browser
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 2.7.2
+ * Version: 2.7.3
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  * Requires at least: 4.9
