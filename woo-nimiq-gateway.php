@@ -287,7 +287,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'How many minutes to wait for a transaction to be mined, before marking the order as failed.', 'wc-gateway-nimiq' ),
-					'default'     => 30,
+					'default'     => 150, // 120 minutes (Nimiq tx validity window) + 30 min buffer
 					'desc_tip'    => true,
 				),
 
