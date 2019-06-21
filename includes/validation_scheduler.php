@@ -35,7 +35,7 @@ function wc_nimiq_validate_orders() {
         'post_status' => 'wc-on-hold',
     ] );
 
-    $logger->info( 'Processing ' . _n( count( $orders ) . ' order', count( $orders ) . ' orders', count( $orders ), 'woocommerce' ) . ' for validation.', $log_context );
+    $logger->info( sprintf( _n( 'Processing %s order', 'Processing %s orders', count( $orders ), 'wc-gateway-nimiq' ), count( $orders ) ), $log_context );
 
     if ( empty( $orders ) ) return;
 
@@ -57,5 +57,5 @@ function wc_nimiq_validate_orders() {
     }
 
     $count_orders_updated = $validation_results[ 'changed' ] ?: 0;
-    $logger->info( 'Updated ' . _n( $count_orders_updated . ' order', $count_orders_updated . ' orders', $count_orders_updated, 'woocommerce' ) . '.', $log_context );
+    $logger->info( sprintf( _n( 'Updated %s order', 'Updated %s orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.', $log_context );
 }

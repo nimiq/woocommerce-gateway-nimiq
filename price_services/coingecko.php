@@ -37,11 +37,9 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
         $price = $result['nimiq-2'][ $currency ];
 
         if ( empty( $price ) ) {
-            return new WP_Error( 'service', 'The currency ' . strtoupper( $currency ) . ' is not supported by Coingecko.' );
+            return new WP_Error( 'service', sprintf( __( 'The currency %s is not supported by Coingecko.', 'wc-gateway-nimiq' ), strtoupper( $currency ) ) );
         };
 
         return $price;
     }
 }
-
-

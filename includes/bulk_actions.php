@@ -17,7 +17,7 @@ add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transaction
 add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
 
 function register_bulk_actions( $actions ) {
-	$actions[ 'validate_transactions' ] = 'Validate Transactions';
+	$actions[ 'validate_transactions' ] = __( 'Validate Transactions', 'wc-gateway-nimiq' );
 	return $actions;
 }
 
@@ -86,7 +86,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
-				fail_order( $order, 'Transaction not found within wait duration.', true );
+				fail_order( $order, __( 'Transaction not found within wait duration.', 'wc-gateway-nimiq' ), true );
 				$count_orders_updated++;
 			}
 
@@ -100,19 +100,19 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// If a tx is returned, validate it
 
 		if ( $service->sender_address() !== $order->get_meta('customer_nim_address') ) {
-			fail_order( $order, 'Transaction sender does not match.', true );
+			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ), true );
 			$count_orders_updated++;
 			continue;
 		}
 
 		if ( $service->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
-			fail_order( $order, 'Transaction recipient does not match.', true );
+			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ), true );
 			$count_orders_updated++;
 			continue;
 		}
 
 		if ( $service->value() !== intval( $order->get_meta('order_total_nim') * 1e5 ) ) {
-			fail_order( $order, 'Transaction value does not match.', true );
+			fail_order( $order, __( 'Transaction value does not match.', 'wc-gateway-nimiq' ), true );
 			$count_orders_updated++;
 			continue;
 		}
@@ -125,7 +125,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$order_hash = $order->get_meta('order_hash');
 		$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
 		if ( $tx_order_hash !== $order_hash ) {
-			fail_order( $order, 'Transaction order hash does not match.', true );
+			fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ), true );
 			$count_orders_updated++;
 			continue;
 		}
@@ -137,7 +137,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Mark as 'processing' when confirmed
-		$order->update_status( 'processing', 'Transaction validated and confirmed.', true );
+		$order->update_status( 'processing', __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ), true );
 		$count_orders_updated++;
 
 	} // end foreach loop
@@ -191,5 +191,5 @@ function handle_bulk_admin_notices_after_redirect() {
 		}
 	}
 
-	echo '<div class="updated notice"><p>Updated ' . _n( $count_orders_updated . ' order', $count_orders_updated . ' orders', $count_orders_updated, 'woocommerce' ) . '.</p></div>';
+	echo '<div class="updated notice"><p>' . sprintf( _n( 'Updated %s order', 'Updated %s orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.</p></div>';
 }

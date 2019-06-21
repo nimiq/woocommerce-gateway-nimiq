@@ -7,7 +7,7 @@ add_filter( 'woocommerce_currencies', 'add_nimiq_currency' );
 add_filter( 'woocommerce_currency_symbol', 'add_nimiq_currency_symbol', 10, 2 );
 
 function add_nimiq_currency( $currencies ) {
-	$currencies['NIM'] = __( 'Nimiq', 'woocommerce' );
+	$currencies['NIM'] = 'Nimiq';
 	return $currencies;
 }
 

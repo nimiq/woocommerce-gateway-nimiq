@@ -11,15 +11,15 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
         $this->transaction = null;
 
         if ( $gateway->get_option( 'network' ) !== 'main' ) {
-            throw new WP_Error('connection', 'NimiqX can only be used in mainnet.');
+            throw new Exception( __( 'NimiqX can only be used for mainnet.', 'wc-gateway-nimiq' ) );
         }
 
         $this->api_key = $gateway->get_option( 'nimiqx_api_key' );
         if ( empty( $this->api_key ) ) {
-            throw new WP_Error('connection', 'API key not set.');
+            throw new Exception( __( 'API key not set.', 'wc-gateway-nimiq' ) );
         }
         if ( !ctype_xdigit( $this->api_key ) ) {
-            throw new WP_Error('service', 'Invalid API key.');
+            throw new Exception( __( 'Invalid API key.', 'wc-gateway-nimiq' ) );
         }
     }
 
@@ -50,7 +50,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error('service', 'Invalid transaction hash.');
+            return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
         }
 
         $api_response = wp_remote_get( $this->makeUrl( 'transaction/' . $transaction_hash ) );
@@ -82,7 +82,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function error() {
         if ( empty( $this->transaction ) ) {
-            return 'Could not retrieve transaction information from NimiqX.';
+            return __( 'Could not retrieve transaction information from NimiqX.', 'wc-gateway-nimiq' );
         }
         return $this->transaction->error || false;
     }

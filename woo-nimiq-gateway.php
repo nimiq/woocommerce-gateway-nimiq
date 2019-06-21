@@ -95,7 +95,7 @@ function wc_nimiq_gateway_init() {
 			 */
 			$this->icon               = "data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' height='26' width='26' version='1.1' viewBox='0 0 72 72'><defs><radialGradient gradientTransform='matrix(0.99996243,0,0,1,0.00384744,3.9999988)' gradientUnits='userSpaceOnUse' r='72.019997' cy='63.169998' cx='54.169998' id='radial-gradient'><stop id='stop4' stop-color='%23ec991c' offset='0' /><stop id='stop6' stop-color='%23e9b213' offset='1' /></radialGradient></defs><path fill='url(%23radial-gradient)' stroke-width='0.99998122' d='M 71.201173,32.999999 56.201736,6.9999988 a 5.9997746,6 0 0 0 -5.199804,-3 H 21.003059 a 5.9997746,6 0 0 0 -5.189805,3 L 0.80381738,32.999999 a 5.9997746,6 0 0 0 0,6 l 14.99943662,26 a 5.9997746,6 0 0 0 5.199805,3 h 29.998873 a 5.9997746,6 0 0 0 5.189805,-3 l 14.999436,-26 a 5.9997746,6 0 0 0 0.01,-6 z' /></svg>";
 			$this->has_fields         = true;
-			$this->method_title       = __( 'Nimiq', 'wc-gateway-nimiq' );
+			$this->method_title       = 'Nimiq';
 			$this->method_description = __( 'Allows Nimiq payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
 
 			// Load the settings.
@@ -209,7 +209,6 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'text',
 					'description' => __( '(Optional) Username for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
 					'default'     => '',
-					'placeholder' => __( '', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -218,7 +217,6 @@ function wc_nimiq_gateway_init() {
 					'type'        => 'text',
 					'description' => __( '(Optional) Password for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
 					'default'     => '',
-					'placeholder' => __( '', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -305,7 +303,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Payment Method Description', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'Pay for your order with your Nimiq account directly in the browser.', 'wc-gateway-nimiq' ),
+					'default'     => __( 'Pay with your Nimiq Account directly in the browser.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
@@ -313,7 +311,7 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'Email Instructions', 'wc-gateway-nimiq' ),
 					'type'        => 'textarea',
 					'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
-					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.' ),
+					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 			) );
@@ -395,35 +393,42 @@ function wc_nimiq_gateway_init() {
 			?>
 
 			<div id="nim_gateway_info_block">
-				<noscript><strong>Javascript is required to pay with Nimiq. Please activate Javascript to continue.</strong></noscript>
+				<noscript>
+					<strong>
+						<?php _e( 'Javascript is required to pay with Nimiq. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
+					</strong>
+				</noscript>
 
 				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
 				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
 
 				<p class="form-row">
-					Order amount: <strong><?php echo( number_format( $order_total_nim, 0, '.', ' ' ) ); ?> NIM</strong>
+					<?php _e( 'Order amount:', 'wc-gateway-nimiq' ); ?>
+					<strong><?php echo( number_format( $order_total_nim, 0, '.', ' ' ) ); ?> NIM</strong>
 				</p>
 
 				<?php if ( is_wp_error( $nim_price ) ) { ?>
-					<p class="form-row" style="color: red;">
-						<em>Could not get a NIM conversion rate:<br><?php echo( $nim_price->get_error_message() ); ?></em>
+					<p class="form-row" style="color: red; font-style: italic;">
+						<?php _e( 'Could not get a NIM conversion rate:', 'wc-gateway-nimiq' ); ?><br>
+						<?php echo( $nim_price->get_error_message() ); ?>
 					</p>
 				<?php } elseif ( $nim_price > 0 ) { ?>
 					<p class="form-row">
-						Rate: 1 NIM = <?php echo( wc_price( $nim_price, [ 'decimals' => 6, 'currency' => $order_currency ] ) ); ?>
+						<?php _e( 'Rate:', 'wc-gateway-nimiq' ); ?>
+						1 NIM = <?php echo( wc_price( $nim_price, [ 'decimals' => 6, 'currency' => $order_currency ] ) ); ?>
 					</p>
 				<?php } ?>
 
 				<?php if ( ! is_wp_error( $nim_price ) && $nim_price > 0 || $order_currency === 'NIM') { ?>
 					<p class="form-row">
-						Please click the big button below to pay with Nimiq.
+						<?php _e( 'Please click the big button below to pay with Nimiq.', 'wc-gateway-nimiq' ); ?>
 					</p>
 				<?php } ?>
 			</div>
 
 			<div id="nim_payment_complete_block" class="hidden">
 				<i class="fas fa-check-circle" style="color: seagreen;"></i>
-				Payment complete
+				<?php _e( 'Payment complete', 'wc-gateway-nimiq' ); ?>
 			</div>
 			<?php
 		}
@@ -460,12 +465,12 @@ function wc_nimiq_gateway_init() {
 
 			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
 			if ( ! $transaction_hash ) {
-				wc_add_notice( __( 'You need to submit the Nimiq transaction first.' ), 'error' );
+				wc_add_notice( __( 'You need to submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
 				return false;
 			}
 
 			if ( strlen( $transaction_hash) !== 64 ) {
-				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.' ), 'error' );
+				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
 				return false;
 			}
 
@@ -548,7 +553,7 @@ function wc_nimiq_gateway_init() {
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
 				if( $this->get_option( 'nimiq_address' ) == "" ) {
-					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
+					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>', 'wc-gateway-nimiq' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
 		}

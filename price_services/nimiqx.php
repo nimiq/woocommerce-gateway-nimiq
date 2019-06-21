@@ -18,10 +18,10 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
 
         $this->api_key = $gateway->get_option( 'nimiqx_api_key' );
         if ( empty( $this->api_key ) ) {
-            throw new WP_Error('connection', 'API key not set.');
+            throw new Exception( __( 'API key not set.', 'wc-gateway-nimiq') );
         }
         if ( !ctype_xdigit( $this->api_key ) ) {
-            throw new WP_Error('service', 'Invalid API key.');
+            throw new Exception( __( 'Invalid API key.', 'wc-gateway-nimiq') );
         }
     }
 
@@ -46,7 +46,7 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
         $price = $result[ $currency ];
 
         if ( empty( $price ) ) {
-            return new WP_Error( 'service', 'The currency ' . strtoupper( $currency ) . ' is not supported by NimiqX.' );
+            return new WP_Error( 'service', sprintf( __( 'The currency %s is not supported by NimiqX.', 'wc-gateway-nimiq' ), strtoupper( $currency ) ) );
         };
 
         return $price;
@@ -56,5 +56,3 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
         return 'https://api.nimiqx.com/' . $path . '?api_key=' . $this->api_key;
     }
 }
-
-

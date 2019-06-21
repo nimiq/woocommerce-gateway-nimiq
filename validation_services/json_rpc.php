@@ -11,7 +11,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $this->transaction = null;
         $this->api_domain = $gateway->get_option( 'jsonrpc_url' );
         if ( empty( $this->api_domain ) ) {
-            throw new WP_Error( 'connection', 'API URL not set.' );
+            throw new Exception( __( 'API URL not set.', 'wc-gateway-nimiq' ) );
         }
     }
 
@@ -31,11 +31,11 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         $block_number = json_decode( $api_response[ 'body' ] );
 
         if ( $block_number->error ) {
-            return new WP_Error( 'service', 'JSON-RPC replied: ' . $block_number->error->message );
+            return new WP_Error( 'service', __( 'JSON-RPC replied:', 'wc-gateway-nimiq' ) . ' ' . $block_number->error->message );
         }
 
         if ( empty( $block_number ) ) {
-            return new WP_Error( 'service', 'Could not get the current blockchain height from JSON-RPC. (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+            return new WP_Error( 'service', __( 'Could not get the current blockchain height from JSON-RPC.', 'wc-gateway-nimiq' ) . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
         }
 
         return $block_number->result;
@@ -48,7 +48,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error( 'connection', 'Invalid transaction hash.' );
+            return new WP_Error( 'connection', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
         }
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
@@ -79,7 +79,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
         }
 
         if ( empty( $response ) ) {
-            return new WP_Error( 'service', 'Could not retrieve transaction information from JSON-RPC. (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+            return new WP_Error( 'service', __( 'Could not retrieve transaction information from JSON-RPC.', 'wc-gateway-nimiq' ) . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
         }
 
         $this->transaction = $response->result;
