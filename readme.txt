@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.6
-Stable tag: v2.7.3
+Stable tag: v2.7.4
 Requires PHP: 5.2.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -44,6 +44,14 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
 == Changelog ==
+
+= 2.7.4 - 2019.06.21 =
+* Remove unused CSS
+* Set network to mainnet by default
+* Improve default setting for mempool wait limit (now 150 min)
+* Enable translations for many more strings
+* Add "What is Nimiq?" link to checkout method selector
+* Fix NimiqX transaction validator
 
 = 2.7.3 - 2019.06.20 =
 * Fix payment method icon size on cart checkout page for themes other than Storefront
@@ -179,9 +187,9 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 
 == Upgrade Notice ==
 
-= 2.7.3 =
+= 2.7.4 =
 
-Corrects the size of the payment method icon on the checkout page
+Removes CSS that hid T&C info on payment page, fixes NimiqX transaction validator.
 
 == Development ==
 
