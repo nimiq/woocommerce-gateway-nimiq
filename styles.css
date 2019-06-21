@@ -1,13 +1,5 @@
-iframe[name="network"] {
-    display: none;
-}
-
 .payment_method_nimiq_gateway .hidden {
-    display: none;
-}
-
-#customer_nim_address {
-    padding: 0.6em 0.8em;
+	display: none;
 }
 
 #nim_payment_complete_block {
@@ -23,8 +15,4 @@ iframe[name="network"] {
 
 #nim_payment_complete_block small {
 	display: block;
-}
-
-body.woocommerce-order-pay .woocommerce-terms-and-conditions-wrapper {
-	display: none;
 }
