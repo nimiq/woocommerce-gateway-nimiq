@@ -40,7 +40,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
             return new WP_Error( 'service', $network_stats->error );
         }
 
-        return $network_stats[ 0 ]->height;
+        return $network_stats->height;
     }
 
     /**
