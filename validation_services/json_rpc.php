@@ -1,7 +1,7 @@
 <?php
 include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
-class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Interface {
+class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Validation_Service_Interface {
     /**
      * Initializes the validation service
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
