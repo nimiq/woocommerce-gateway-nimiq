@@ -62,4 +62,11 @@ interface WC_Gateway_Nimiq_Service_Interface {
      * @return {number}
      */
     public function block_height();
+
+    /**
+     * Returns the confirmations of the transaction relative to the blockchain height
+     * @param {number} $blockchain_height
+     * @return {number}
+     */
+    public function confirmations(int $blockchain_height);
 }

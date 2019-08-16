@@ -131,7 +131,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $service->block_height() ) || $current_height - $service->block_height() < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $service->block_height() ) || $service->confirmations($blockchain_height) < $gateway->get_option( 'confirmations' ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}

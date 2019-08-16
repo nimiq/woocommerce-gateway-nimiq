@@ -128,6 +128,15 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
         return $this->transaction->height;
     }
 
+    /**
+     * Returns the confirmations of the transaction relative to the blockchain height
+     * @param {number} $blockchain_height
+     * @return {number}
+     */
+    public function confirmations(int $blockchain_height) {
+        return $blockchain_height - $this->block_height();
+    }
+
     private function makeUrl( $path ) {
         return 'https://api.nimiqx.com/' . $path . '?api_key=' . $this->api_key;
     }

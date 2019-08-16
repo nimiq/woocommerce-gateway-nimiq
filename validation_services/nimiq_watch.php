@@ -117,6 +117,15 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
     public function block_height() {
         return $this->transaction->block_height;
     }
+
+    /**
+     * Returns the confirmations of the transaction relative to the blockchain height
+     * @param {number} $blockchain_height
+     * @return {number}
+     */
+    public function confirmations(int $blockchain_height) {
+        return $blockchain_height - $this->block_height();
+    }
 }
 
 $service = new WC_Gateway_Nimiq_Service_Nimiqwatch( $gateway );
