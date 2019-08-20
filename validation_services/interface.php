@@ -11,9 +11,11 @@ interface WC_Gateway_Nimiq_Validation_Service_Interface {
     /**
      * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
+     * @param {WP_Order} $order
+     * @param {WC_Gateway_Nimiq} $gateway
      * @return {void|WP_Error}
      */
-    public function load_transaction( $transaction_hash );
+    public function load_transaction( $transaction_hash, $order, $gateway );
 
     /**
      * Returns if transaction was found or not
@@ -40,8 +42,8 @@ interface WC_Gateway_Nimiq_Validation_Service_Interface {
     public function recipient_address();
 
     /**
-     * Returns the value of the transaction in Luna
-     * @return {number}
+     * Returns the value of the transaction in the smallest unit
+     * @return {string}
      */
     public function value();
 

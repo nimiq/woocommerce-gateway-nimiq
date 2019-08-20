@@ -51,9 +51,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
     /**
      * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
+     * @param {WP_Order} $order
+     * @param {WC_Gateway_Nimiq} $gateway
      * @return {void|WP_Error}
      */
-    public function load_transaction( $transaction_hash ) {
+    public function load_transaction( $transaction_hash, $order, $gateway ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
             return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
         }
@@ -116,11 +118,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
     }
 
     /**
-     * Returns the value of the transaction in Luna
-     * @return {number}
+     * Returns the value of the transaction in the smallest unit
+     * @return {string}
      */
     public function value() {
-        return $this->transaction->value;
+        return strval( $this->transaction->value );
     }
 
     /**

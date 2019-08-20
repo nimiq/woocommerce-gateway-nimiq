@@ -73,7 +73,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		$transaction_hash = $order->get_meta('transaction_hash');
 
-		$is_loaded = $service->load_transaction( $transaction_hash );
+		$is_loaded = $service->load_transaction( $transaction_hash, $order, $gateway );
 		if ( is_wp_error( $is_loaded ) ) {
 			$errors[] = $is_loaded->get_error_message();
 			continue;
@@ -86,7 +86,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
-				fail_order( $order, __( 'Transaction not found within mempool wait duration.', 'wc-gateway-nimiq' ), true );
+				fail_order( $order, __( 'Transaction not found within mempool wait duration.', 'wc-gateway-nimiq' ) );
 				$count_orders_updated++;
 			}
 
@@ -100,19 +100,20 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// If a tx is returned, validate it
 
 		if ( $service->sender_address() !== $order->get_meta('customer_nim_address') ) {
-			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ), true );
+			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
 		if ( $service->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
-			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ), true );
+			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $service->value() !== intval( $order->get_meta('order_total_nim') * 1e5 ) ) {
-			fail_order( $order, __( 'Transaction value does not match.', 'wc-gateway-nimiq' ), true );
+		$order_total_crypto = get_order_total_crypto( $order );
+		if ( $service->value() !== $order_total_crypto ) {
+			fail_order( $order, __( 'Transaction value does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
@@ -125,19 +126,19 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$order_hash = $order->get_meta('order_hash');
 		$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
 		if ( $tx_order_hash !== $order_hash ) {
-			fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ), true );
+			fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $service->block_height() ) || $service->confirmations($blockchain_height) < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $service->block_height() ) || $service->confirmations() < $gateway->get_option( 'confirmations' ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}
 
 		// Mark as 'processing' when confirmed
-		$order->update_status( 'processing', __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ), true );
+		$order->update_status( 'processing', __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ), false );
 		$count_orders_updated++;
 
 	} // end foreach loop
@@ -146,8 +147,37 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 } // end _do_bulk_validate_transactions()
 
-function fail_order($order, $reason, $is_manual_change) {
-	$order->update_status( 'failed', $reason, $is_manual_change );
+function get_order_currency( $order ) {
+	return $order->get_meta('order_crypto_currency') || 'nim';
+}
+
+function get_order_total_crypto( $order ) {
+	// 1. Get order crypto currency
+	$currency = get_order_currency( $order );
+
+	// 2. Get order crypto total
+	$order_total = $order->get_meta( 'order_total' . $currency );
+
+	// 3. Convert to smallest unit string
+	// 3.1. Split by decimal dot
+	$split = explode( '.', $order_total, 2 );
+	$integers = $split[0];
+	$decimals = $split[1] || '';
+
+	// 3.2. Extend decimals with 0s until crypto-specific decimals is reached
+	$pad_length = [
+		'nim' => 5,
+		'btc' => 8,
+		'eth' => 18,
+	][ $currency ];
+	$decimals = str_pad( $decimals, $pad_length, '0', STR_PAD_RIGHT );
+
+	// 3.3. Join integers with decimals to create value string
+	return implode( '', [ $integers, $decimals ] );
+}
+
+function fail_order($order, $reason) {
+	$order->update_status( 'failed', $reason, false );
 
 	// Restock inventory
 	$line_items = $order->get_items();
