@@ -9,6 +9,8 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
+        $this->head_height = null;
+
         $this->api_domain = $gateway->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
     }
 
@@ -17,6 +19,10 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
      * @return {number|WP_Error}
      */
     public function blockchain_height() {
+        if ( !empty( $this->head_height ) ) {
+            return $this->head_height;
+        }
+
         $api_response = wp_remote_get( $this->api_domain . '/latest/1' );
 
         if ( is_wp_error( $api_response ) ) {
@@ -44,6 +50,13 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
             return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
+        }
+
+        if ( empty( $this->head_height ) ) {
+            $this->head_height = $this->blockchain_height();
+            if ( is_wp_error( $this->head_height ) ) {
+                return $this->head_height;
+            }
         }
 
         // Convert HEX hash into base64
@@ -119,12 +132,11 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Service_In
     }
 
     /**
-     * Returns the confirmations of the transaction relative to the blockchain height
-     * @param {number} $blockchain_height
+     * Returns the confirmations of the transaction
      * @return {number}
      */
-    public function confirmations(int $blockchain_height) {
-        return $blockchain_height - $this->block_height();
+    public function confirmations() {
+        return $this->blockchain_height() - $this->block_height();
     }
 }
 

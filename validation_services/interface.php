@@ -9,12 +9,6 @@ interface WC_Gateway_Nimiq_Service_Interface {
     public function __construct( $gateway );
 
     /**
-     * Retrieves the current blockchain head height
-     * @return {number|WP_Error}
-     */
-    public function blockchain_height();
-
-    /**
      * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @return {void|WP_Error}
@@ -64,9 +58,8 @@ interface WC_Gateway_Nimiq_Service_Interface {
     public function block_height();
 
     /**
-     * Returns the confirmations of the transaction relative to the blockchain height
-     * @param {number} $blockchain_height
+     * Returns the confirmations of the transaction
      * @return {number}
      */
-    public function confirmations(int $blockchain_height);
+    public function confirmations();
 }

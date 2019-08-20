@@ -9,6 +9,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
+        $this->head_height = null;
 
         if ( $gateway->get_option( 'network' ) !== 'main' ) {
             throw new Exception( __( 'NimiqX can only be used for mainnet.', 'wc-gateway-nimiq' ) );
@@ -28,6 +29,10 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
      * @return {number|WP_Error}
      */
     public function blockchain_height() {
+        if ( !empty( $this->head_height ) ) {
+            return $this->head_height;
+        }
+
         $api_response = wp_remote_get( $this->makeUrl( 'network-stats' ) );
 
         if ( is_wp_error( $api_response ) ) {
@@ -51,6 +56,13 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
             return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
+        }
+
+        if ( empty( $this->head_height ) ) {
+            $this->head_height = $this->blockchain_height();
+            if ( is_wp_error( $this->head_height ) ) {
+                return $this->head_height;
+            }
         }
 
         $api_response = wp_remote_get( $this->makeUrl( 'transaction/' . $transaction_hash ) );
@@ -129,12 +141,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Service_Interf
     }
 
     /**
-     * Returns the confirmations of the transaction relative to the blockchain height
-     * @param {number} $blockchain_height
+     * Returns the confirmations of the transaction
      * @return {number}
      */
-    public function confirmations(int $blockchain_height) {
-        return $blockchain_height - $this->block_height();
+    public function confirmations() {
+        return $this->blockchain_height() - $this->block_height();
     }
 
     private function makeUrl( $path ) {

@@ -9,6 +9,8 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
+        $this->head_height = null;
+
         $this->api_domain = $gateway->get_option( 'jsonrpc_url' );
         if ( empty( $this->api_domain ) ) {
             throw new Exception( __( 'API URL not set.', 'wc-gateway-nimiq' ) );
@@ -20,6 +22,10 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
      * @return {number|WP_Error}
      */
     public function blockchain_height() {
+        if ( !empty( $this->head_height ) ) {
+            return $this->head_height;
+        }
+
         $call = '{"jsonrpc":"2.0","method":"blockNumber","params":[],"id":42}';
 
         $api_response = wp_remote_post( $this->api_domain, array( 'body' => $call ) );
@@ -49,6 +55,13 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
     public function load_transaction( $transaction_hash ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
             return new WP_Error( 'connection', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
+        }
+
+        if ( empty( $this->head_height ) ) {
+            $this->head_height = $this->blockchain_height();
+            if ( is_wp_error( $this->head_height ) ) {
+                return $this->head_height;
+            }
         }
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
@@ -147,12 +160,11 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Service_Inter
     }
 
     /**
-     * Returns the confirmations of the transaction relative to the blockchain height
-     * @param {number} $blockchain_height
+     * Returns the confirmations of the transaction
      * @return {number}
      */
-    public function confirmations(int $blockchain_height) {
-        return $blockchain_height - $this->block_height();
+    public function confirmations() {
+        return $this->blockchain_height() - $this->block_height();
     }
 }
 
