@@ -176,6 +176,15 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'ethereum_address' => array(
+					'title'       => __( 'Shop ETH Address', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Your Ethereum address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => '0x...',
+					'desc_tip'    => true,
+				),
+
 				'price_service' => array(
 					'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
@@ -232,6 +241,27 @@ function wc_nimiq_gateway_init() {
 					'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Token for accessing the NimiqX price and validation service.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
+				'validation_service_eth' => array(
+					'title'       => __( 'Ethereum Validation Service', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which service to use for Ethereum transaction validation.', 'wc-gateway-nimiq' ),
+					'default'     => 'etherscan',
+					'options'     => array(
+						// List available validation services here. The option value must match the file name.
+						'etherscan'  => 'Etherscan.io (testnet & mainnet)',
+					),
+					'desc_tip'    => true,
+				),
+
+				'etherscan_api_key' => array(
+					'title'       => __( 'Etherscan API Key', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Token for accessing the Etherscan validation service.', 'wc-gateway-nimiq' ),
 					'default'     => '',
 					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,

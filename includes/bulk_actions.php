@@ -48,14 +48,12 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	$count_orders_updated = 0;
 	$errors = array();
 
-	// Init validation service
-	$service_slug = $gateway->get_option( 'validation_service_nim' );
-	include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
-
-	// Get current blockchain height
-	$current_height = $service->blockchain_height();
-	if ( is_wp_error( $current_height ) ) {
-		return [ 'changed' => $count_orders_updated, 'errors' => [ $current_height->get_error_message() ] ];
+	// Init validation services
+	$services = [];
+	$validation_options = ['validation_service_nim', /*'validation_service_btc', */'validation_service_eth'];
+	foreach ($validation_options as $option) {
+		$service_slug = $gateway->get_option( $option );
+		include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
 	}
 
 	foreach ( $ids as $postID ) {
@@ -70,6 +68,9 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		// Only continue if order status is currently 'on hold'
 		if ( $order->get_status() !== 'on-hold' ) continue;
+
+		// Get currency-specific validation service
+		$service = $services[ get_order_currency( $order ) ];
 
 		$transaction_hash = $order->get_meta('transaction_hash');
 
@@ -99,13 +100,14 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		// If a tx is returned, validate it
 
-		if ( $service->sender_address() !== $order->get_meta('customer_nim_address') ) {
+		$order_sender_address = get_order_sender_address( $order );
+		if ( !empty( $order_sender_address ) && $service->sender_address() !== $order_sender_address ) {
 			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $service->recipient_address() !== $gateway->get_option( 'nimiq_address' ) ) {
+		if ( $service->recipient_address() !== get_order_recipient_address( $order, $gateway ) ) {
 			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
@@ -149,6 +151,21 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 function get_order_currency( $order ) {
 	return $order->get_meta('order_crypto_currency') || 'nim';
+}
+
+function get_order_sender_address( $order ) {
+	$currency = get_order_currency( $order );
+	return $order->get_meta( 'customer_' . $currency . '_address' );
+}
+
+function get_order_recipient_address( $order, $gateway ) {
+	$currency = get_order_currency( $order );
+	$qualified_currency_name = [
+		'nim' => 'nimiq',
+		'btc' => 'bitcoin',
+		'eth' => 'ethereum',
+	][ $currency ];
+	return $order->get_meta( 'order_' . $currency . '_address' ) || $gateway->get_option( $qualified_currency_name . '_address' );
 }
 
 function get_order_total_crypto( $order ) {

@@ -170,4 +170,4 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
     }
 }
 
-$service = new WC_Gateway_Nimiq_Service_JsonRpcNimiq( $gateway );
+$services['nim'] = new WC_Gateway_Nimiq_Service_JsonRpcNimiq( $gateway );

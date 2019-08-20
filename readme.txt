@@ -195,7 +195,7 @@ Removes CSS that hid T&C info on payment page, fixes NimiqX transaction validato
 
 = Adding A New Validation Service =
 
-Validation services are defined under [`./validation_services/`](./validation_services/). Each service class must implement the `WC_Gateway_Nimiq_Validation_Service_Interface`, defined in [`./validation_services/interface.php`](./validation_services/interface.php). The easiest way to start is to take an existing service (e.g. [`nimiq_watch.php`](./validation_services/nimiq_watch.php)) and rename and adapt it to the new service. The new service then also needs to be registered in the `validation_service` setting. The value of the setting must match the file name (without the `.php` extension) of the service definition. If the new service requires additional setting fields, [`settings.js`](./js/settings.js) also needs to be adapted to show/hide those fields conditionally.
+Validation services are defined under [`./validation_services/`](./validation_services/). Each service class must implement the `WC_Gateway_Nimiq_Validation_Service_Interface`, defined in [`./validation_services/interface.php`](./validation_services/interface.php). The easiest way to start is to take an existing service (e.g. [`nimiq_watch.php`](./validation_services/nimiq_watch.php)) and rename and adapt it to the new service. The new service then also needs to be registered in the respective `validation_service_<currency>` setting. The value of the setting must match the file name (without the `.php` extension) of the service definition. If the new service requires additional setting fields, [`settings.js`](./js/settings.js) also needs to be adapted to show/hide those fields conditionally.
 
 == Acknowledgement ==
 

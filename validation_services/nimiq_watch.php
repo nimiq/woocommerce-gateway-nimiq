@@ -142,4 +142,4 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
     }
 }
 
-$service = new WC_Gateway_Nimiq_Service_Nimiqwatch( $gateway );
+$services['nim'] = new WC_Gateway_Nimiq_Service_Nimiqwatch( $gateway );
