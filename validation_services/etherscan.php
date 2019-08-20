@@ -20,6 +20,10 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         if ( empty( $this->api_key ) ) {
             throw new Exception( __( 'API key not set.', 'wc-gateway-nimiq' ) );
         }
+
+        $this->api_url = $gateway->get_option( 'network' ) === 'main'
+            ? 'https://api.etherscan.io/api'
+            : 'https://api-ropsten.etherscan.io/api';
     }
 
     /**
@@ -35,44 +39,46 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         $recipient_address = null;
 
         if ( !empty( $transaction_hash ) ) {
-            if ( !ctype_xdigit( $transaction_hash ) ) {
+            if ( !ctype_xdigit( str_replace( '0x', '', $transaction_hash ) ) ) {
                 return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
-            }
-        } else {
-            $recipient_address = $order->get_meta( 'order_eth_address' ) || $gateway->get_option( 'ethereum_address' );
-            if ( !ctype_xdigit( $recipient_address ) ) {
-                return new WP_Error('service', __( 'Invalid merchant address.', 'wc-gateway-nimiq' ) );
             }
         }
 
+        $recipient_address = Order_Utils::get_order_recipient_address( $order, $gateway );
+        if ( !ctype_xdigit( str_replace( '0x', '', $recipient_address ) ) ) {
+            return new WP_Error('service', __( 'Invalid merchant address.', 'wc-gateway-nimiq' ) );
+        }
+
         // Fake result for the first while loop iteration
-        if ( $this->has_unique_order_address( $order ) ) {
-            $response = [ 'result' => [] ];
-            $page = 0;
-        } else {
-            $response = [ 'result' => $this->transactions ];
+        $response = (object) [ 'result' => [] ];
+        $page = 0;
+
+        if ( !$this->has_unique_order_address( $order ) ) {
+            $response->result = $this->transactions;
             $page = $this->page;
         }
 
         while ( !$this->transaction ) {
-            $transaction = $this->find_transaction( $transaction_hash, $recipient_address, $response->result );
+            $transaction = $this->find_transaction( $transaction_hash, $recipient_address, $order, $response->result );
             if ( $transaction ) {
                 $this->transaction = $transaction;
+                if ( empty( $transaction_hash ) ) {
+                    // Store tx hash in order
+                    update_post_meta( $order->get_id(), 'transaction_hash', $transaction->hash );
+                }
                 return true;
             }
 
-            if ( !$transaction ) {
-                // Stop when no more transactions are available
-                // ($page is set to -1 below, when a paged API call returns less than API_TX_PER_PAGE transactions)
-                if ( $page < 0 ) {
-                    return false;
-                }
+            // Stop when no more transactions are available
+            // ($page is set to -1 below, when a paged API call returns less than API_TX_PER_PAGE transactions)
+            if ( $page < 0 ) {
+                return false;
+            }
 
-                // Stop when earlierst transaction is earlier than the order date
-                $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
-                if ( end( $response->result )->timeStamp < $order_date ) {
-                    return false;
-                }
+            // Stop when earlierst transaction is earlier than the order date
+            $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+            if ( end( $response->result ) && end( $response->result )->timeStamp < $order_date ) {
+                return false;
             }
 
             // Etherscan API has a rate-limit of 5 requests/second, so we need to sleep for 200ms between requests
@@ -92,7 +98,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
 
             $response = json_decode( $api_response[ 'body' ] );
 
-            if ( $response->status !== 1 || $response->message !== 'OK' ) {
+            if ( $response->status !== '1' || $response->message !== 'OK' ) {
                 // Etherscan API returns {status: 0, message: "No transactions found", result: []} when the requested page
                 // has no entries anymore. In this case we don't want to return an error, but simply stop querying new pages.
                 if ( $response->message !== 'No transactions found' ) {
@@ -137,7 +143,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {string}
      */
     public function sender_address() {
-        return $this->transaction->from_address;
+        return $this->transaction->from;
     }
 
     /**
@@ -145,7 +151,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {string}
      */
     public function recipient_address() {
-        return $this->transaction->to_address;
+        return $this->transaction->to;
     }
 
     /**
@@ -153,7 +159,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {string}
      */
     public function value() {
-        return strval( $this->transaction->value );
+        return $this->transaction->value;
     }
 
     /**
@@ -161,7 +167,8 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {string}
      */
     public function message() {
-        $extraData = hex2bin( $this->transaction->input );
+        $input = str_replace( '0x', '', $this->transaction->input );
+        $extraData = hex2bin( $input );
         return mb_convert_encoding( $extraData, 'UTF-8' );
     }
 
@@ -170,7 +177,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {number}
      */
     public function block_height() {
-        return $this->transaction->blockNumber;
+        return intval( $this->transaction->blockNumber );
     }
 
     /**
@@ -178,7 +185,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * @return {number}
      */
     public function confirmations() {
-        return $this->transaction->confirmations;
+        return intval( $this->transaction->confirmations );
     }
 
     private function get_milliseconds() {
@@ -189,8 +196,27 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         return !empty( $order->get_meta( 'order_eth_address' ) );
     }
 
+    private function find_transaction( $transaction_hash, $recipient_address, $order, $transactions ) {
+        foreach ( $transactions as $tx ) {
+            if ( $tx->hash === $transaction_hash || (
+                empty( $transaction_hash ) &&
+                $tx->to === $recipient_address &&
+                $tx->value === Order_Utils::get_order_total_crypto( $order )
+            ) ) {
+                return $tx;
+            }
+        }
+        return null;
+    }
+
+    private function add_transactions( $transactions ) {
+        foreach ( $transactions as $tx ) {
+            $this->transactions[ $tx->hash ] = $tx;
+        }
+    }
+
     private function get_url_transactions_by_address( string $address, int $page = 1, int $offset = 10 ) {
-        $query = 'module=account&action=txlist&startblock=0&endblock=99999999&sort=desc';
+        $query = '?module=account&action=txlist&startblock=0&endblock=99999999&sort=desc';
         $query .= '&page=' . $page;
         $query .= '&offset=' . $offset;
         $query .= '&address=' . $address;
@@ -198,11 +224,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
     }
 
     private function makeUrl( $query ) {
-        $api = $gateway->get_option( 'network' ) === 'main'
-            ? 'https://api.etherscan.io/api?'
-            : 'https://api-ropsten.etherscan.io/api?';
-
-        return $api . $query . '?apikey=' . $this->api_key;
+        return $this->api_url . $query . '&apikey=' . $this->api_key;
     }
 }
 

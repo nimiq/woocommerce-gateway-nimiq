@@ -16,6 +16,8 @@ add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
 add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
 
+include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'order_utils.php' );
+
 function register_bulk_actions( $actions ) {
 	$actions[ 'validate_transactions' ] = __( 'Validate Transactions', 'wc-gateway-nimiq' );
 	return $actions;
@@ -70,7 +72,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		if ( $order->get_status() !== 'on-hold' ) continue;
 
 		// Get currency-specific validation service
-		$service = $services[ get_order_currency( $order ) ];
+		$service = $services[ Order_Utils::get_order_currency( $order ) ];
 
 		$transaction_hash = $order->get_meta('transaction_hash');
 
@@ -100,37 +102,39 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		// If a tx is returned, validate it
 
-		$order_sender_address = get_order_sender_address( $order );
+		$order_sender_address = Order_Utils::get_order_sender_address( $order );
 		if ( !empty( $order_sender_address ) && $service->sender_address() !== $order_sender_address ) {
 			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
-		if ( $service->recipient_address() !== get_order_recipient_address( $order, $gateway ) ) {
+		if ( $service->recipient_address() !== Order_Utils::get_order_recipient_address( $order, $gateway ) ) {
 			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
-		$order_total_crypto = get_order_total_crypto( $order );
+		$order_total_crypto = Order_Utils::get_order_total_crypto( $order );
 		if ( $service->value() !== $order_total_crypto ) {
 			fail_order( $order, __( 'Transaction value does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
-		// Validate transaction data to include correct shortened order hash
-		$message = $service->message();
-		// Look for the last pair of round brackets in the tx message
-		preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
-		$tx_order_hash = end( $matches )[1];
-		$order_hash = $order->get_meta('order_hash');
-		$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
-		if ( $tx_order_hash !== $order_hash ) {
-			fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
-			$count_orders_updated++;
-			continue;
+		if ( Order_Utils::get_order_currency( $order ) === 'nim' ) {
+			// Validate transaction data to include correct shortened order hash
+			$message = $service->message();
+			// Look for the last pair of round brackets in the tx message
+			preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
+			$tx_order_hash = end( $matches )[1];
+			$order_hash = $order->get_meta('order_hash');
+			$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
+			if ( $tx_order_hash !== $order_hash ) {
+				fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
+				$count_orders_updated++;
+				continue;
+			}
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
@@ -148,50 +152,6 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	return [ 'changed' => $count_orders_updated, 'errors' => $errors ];
 
 } // end _do_bulk_validate_transactions()
-
-function get_order_currency( $order ) {
-	return $order->get_meta('order_crypto_currency') || 'nim';
-}
-
-function get_order_sender_address( $order ) {
-	$currency = get_order_currency( $order );
-	return $order->get_meta( 'customer_' . $currency . '_address' );
-}
-
-function get_order_recipient_address( $order, $gateway ) {
-	$currency = get_order_currency( $order );
-	$qualified_currency_name = [
-		'nim' => 'nimiq',
-		'btc' => 'bitcoin',
-		'eth' => 'ethereum',
-	][ $currency ];
-	return $order->get_meta( 'order_' . $currency . '_address' ) || $gateway->get_option( $qualified_currency_name . '_address' );
-}
-
-function get_order_total_crypto( $order ) {
-	// 1. Get order crypto currency
-	$currency = get_order_currency( $order );
-
-	// 2. Get order crypto total
-	$order_total = $order->get_meta( 'order_total' . $currency );
-
-	// 3. Convert to smallest unit string
-	// 3.1. Split by decimal dot
-	$split = explode( '.', $order_total, 2 );
-	$integers = $split[0];
-	$decimals = $split[1] || '';
-
-	// 3.2. Extend decimals with 0s until crypto-specific decimals is reached
-	$pad_length = [
-		'nim' => 5,
-		'btc' => 8,
-		'eth' => 18,
-	][ $currency ];
-	$decimals = str_pad( $decimals, $pad_length, '0', STR_PAD_RIGHT );
-
-	// 3.3. Join integers with decimals to create value string
-	return implode( '', [ $integers, $decimals ] );
-}
 
 function fail_order($order, $reason) {
 	$order->update_status( 'failed', $reason, false );
