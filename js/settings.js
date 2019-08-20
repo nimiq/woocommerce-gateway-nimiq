@@ -35,9 +35,9 @@
 
         // Disable all non-common conditional fields
         var conditional_fields = [
-            '#woocommerce_nimiq_gateway_jsonrpc_url',
-            '#woocommerce_nimiq_gateway_jsonrpc_username',
-            '#woocommerce_nimiq_gateway_jsonrpc_password',
+            '#woocommerce_nimiq_gateway_jsonrpc_nimiq_url',
+            '#woocommerce_nimiq_gateway_jsonrpc_nimiq_username',
+            '#woocommerce_nimiq_gateway_jsonrpc_nimiq_password',
             // '#conditional_field_id',
         ];
         $(conditional_fields.join(',')).closest('tr').addClass('hidden');
@@ -46,10 +46,10 @@
         switch (service_slug) {
             case 'nimiq_watch':
                 break;
-            case 'json_rpc':
-                $('#woocommerce_nimiq_gateway_jsonrpc_url, ' +
-                  '#woocommerce_nimiq_gateway_jsonrpc_username, ' +
-                  '#woocommerce_nimiq_gateway_jsonrpc_password')
+            case 'json_rpc_nim':
+                $('#woocommerce_nimiq_gateway_jsonrpc_nimiq_url, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_nimiq_username, ' +
+                  '#woocommerce_nimiq_gateway_jsonrpc_nimiq_password')
                     .closest('tr').removeClass('hidden');
                 break;
             // case '':
@@ -77,7 +77,7 @@
 
     // Set up event handlers
     const $price_service_select = $('#woocommerce_nimiq_gateway_price_service');
-    const $validation_service_select = $('#woocommerce_nimiq_gateway_validation_service');
+    const $validation_service_select = $('#woocommerce_nimiq_gateway_validation_service_nim');
 
     let price_service = $price_service_select.val();
     let validation_service = $validation_service_select.val();

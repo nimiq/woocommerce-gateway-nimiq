@@ -189,39 +189,39 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
-				'validation_service' => array(
-					'title'       => __( 'Validation Service', 'wc-gateway-nimiq' ),
+				'validation_service_nim' => array(
+					'title'       => __( 'Nimiq Validation Service', 'wc-gateway-nimiq' ),
 					'type'        => 'select',
-					'description' => __( 'Which service to use for transaction validation.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Which service to use for Nimiq transaction validation.', 'wc-gateway-nimiq' ),
 					'default'     => 'nimiq_watch',
 					'options'     => array(
 						// List available validation services here. The option value must match the file name.
-						'nimiq_watch' => 'NIMIQ.WATCH (testnet & mainnet)',
-						'json_rpc'    => 'Nimiq JSON-RPC API',
-						'nimiqx'      => 'NimiqX (mainnet)',
+						'nimiq_watch'  => 'NIMIQ.WATCH (testnet & mainnet)',
+						'json_rpc_nim' => 'Nimiq JSON-RPC API',
+						'nimiqx'       => 'NimiqX (mainnet)',
 					),
 					'desc_tip'    => true,
 				),
 
-				'jsonrpc_url' => array(
-					'title'       => __( 'JSON-RPC URL', 'wc-gateway-nimiq' ),
+				'jsonrpc_nimiq_url' => array(
+					'title'       => __( 'Nimiq JSON-RPC URL', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'URL (including port) of the JSON-RPC server used to verify transactions.', 'wc-gateway-nimiq' ),
+					'description' => __( 'URL (including port) of the Nimiq JSON-RPC server used to verify transactions.', 'wc-gateway-nimiq' ),
 					'default'     => 'http://localhost:8648',
 					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
-				'jsonrpc_username' => array(
-					'title'       => __( 'JSON-RPC Username', 'wc-gateway-nimiq' ),
+				'jsonrpc_nimiq_username' => array(
+					'title'       => __( 'Nimiq JSON-RPC Username', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( '(Optional) Username for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
 					'default'     => '',
 					'desc_tip'    => true,
 				),
 
-				'jsonrpc_password' => array(
-					'title'       => __( 'JSON-RPC Password', 'wc-gateway-nimiq' ),
+				'jsonrpc_nimiq_password' => array(
+					'title'       => __( 'Nimiq JSON-RPC Password', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( '(Optional) Password for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
 					'default'     => '',

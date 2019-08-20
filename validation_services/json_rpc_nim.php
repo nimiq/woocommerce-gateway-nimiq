@@ -1,7 +1,7 @@
 <?php
 include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
-class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Validation_Service_Interface {
+class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validation_Service_Interface {
     /**
      * Initializes the validation service
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
@@ -11,7 +11,7 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Validation_Se
         $this->transaction = null;
         $this->head_height = null;
 
-        $this->api_domain = $gateway->get_option( 'jsonrpc_url' );
+        $this->api_domain = $gateway->get_option( 'jsonrpc_nimiq_url' );
         if ( empty( $this->api_domain ) ) {
             throw new Exception( __( 'API URL not set.', 'wc-gateway-nimiq' ) );
         }
@@ -68,8 +68,8 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Validation_Se
 
         $call = '{"jsonrpc":"2.0","method":"getTransactionByHash","params":["' . $transaction_hash . '"],"id":42}';
 
-        $username = $gateway->get_option( 'jsonrpc_username' );
-        $password = $gateway->get_option( 'jsonrpc_password' );
+        $username = $gateway->get_option( 'jsonrpc_nimiq_username' );
+        $password = $gateway->get_option( 'jsonrpc_nimiq_password' );
         $headers = array( );
 
         if ( !empty( $username ) || !empty( $password ) ) {
@@ -170,4 +170,4 @@ class WC_Gateway_Nimiq_Service_Jsonrpc implements WC_Gateway_Nimiq_Validation_Se
     }
 }
 
-$service = new WC_Gateway_Nimiq_Service_Jsonrpc( $gateway );
+$service = new WC_Gateway_Nimiq_Service_JsonRpcNimiq( $gateway );

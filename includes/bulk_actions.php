@@ -49,7 +49,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 	$errors = array();
 
 	// Init validation service
-	$service_slug = $gateway->get_option( 'validation_service' );
+	$service_slug = $gateway->get_option( 'validation_service_nim' );
 	include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
 
 	// Get current blockchain height
