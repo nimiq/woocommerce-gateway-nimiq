@@ -45,7 +45,8 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
             return new WP_Error( 'service', $network_stats->error );
         }
 
-        return $network_stats->height;
+        $this->head_height = $network_stats->height;
+        return $this->head_height;
     }
 
     /**
@@ -60,11 +61,9 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
             return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
         }
 
-        if ( empty( $this->head_height ) ) {
-            $this->head_height = $this->blockchain_height();
-            if ( is_wp_error( $this->head_height ) ) {
-                return $this->head_height;
-            }
+        $head_height = $this->blockchain_height();
+        if ( is_wp_error( $head_height ) ) {
+            return $head_height;
         }
 
         $api_response = wp_remote_get( $this->makeUrl( 'transaction/' . $transaction_hash ) );
@@ -147,7 +146,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
      * @return {number}
      */
     public function confirmations() {
-        return $this->blockchain_height() - $this->block_height();
+        return $this->blockchain_height() + 1 - $this->block_height();
     }
 
     private function makeUrl( $path ) {
