@@ -176,6 +176,15 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
+				'bitcoin_address' => array(
+					'title'       => __( 'Shop BTC Address', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Your Bitcoin address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
+					'default'     => '',
+					'placeholder' => '...',
+					'desc_tip'    => true,
+				),
+
 				'ethereum_address' => array(
 					'title'       => __( 'Shop ETH Address', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
@@ -243,6 +252,18 @@ function wc_nimiq_gateway_init() {
 					'description' => __( 'Token for accessing the NimiqX price and validation service.', 'wc-gateway-nimiq' ),
 					'default'     => '',
 					'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
+					'desc_tip'    => true,
+				),
+
+				'validation_service_btc' => array(
+					'title'       => __( 'Bitcoin Validation Service', 'wc-gateway-nimiq' ),
+					'type'        => 'select',
+					'description' => __( 'Which service to use for Bitcoin transaction validation.', 'wc-gateway-nimiq' ),
+					'default'     => 'blockstream',
+					'options'     => array(
+						// List available validation services here. The option value must match the file name.
+						'blockstream'  => 'Blockstream.info (testnet & mainnet)',
+					),
 					'desc_tip'    => true,
 				),
 

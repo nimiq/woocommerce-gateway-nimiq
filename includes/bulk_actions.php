@@ -52,7 +52,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 	// Init validation services
 	$services = [];
-	$validation_options = ['validation_service_nim', /*'validation_service_btc', */'validation_service_eth'];
+	$validation_options = ['validation_service_nim', 'validation_service_btc', 'validation_service_eth'];
 	foreach ($validation_options as $option) {
 		$service_slug = $gateway->get_option( $option );
 		include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
