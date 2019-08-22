@@ -202,7 +202,7 @@ function wc_nimiq_gateway_init() {
 					'options'     => array(
 						// List available price services here. The option value must match the file name.
 						'coingecko' => 'Coingecko',
-						'nimiqx'    => 'NimiqX',
+						// 'nimiqx'    => 'NimiqX (Nimiq only)',
 					),
 					'desc_tip'    => true,
 				),
@@ -318,26 +318,41 @@ function wc_nimiq_gateway_init() {
 				),
 
 				'message' => array(
-					'title'       => __( 'Transaction Message', 'wc-gateway-nimiq' ),
+					'title'       => __( 'NIM Transaction Message', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
 					'default'     => __( 'Thank you for shopping with us!', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
 
-				'fee' => array(
-					'title'       => __( 'Transaction Fee per Byte', 'wc-gateway-nimiq' ),
+				'fee_nim' => array(
+					'title'       => __( 'NIM Fee per Byte', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
 					'description' => __( 'Luna per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
-					'default'     => 0,
+					'default'     => 1,
 					'desc_tip'    => true,
 				),
 
-				// TODO: Becomes unecessary when API can retrieve mempool transactions
+				'fee_btc' => array(
+					'title'       => __( 'BTC Fee per Byte', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Satoshi per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
+					'default'     => 40,
+					'desc_tip'    => true,
+				),
+
+				'fee_eth' => array(
+					'title'       => __( 'ETH Gas Price (Gwei)', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'Gas price in Gwei to be applied to transactions.', 'wc-gateway-nimiq' ),
+					'default'     => 8,
+					'desc_tip'    => true,
+				),
+
 				'tx_wait_duration' => array(
 					'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'How many minutes to wait for a transaction to be mined, before marking the order as failed.', 'wc-gateway-nimiq' ),
+					'description' => __( 'How many minutes to wait for a transaction to be found, before marking the order as failed.', 'wc-gateway-nimiq' ),
 					'default'     => 150, // 120 minutes (Nimiq tx validity window) + 30 min buffer
 					'desc_tip'    => true,
 				),
@@ -377,7 +392,6 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function payment_fields() {
-
 			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
 				$description = $this->get_description();
 				if ( $description ) {
@@ -389,8 +403,10 @@ function wc_nimiq_gateway_init() {
 			// These scripts are enqueued at the end of the page
 			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
 
-			$order_total_nim = 0;
-			$nim_price = 0;
+			$cryptoman = new Crypto_Manager( $this );
+
+			$order_totals_crypto = [];
+			$prices = [];
 			$order_currency = '';
 			$order_hash = '';
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
@@ -401,24 +417,28 @@ function wc_nimiq_gateway_init() {
 				$price_service = $this->get_option( 'price_service' );
 
 				if ( $order_currency === 'NIM') {
-					$order_total_nim = $order_total;
-					update_post_meta( $order_id, 'order_total_nim', $order_total_nim );
+					$order_totals_crypto[ 'nim' ] = $order_total;
+					update_post_meta( $order_id, 'order_total_nim', $order_total );
 				} else {
 					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
 					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
-
 					$price_service = new $class( $this );
-					$nim_price = $price_service->getCurrentPrice( $order_currency );
 
-					if ( is_wp_error( $nim_price ) ) {
-						update_post_meta( $order_id, 'conversion_error', $nim_price->get_error_message() );
+					$accepted_cryptos = $cryptoman->get_accepted_cryptos();
+
+					$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
+
+					if ( is_wp_error( $prices ) ) {
+						update_post_meta( $order_id, 'conversion_error', $prices->get_error_message() );
 					} else {
-						// Round up to full NIM
-						$order_total_nim = ceil( $order_total / $nim_price );
+						$order_totals_crypto = $cryptoman->calculate_quotes( $order_total, $prices );
 
-						update_post_meta( $order_id, 'nim_price', $nim_price );
-						update_post_meta( $order_id, 'nim_price_currency', $order_currency );
-						update_post_meta( $order_id, 'order_total_nim', $order_total_nim );
+						foreach ( $accepted_cryptos as $crypto ) {
+							update_post_meta( $order_id, $crypto . '_price', $prices[ $crypto ] );
+							update_post_meta( $order_id, 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
+						}
+
+						// TODO: Define and store expiry date
 					}
 				}
 
@@ -441,9 +461,15 @@ function wc_nimiq_gateway_init() {
 				'SITE_TITLE'     => get_bloginfo( 'name' ),
 				'HUB_URL'        => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com/' : 'https://hub.nimiq-testnet.com/',
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
-				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
-				'ORDER_TOTAL'    => intval( $order_total_nim * 1e5 ),
-				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) ?: 0 ),
+				'ORDER_AMOUNT'   => $order->get_total(),
+				'ORDER_CURRENCY' => $order->get_currency(),
+				'SHOP_ADDRESSES' => json_encode( [
+					'nim' => $this->get_option( 'nimiq_address' ),
+					'btc' => $this->get_option( 'bitcoin_address' ),
+					'eth' => $this->get_option( 'ethereum_address' ),
+				] ),
+				'ORDER_TOTALS'   => json_encode( Crypto_Manager::coins_to_units( $order_totals_crypto ) ),
+				'TX_FEES'        => json_encode( $cryptoman->get_fees( count( $tx_message_bytes ) ) ),
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 			) );
@@ -462,25 +488,32 @@ function wc_nimiq_gateway_init() {
 				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
 
 				<p class="form-row">
-					<?php _e( 'Order amount:', 'wc-gateway-nimiq' ); ?>
-					<strong><?php echo( number_format( $order_total_nim, 0, '.', ' ' ) ); ?> NIM</strong>
+					<?php _e( 'Payable amount:', 'wc-gateway-nimiq' ); ?><br>
+					<?php foreach ( $order_totals_crypto as $crypto => $amount ) { ?>
+						<?php $decimals = Crypto_Manager::required_decimals()[ $crypto ]; ?>
+						<strong><?php echo( strtoupper( $crypto ) ); ?> <?php echo( number_format( $amount, $decimals, '.', ' ' ) ); ?></strong><br>
+					<?php } ?>
 				</p>
 
-				<?php if ( is_wp_error( $nim_price ) ) { ?>
+				<?php if ( is_wp_error( $prices ) ) { ?>
 					<p class="form-row" style="color: red; font-style: italic;">
 						<?php _e( 'Could not get a NIM conversion rate:', 'wc-gateway-nimiq' ); ?><br>
-						<?php echo( $nim_price->get_error_message() ); ?>
+						<?php echo( $prices->get_error_message() ); ?>
 					</p>
-				<?php } elseif ( $nim_price > 0 ) { ?>
+				<?php } elseif ( count( $prices ) > 0 ) { ?>
 					<p class="form-row">
-						<?php _e( 'Rate:', 'wc-gateway-nimiq' ); ?>
-						1 NIM = <?php echo( wc_price( $nim_price, [ 'decimals' => 6, 'currency' => $order_currency ] ) ); ?>
+						<?php _e( 'Rates:', 'wc-gateway-nimiq' ); ?><br>
+						<?php foreach ( $prices as $crypto => $price ) { ?>
+							<?php $decimals = strlen( end( explode( '.', strval( $price ) ) ) ); ?>
+							1 <?php echo( strtoupper( $crypto ) ); ?> =
+							<?php echo( wc_price( $price, [ 'decimals' => $decimals, 'currency' => $order_currency ] ) ); ?><br>
+						<?php } ?>
 					</p>
 				<?php } ?>
 
-				<?php if ( ! is_wp_error( $nim_price ) && $nim_price > 0 || $order_currency === 'NIM') { ?>
+				<?php if ( !is_wp_error( $prices ) && count( $prices ) > 0 || $order_currency === 'NIM') { ?>
 					<p class="form-row">
-						<?php _e( 'Please click the big button below to pay with Nimiq.', 'wc-gateway-nimiq' ); ?>
+						<?php _e( 'Please click the big button below to pay.', 'wc-gateway-nimiq' ); ?>
 					</p>
 				<?php } ?>
 			</div>
@@ -635,3 +668,5 @@ function wc_nimiq_gateway_init() {
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/order_utils.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/crypto_manager.php' );

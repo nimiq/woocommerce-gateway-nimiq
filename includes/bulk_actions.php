@@ -16,8 +16,6 @@ add_filter( 'bulk_actions-edit-shop_order', 'register_bulk_actions', 9);
 add_filter( 'handle_bulk_actions-edit-shop_order', 'do_bulk_validate_transactions', 10, 3 );
 add_action( 'admin_notices', 'handle_bulk_admin_notices_after_redirect' );
 
-include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'order_utils.php' );
-
 function register_bulk_actions( $actions ) {
 	$actions[ 'validate_transactions' ] = __( 'Validate Transactions', 'wc-gateway-nimiq' );
 	return $actions;

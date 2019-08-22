@@ -9,12 +9,10 @@ interface WC_Gateway_Nimiq_Price_Service_Interface {
      */
     public function __construct( $gateway );
 
-
     /**
-     * Retrieves the current nimiq price
-     *
-     * @param {string} The currency to get the price for
-     * @return {float|WP_Error}
+     * @param {string[]} $crypto_currencies
+     * @param {string} $shop_currency
+     * @return {{[iso: string]: number]}}
      */
-    public function getCurrentPrice( $currency );
+    public function get_prices( $crypto_currencies, $shop_currency );
 }

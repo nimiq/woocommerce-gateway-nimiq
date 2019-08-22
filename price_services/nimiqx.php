@@ -26,11 +26,12 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
     }
 
     /**
-     * @param {string} $currency
-     * @return {float}
+     * @param {string[]} $crypto_currencies
+     * @param {string} $shop_currency
+     * @return {{[iso: string]: number]}}
      */
-    public function getCurrentPrice( $currency ) {
-        $currency = strtolower( $currency );
+    public function get_prices( $crypto_currencies, $shop_currency ) {
+        $currency = strtolower( $shop_currency );
         $api_response = wp_remote_get( $this->makeUrl( 'price/' . $currency ) );
 
         if ( is_wp_error( $api_response ) ) {
