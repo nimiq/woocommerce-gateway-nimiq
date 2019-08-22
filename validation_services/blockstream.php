@@ -112,6 +112,8 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
 
             // Stop when earlierst transaction is earlier than the order date
             $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+            // The first call to Blockstream returns up to 50 mempool tx AND up to 25 mined tx.
+            // So if the last returned tx is not mined (confirmed), there are no mined tx at all.
             if ( end( $response ) && ( !end( $response )->status->confirmed || end( $response )->status->block_time < $order_date ) ) {
                 return false;
             }

@@ -1,8 +1,13 @@
 (async function($) {
     'use strict';
 
-    // Disable submit button until ready
-	$('input#terms').prop('checked', true);
+    // Check the T&C box, which was already checked on the page before
+    $('input#terms').prop('checked', true);
+
+    // Count up server time for the request
+    setInterval(function() {
+        CONFIG.TIME++;
+    }, 1000);
 
     // Status variables
     var awaiting_transaction_signing = false;
@@ -19,7 +24,7 @@
 
         if (awaiting_transaction_signing) return false;
 
-        // Process NIM payment (async)
+        // Process crypto payment (async)
         do_payment();
     }
 
@@ -27,17 +32,44 @@
         awaiting_transaction_signing = true;
         $('button#place_order').prop('disabled', true);
 
+        const addresses = JSON.parse(CONFIG.SHOP_ADDRESSES);
+        const order_totals = JSON.parse(CONFIG.ORDER_TOTALS);
+        const fees = JSON.parse(CONFIG.TX_FEES);
+
+        const paymentOptions = Object.keys(order_totals).map(function(currency) {
+            const address = addresses[currency];
+            const total = order_totals[currency];
+            const fee = fees[currency];
+
+            return {
+                currency: currency.toUpperCase(),
+                type: 0, // DIRECT payment
+                amount: total,
+                expires: CONFIG.EXPIRES,
+                protocolSpecific: Object.assign({
+                    recipient: address,
+                }, currency === 'eth' ? {
+                    gasLimit: fee.gas_limit,
+                    gasPrice: fee.gas_price,
+                } : {
+                    fee,
+                }),
+            };
+        });
+
         // Generate transaction object
         var request = {
+            version: 2,
             appName: CONFIG.SITE_TITLE,
             shopLogoUrl: CONFIG.SHOP_LOGO_URL || undefined,
-            recipient: CONFIG.STORE_ADDRESS,
-            value: parseFloat(CONFIG.ORDER_TOTAL),
-            fee: parseFloat(CONFIG.TX_FEE),
+            time: CONFIG.TIME,
             extraData: new Uint8Array(JSON.parse(CONFIG.TX_MESSAGE)),
+            fiatAmount: parseFloat(CONFIG.ORDER_AMOUNT),
+            fiatCurrency: CONFIG.ORDER_CURRENCY,
+            paymentOptions,
         };
 
-        // Start Accounts action
+        // Start Hub action
         try {
             var signed_transaction = await hubApi.checkout(request);
             if (use_redirect()) return;
@@ -70,10 +102,12 @@
 
     var on_signing_error = function(e) {
         console.error(e);
-        if (e.message !== 'CANCELED') alert('Error: ' + e.message);
+        // if (e.message !== 'CANCELED' && e.message !== 'Connection was closed') alert('Error: ' + e.message);
+        if (e.message !== 'CANCELED' && e !== 'Connection was closed') alert('Error: ' + e.message);
         awaiting_transaction_signing = false;
         // Reenable checkout button
         $('button#place_order').prop('disabled', false);
+        jQuery('#order_review').unblock();
     }
 
     // Add submit event listener to form, preventDefault()
