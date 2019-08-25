@@ -62,6 +62,7 @@
             version: 2,
             appName: CONFIG.SITE_TITLE,
             shopLogoUrl: CONFIG.SHOP_LOGO_URL || undefined,
+            callbackUrl: CONFIG.CALLBACK || undefined,
             time: CONFIG.TIME,
             extraData: new Uint8Array(JSON.parse(CONFIG.TX_MESSAGE)),
             fiatAmount: parseFloat(CONFIG.ORDER_AMOUNT),
@@ -103,7 +104,7 @@
     var on_signing_error = function(e) {
         console.error(e);
         // if (e.message !== 'CANCELED' && e.message !== 'Connection was closed') alert('Error: ' + e.message);
-        if (e.message !== 'CANCELED' && e !== 'Connection was closed') alert('Error: ' + e.message);
+        if (e.message !== 'CANCELED' && e.message !== 'Connection was closed' && e !== 'Connection was closed') alert('Error: ' + e.message);
         awaiting_transaction_signing = false;
         // Reenable checkout button
         $('button#place_order').prop('disabled', false);

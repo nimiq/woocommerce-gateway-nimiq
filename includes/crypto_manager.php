@@ -7,6 +7,22 @@ class Crypto_Manager {
         'eth' => 18,
     ];
 
+    public static function iso_to_name( $iso ) {
+        return [
+            'nim' => 'nimiq',
+            'btc' => 'bitcoin',
+            'eth' => 'ethereum',
+        ][ $iso ];
+    }
+
+    public static function name_to_iso( $name ) {
+        return [
+            'nimiq' => 'nim',
+            'bitcoin' => 'btc',
+            'ethereum' => 'eth',
+        ][ $name ];
+    }
+
     public static function coins_to_units( $values ) {
         $units = [];
         foreach ( $values as $crypto => $value ) {
@@ -44,8 +60,8 @@ class Crypto_Manager {
 
     public function get_accepted_cryptos() {
         $accepted_cryptos = [ 'nim' ];
-        if ( !empty( $this->gateway->get_option( 'bitcoin_address' ) ) ) $accepted_cryptos[] = 'btc';
-        if ( !empty( $this->gateway->get_option( 'ethereum_address' ) ) ) $accepted_cryptos[] = 'eth';
+        if ( !empty( $this->gateway->get_option( 'bitcoin_xpub' ) ) ) $accepted_cryptos[] = 'btc';
+        if ( !empty( $this->gateway->get_option( 'ethereum_xpub' ) ) ) $accepted_cryptos[] = 'eth';
         return $accepted_cryptos;
     }
 

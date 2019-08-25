@@ -176,19 +176,19 @@ function wc_nimiq_gateway_init() {
 					'desc_tip'    => true,
 				),
 
-				'bitcoin_address' => array(
-					'title'       => __( 'Shop BTC Address', 'wc-gateway-nimiq' ),
+				'bitcoin_xpub' => array(
+					'title'       => __( 'BTC Extended Public Key', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Your Bitcoin address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Your Bitcoin xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
 					'default'     => '',
-					'placeholder' => '...',
+					'placeholder' => 'xpub...',
 					'desc_tip'    => true,
 				),
 
-				'ethereum_address' => array(
-					'title'       => __( 'Shop ETH Address', 'wc-gateway-nimiq' ),
+				'ethereum_xpub' => array(
+					'title'       => __( 'ETH Extended Public Key', 'wc-gateway-nimiq' ),
 					'type'        => 'text',
-					'description' => __( 'Your Ethereum address where customers will send their transactions to.', 'wc-gateway-nimiq' ),
+					'description' => __( 'Your Ethereum xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
 					'default'     => '',
 					'placeholder' => '0x...',
 					'desc_tip'    => true,
@@ -388,6 +388,14 @@ function wc_nimiq_gateway_init() {
 					'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.', 'wc-gateway-nimiq' ),
 					'desc_tip'    => true,
 				),
+
+				'current_address_index_btc' => array(
+					'title'       => __( '[BTC Address Index]', 'wc-gateway-nimiq' ),
+					'type'        => 'text',
+					'description' => __( 'DO NOT CHANGE! The current BTC address derivation index', 'wc-gateway-nimiq' ),
+					'default'     => -1,
+					'desc_tip'    => true,
+				),
 			) );
 		}
 
@@ -409,6 +417,7 @@ function wc_nimiq_gateway_init() {
 			$prices = [];
 			$order_currency = '';
 			$order_hash = '';
+			$callback_url = '';
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
@@ -427,6 +436,7 @@ function wc_nimiq_gateway_init() {
 					$accepted_cryptos = $cryptoman->get_accepted_cryptos();
 
 					$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
+					// TODO: Define and store expiry date
 
 					if ( is_wp_error( $prices ) ) {
 						update_post_meta( $order_id, 'conversion_error', $prices->get_error_message() );
@@ -437,9 +447,12 @@ function wc_nimiq_gateway_init() {
 							update_post_meta( $order_id, $crypto . '_price', $prices[ $crypto ] );
 							update_post_meta( $order_id, 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 						}
-
-						// TODO: Define and store expiry date
 					}
+
+					// Generate CSRF token, webhook URL
+					$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
+					update_post_meta( $order_id, 'checkout_csrf_token', csrf_token );
+					$callback_url = get_site_url() . '/wp-json/nimiq-checkout/v1/callback/' . $order_id . '/?csrf_token=' . $csrf_token;
 				}
 
 				$order_hash = $order->get_meta( 'order_hash' );
@@ -465,8 +478,6 @@ function wc_nimiq_gateway_init() {
 				'ORDER_CURRENCY' => $order->get_currency(),
 				'SHOP_ADDRESSES' => json_encode( [
 					'nim' => $this->get_option( 'nimiq_address' ),
-					'btc' => $this->get_option( 'bitcoin_address' ),
-					'eth' => $this->get_option( 'ethereum_address' ),
 				] ),
 				'ORDER_TOTALS'   => json_encode( Crypto_Manager::coins_to_units( $order_totals_crypto ) ),
 				'TX_FEES'        => json_encode( $cryptoman->get_fees( count( $tx_message_bytes ) ) ),
@@ -474,6 +485,7 @@ function wc_nimiq_gateway_init() {
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 				'TIME'           => time(),
 				'EXPIRES'        => strtotime( '+15 minutes' ),
+				'CALLBACK'       => $callback_url,
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
 
@@ -590,7 +602,6 @@ function wc_nimiq_gateway_init() {
 			}
 		}
 
-
 		/**
 		 * Add content to the WC emails.
 		 *
@@ -604,7 +615,6 @@ function wc_nimiq_gateway_init() {
 				echo wpautop( wptexturize( $this->instructions ) ) . PHP_EOL;
 			}
 		}
-
 
 		/**
 		 * Process the payment and return the result
@@ -646,7 +656,7 @@ function wc_nimiq_gateway_init() {
 		// Custom function not required by the Gateway
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
-				if( $this->get_option( 'nimiq_address' ) == "" ) {
+				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
 					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>', 'wc-gateway-nimiq' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
@@ -667,8 +677,12 @@ function wc_nimiq_gateway_init() {
 
 } // end wc_nimiq_gateway_init()
 
+// Includes that register actions and filters and are thus self-calling
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'includes/webhook.php' );
+
+// Utility classes called from other code
 include_once( plugin_dir_path( __FILE__ ) . 'includes/order_utils.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/crypto_manager.php' );
