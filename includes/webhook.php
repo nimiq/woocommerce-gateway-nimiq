@@ -71,6 +71,9 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
 
     $order->save();
 
+    // For now, we need to update the status here, because at least for BTC and ETH the Hub request does not return yet.
+    $order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
+
     $protocolSpecific = [
         'recipient' => $address,
     ];
