@@ -71,13 +71,30 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
 
     $order->save();
 
-    $result = [ 'status' => 'OK' ];
+    $protocolSpecific = [
+        'recipient' => $address,
+    ];
 
-    if ( !empty( $address ) ) {
-        $result[ 'recipient' ] = $address;
+    $tx_message = ( !empty( $gateway->get_option( 'message' ) ) ? $gateway->get_option( 'message' ) . ' ' : '' )
+        . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
+    $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
+
+    $fees = $cryptoman->get_fees( count( $tx_message_bytes ) );
+
+    if ( $currency === 'eth' ) {
+        $protocolSpecific[ 'gasLimit' ] = $fees[ $currency ]['gas_limit'];
+        $protocolSpecific[ 'gasPrice' ] = $fees[ $currency ]['gas_price'];
+    } else {
+        $protocolSpecific[ 'fee' ] = $fees[ $currency ];
     }
 
-    // TODO: Update payment amount, expiry from new quote
+    $paymentOption = [
+        'type' => 0, // DIRECT
+        'currency' => strtoupper( $currency ),
+        'expires' => intval( $order->get_meta( 'crypto_rate_expires' ) ),
+        'amount' => Order_Utils::get_order_total_crypto( $order ),
+        'protocolSpecific' => $protocolSpecific,
+    ];
 
-    return $result;
+    return $paymentOption;
 }

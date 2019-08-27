@@ -427,7 +427,7 @@ function wc_nimiq_gateway_init() {
 
 				if ( $order_currency === 'NIM') {
 					$order_totals_crypto[ 'nim' ] = $order_total;
-					update_post_meta( $order_id, 'order_total_nim', $order_total );
+					$order->update_meta_data( 'order_total_nim', $order_total );
 				} else {
 					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
 					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
@@ -436,30 +436,33 @@ function wc_nimiq_gateway_init() {
 					$accepted_cryptos = $cryptoman->get_accepted_cryptos();
 
 					$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
-					// TODO: Define and store expiry date
+					$expires = strtotime( '+15 minutes' );
+					$order->update_meta_data( 'crypto_rate_expires', $expires );
 
 					if ( is_wp_error( $prices ) ) {
-						update_post_meta( $order_id, 'conversion_error', $prices->get_error_message() );
+						$order->update_meta_data( 'conversion_error', $prices->get_error_message() );
 					} else {
 						$order_totals_crypto = $cryptoman->calculate_quotes( $order_total, $prices );
 
 						foreach ( $accepted_cryptos as $crypto ) {
-							update_post_meta( $order_id, $crypto . '_price', $prices[ $crypto ] );
-							update_post_meta( $order_id, 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
+							$order->update_meta_data( $crypto . '_price', $prices[ $crypto ] );
+							$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 						}
 					}
 
 					// Generate CSRF token, webhook URL
 					$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
-					update_post_meta( $order_id, 'checkout_csrf_token', csrf_token );
+					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
 					$callback_url = get_site_url() . '/wp-json/nimiq-checkout/v1/callback/' . $order_id . '/?csrf_token=' . $csrf_token;
 				}
 
 				$order_hash = $order->get_meta( 'order_hash' );
 				if ( empty( $order_hash ) ) {
 					$order_hash = $this->compute_order_hash( $order );
-					update_post_meta( $order_id, 'order_hash', $order_hash );
+					$order->update_meta_data( 'order_hash', $order_hash );
 				}
+
+				$order->save();
 			}
 
 			// To uniquely identify the payment transaction, we add a shortened hash of
