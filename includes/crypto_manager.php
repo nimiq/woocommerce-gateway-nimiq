@@ -27,19 +27,23 @@ class Crypto_Manager {
         $units = [];
         foreach ( $values as $crypto => $value ) {
             // Convert to smallest unit string
-            // 1. Split by decimal dot
-            $split = explode( '.', strval( $value ), 2 );
+
+            // 1. Format as string without exponent
+            $pad_length = self::DECIMALS[ $crypto ];
+            $coins = number_format($value, $pad_length, '.', '');
+
+            // 2. Split by decimal dot
+            $split = explode( '.', $coins, 2 );
             $integers = $split[0];
             $decimals = $split[1] ?: '';
 
-            // 2. Extend decimals with 0s until number of crypto-specific decimals is reached
-            $pad_length = self::DECIMALS[ $crypto ];
+            // 3. Extend decimals with 0s until number of crypto-specific decimals is reached
             $decimals = str_pad( $decimals, $pad_length, '0', STR_PAD_RIGHT );
 
-            // 3. Join integers with decimals to create value string
+            // 4. Join integers with decimals to create value string
             $unit = implode( '', [ $integers, $decimals ] );
 
-            // 4. Remove leading zeros
+            // 5. Remove leading zeros
             $units[ $crypto ] = ltrim($unit, '0');
         }
         return $units;
