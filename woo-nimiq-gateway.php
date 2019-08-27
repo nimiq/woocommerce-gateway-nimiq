@@ -391,8 +391,18 @@ function wc_nimiq_gateway_init() {
 
 				'current_address_index_btc' => array(
 					'title'       => __( '[BTC Address Index]', 'wc-gateway-nimiq' ),
-					'type'        => 'text',
-					'description' => __( 'DO NOT CHANGE! The current BTC address derivation index', 'wc-gateway-nimiq' ),
+					'type'        => 'number',
+					'min'    => '-1',
+					'description' => __( 'DO NOT CHANGE! The current BTC address derivation index.', 'wc-gateway-nimiq' ),
+					'default'     => -1,
+					'desc_tip'    => true,
+				),
+
+				'current_address_index_eth' => array(
+					'title'       => __( '[ETH Address Index]', 'wc-gateway-nimiq' ),
+					'type'        => 'number',
+					'min'    => '-1',
+					'description' => __( 'DO NOT CHANGE! The current ETH address derivation index.', 'wc-gateway-nimiq' ),
 					'default'     => -1,
 					'desc_tip'    => true,
 				),
