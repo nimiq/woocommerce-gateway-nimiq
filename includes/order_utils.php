@@ -22,10 +22,10 @@ class Order_Utils {
 
     public static function get_order_recipient_address( $order, $gateway ) {
         $currency = self::get_order_currency( $order );
-        if ( $currency === 'btc' || $currency === 'eth' ) {
-            return $order->get_meta( 'order_' . $currency . '_address' );
-        } else {
-            return $gateway->get_option( 'nimiq_address' );
+        switch( $currency ) {
+            case 'btc': return $order->get_meta( 'order_' . $currency . '_address' );
+            case 'eth': return strtolower( $order->get_meta( 'order_' . $currency . '_address' ) );
+            case 'nim': return $gateway->get_option( 'nimiq_address' );
         }
     }
 }
