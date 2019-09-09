@@ -497,7 +497,7 @@ function wc_nimiq_gateway_init() {
 				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']', // json_encode would create an object
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 				'TIME'           => time(),
-				'EXPIRES'        => strtotime( '+15 minutes' ),
+				'EXPIRES'        => $expires ?: strtotime( '+15 minutes' ),
 				'CALLBACK'       => $callback_url,
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
