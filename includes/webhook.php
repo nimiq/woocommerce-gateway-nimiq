@@ -24,7 +24,7 @@ add_action( 'rest_api_init', function () {
 function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
     $id = $request[ 'id' ];
     $csrf_token = $request[ 'csrf_token' ];
-    $currency = strtolower( $request[ 'currency' ] );
+    $command = strtolower( $request[ 'command' ] );
 
     $order = wc_get_order( $id );
 
@@ -40,6 +40,34 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
         return new WP_Error( 'bad_order', 'Bad order', array( 'status' => 406 ) );
     }
 
+    // Validate CSRF token
+    $order_csrf_token = $order->get_meta( 'checkout_csrf_token' );
+    if ( empty( $order_csrf_token ) || $order_csrf_token !== $csrf_token ) {
+        return new WP_Error( 'invalid_csrf', 'Invalid CSRF token', array( 'status' => 403 ) );
+    }
+
+    // Call handler depending on command
+    switch ( $command ) {
+        case 'get_time':
+            return woo_nimiq_checkout_callback_get_time( $request, $order, $gateway ); break;
+        case 'set_currency':
+            return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ); break;
+        case 'check_network':
+            return woo_nimiq_checkout_callback_check_network( $request, $order, $gateway ); break;
+        default:
+            return woo_nimiq_checkout_callback_unknown( $request, $order, $gateway ); break;
+    }
+}
+
+function woo_nimiq_checkout_callback_get_time( $request, $order, $gateway ) {
+    return [
+        'time' => time(),
+    ];
+}
+
+function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) {
+    $currency = strtolower( $request[ 'currency' ] );
+
     $cryptoman = new Crypto_Manager( $gateway );
     $accepted_currencies = $cryptoman->get_accepted_cryptos();
 
@@ -47,15 +75,6 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
     if ( !in_array( $currency, $accepted_currencies, true ) ) {
         return new WP_Error( 'bad_currency', 'Bad currency', array( 'status' => 406 ) );
     }
-
-    $order_csrf_token = $order->get_meta( 'checkout_csrf_token' );
-
-    // Validate CSRF token
-    if ( empty( $order_csrf_token ) || $order_csrf_token !== $csrf_token ) {
-        return new WP_Error( 'invalid_csrf', 'Invalid CSRF token', array( 'status' => 403 ) );
-    }
-    // Delete CSRF token from order, because it must only be used once
-    // $order->delete_meta_data( 'checkout_csrf_token' );
 
     $order->update_meta_data( 'order_crypto_currency', $currency );
 
@@ -70,9 +89,6 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
     }
 
     $order->save();
-
-    // For now, we need to update the status here, because at least for BTC and ETH the Hub request does not return yet.
-    $order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
 
     $protocolSpecific = [
         'recipient' => $address,
@@ -100,4 +116,20 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
     ];
 
     return $paymentOption;
+}
+
+function woo_nimiq_checkout_callback_check_network( $request, $order, $gateway ) {
+    return new WP_Error( 'not_implemented', 'Not implemented', array( 'status' => 501 ) );
+
+    // For now, we need to update the status here, because at least for BTC and ETH the Hub request does not return yet.
+    // $order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
+
+    // Delete CSRF token when transaction found
+    // $order->delete_meta_data( 'checkout_csrf_token' );
+
+    // $order->save();
+}
+
+function woo_nimiq_checkout_callback_unknown( $request, $order, $gateway ) {
+    return new WP_Error( 'bad_command', 'Bad command', array( 'status' => 406 ) );
 }
