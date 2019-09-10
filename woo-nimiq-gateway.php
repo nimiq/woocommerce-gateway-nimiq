@@ -143,70 +143,18 @@ function wc_nimiq_gateway_init() {
 			$this->form_fields = $woo_nimiq_checkout_settings;
 		}
 
-		public function payment_fields() {
-			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
-				$description = $this->get_description();
-				if ( $description ) {
-					echo wpautop( wptexturize( $description ) );
-				}
-				return;
-			}
+		private function get_payment_request( $order_id ) {
+			$order = wc_get_order( $order_id );
 
-			// These scripts are enqueued at the end of the page
-			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
+			$order_total = floatval( $order->get_total() );
+			$order_currency = $order->get_currency();
 
 			$cryptoman = new Crypto_Manager( $this );
 
-			$order_totals_crypto = [];
-			$prices = [];
-			$order_currency = '';
-			$order_hash = '';
-			$callback_url = '';
-			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
-				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
-				$order = wc_get_order( $order_id );
-				$order_total = $order->get_total();
-				$order_currency = $order->get_currency();
-				$price_service = $this->get_option( 'price_service' );
-
-				if ( $order_currency === 'NIM') {
-					$order_totals_crypto[ 'nim' ] = $order_total;
-					$order->update_meta_data( 'order_total_nim', $order_total );
-				} else {
-					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
-					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
-					$price_service = new $class( $this );
-
-					$accepted_cryptos = $cryptoman->get_accepted_cryptos();
-
-					$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
-					$expires = strtotime( '+15 minutes' );
-					$order->update_meta_data( 'crypto_rate_expires', $expires );
-
-					if ( is_wp_error( $prices ) ) {
-						$order->update_meta_data( 'conversion_error', $prices->get_error_message() );
-					} else {
-						$order_totals_crypto = $cryptoman->calculate_quotes( $order_total, $prices );
-
-						foreach ( $accepted_cryptos as $crypto ) {
-							$order->update_meta_data( $crypto . '_price', $prices[ $crypto ] );
-							$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
-						}
-					}
-
-					// Generate CSRF token, webhook URL
-					$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
-					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
-					$callback_url = get_site_url() . '/wp-json/nimiq-checkout/v1/callback/' . $order_id . '/?csrf_token=' . $csrf_token;
-				}
-
-				$order_hash = $order->get_meta( 'order_hash' );
-				if ( empty( $order_hash ) ) {
-					$order_hash = $this->compute_order_hash( $order );
-					$order->update_meta_data( 'order_hash', $order_hash );
-				}
-
-				$order->save();
+			$order_hash = $order->get_meta( 'order_hash' );
+			if ( empty( $order_hash ) ) {
+				$order_hash = $this->compute_order_hash( $order );
+				$order->update_meta_data( 'order_hash', $order_hash );
 			}
 
 			// To uniquely identify the payment transaction, we add a shortened hash of
@@ -216,23 +164,130 @@ function wc_nimiq_gateway_init() {
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
+			$fees = $cryptoman->get_fees( count( $tx_message_bytes ) );
+
+			// Collect common request properties used in both request types
+			$request = [
+				'appName' => get_bloginfo( 'name' ),
+				'shopLogoUrl' => $this->get_option( 'shop_logo_url' ),
+				'extraData' => $tx_message,
+			];
+
+			if ( $order_currency === 'NIM') {
+				$order->update_meta_data( 'order_total_nim', $order_total );
+
+				// Use NimiqCheckoutRequest (version 1)
+				$request = array_merge( $request, [
+					'version' => 1,
+					'recipient' => Order_Utils::get_order_recipient_address( $order, $this ),
+					'value' => intval( Order_Utils::get_order_total_crypto( $order ) ),
+					'fee' => $fees[ 'nim' ],
+				] );
+			} else {
+				$price_service = $this->get_option( 'price_service' );
+				include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
+				$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
+				$price_service = new $class( $this );
+
+				$accepted_cryptos = $cryptoman->get_accepted_cryptos();
+
+				$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
+
+				$expires = strtotime( '+15 minutes' );
+				$order->update_meta_data( 'crypto_rate_expires', $expires );
+
+				if ( is_wp_error( $prices ) ) {
+					$order->update_meta_data( 'conversion_error', $prices->get_error_message() );
+					return $prices;
+				}
+
+				$order_totals_crypto = $cryptoman->calculate_quotes( $order_total, $prices );
+				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
+
+				foreach ( $accepted_cryptos as $crypto ) {
+					$order->update_meta_data( $crypto . '_price', $prices[ $crypto ] );
+					$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
+				}
+
+				// Generate CSRF token, webhook URL
+				$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
+				$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
+				$callback_url = get_site_url() . '/wp-json/nimiq-checkout/v1/callback/' . $order_id . '/?csrf_token=' . $csrf_token;
+
+				// Use MultiCurrencyCheckoutRequest (version 2)
+				$payment_options = [];
+				foreach ( $accepted_cryptos as $crypto ) {
+					$recipient = $crypto === 'nim' ? Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ] : null;
+					$amount = $order_totals_unit[ $crypto ];
+					$fee = $fees[ $crypto ];
+
+					$payment_options[] = [
+						'type' => 0, // 0 = DIRECT
+						'currency' => $crypto,
+						'expires' => $expires,
+						'amount' => $amount,
+						'protocolSpecific' => array_merge( [
+							'recipient' => $recipient,
+						], $crypto === 'eth' ? [
+							'gasLimit' => $fee[ 'gas_limit' ],
+							'gasPrice' => strval( $fee[ 'gas_price' ] ),
+						] : [
+							'fee' => $fee,
+						] ),
+					];
+				};
+
+				$request = array_merge( $request, [
+					'version' => 2,
+					'callbackUrl' => $callback_url,
+					'time' => time(),
+					'fiatAmount' => $order_total,
+					'fiatCurrency' => $order_currency,
+					'paymentOptions' => $payment_options,
+				] );
+			}
+
+			$order->save();
+
+			return $request;
+		}
+
+		public function payment_fields() {
+			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+				$description = $this->get_description();
+				if ( $description ) {
+					echo wpautop( wptexturize( $description ) );
+				}
+				return;
+			}
+
+			if ( !isset( $_GET['pay_for_order'] ) || !isset( $_GET['key'] ) ) {
+				return;
+			}
+
+			$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+			$request = $this->get_payment_request( $order_id );
+
+			if ( is_wp_error( $request ) ) {
+				?>
+				<div id="nim_gateway_info_block">
+					<p class="form-row" style="color: red; font-style: italic;">
+						<?php _e( 'ERROR:', 'wc-gateway-nimiq' ); ?><br>
+						<?php echo( $request->get_error_message() ); ?>
+					</p>
+				</div>
+				<?php
+				return;
+			}
+
+			// These scripts are enqueued at the end of the page
+			wp_enqueue_script('HubApi', plugin_dir_url( __FILE__ ) . 'js/HubApi.standalone.umd.js', [], $this->version(), true );
+
 			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'HubApi' ], $this->version(), true );
 			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
-				'SITE_TITLE'     => get_bloginfo( 'name' ),
-				'HUB_URL'        => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com/' : 'https://hub.nimiq-testnet.com/',
-				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
-				'ORDER_AMOUNT'   => $order->get_total(),
-				'ORDER_CURRENCY' => $order->get_currency(),
-				'SHOP_ADDRESSES' => json_encode( [
-					'nim' => $this->get_option( 'nimiq_address' ),
-				] ),
-				'ORDER_TOTALS'   => json_encode( Crypto_Manager::coins_to_units( $order_totals_crypto ) ),
-				'TX_FEES'        => json_encode( $cryptoman->get_fees( count( $tx_message_bytes ) ) ),
-				'TX_MESSAGE'     => $tx_message,
-				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
-				'TIME'           => time(),
-				'EXPIRES'        => $expires ?: strtotime( '+15 minutes' ),
-				'CALLBACK'       => $callback_url,
+				'HUB_URL'      => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : 'https://hub.nimiq-testnet.com',
+				'RPC_BEHAVIOR' => $this->get_option( 'rpc_behavior' ),
+				'REQUEST'      => json_encode( $request ),
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
 
@@ -249,34 +304,8 @@ function wc_nimiq_gateway_init() {
 				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
 
 				<p class="form-row">
-					<?php _e( 'Payable amount:', 'wc-gateway-nimiq' ); ?><br>
-					<?php foreach ( $order_totals_crypto as $crypto => $amount ) { ?>
-						<?php $decimals = Crypto_Manager::required_decimals()[ $crypto ]; ?>
-						<strong><?php echo( strtoupper( $crypto ) ); ?> <?php echo( number_format( $amount, $decimals, '.', ' ' ) ); ?></strong><br>
-					<?php } ?>
+					<?php _e( 'Please click the big button below to pay.', 'wc-gateway-nimiq' ); ?>
 				</p>
-
-				<?php if ( is_wp_error( $prices ) ) { ?>
-					<p class="form-row" style="color: red; font-style: italic;">
-						<?php _e( 'Could not get a NIM conversion rate:', 'wc-gateway-nimiq' ); ?><br>
-						<?php echo( $prices->get_error_message() ); ?>
-					</p>
-				<?php } elseif ( count( $prices ) > 0 ) { ?>
-					<p class="form-row">
-						<?php _e( 'Rates:', 'wc-gateway-nimiq' ); ?><br>
-						<?php foreach ( $prices as $crypto => $price ) { ?>
-							<?php $decimals = strlen( end( explode( '.', strval( $price ) ) ) ); ?>
-							1 <?php echo( strtoupper( $crypto ) ); ?> =
-							<?php echo( wc_price( $price, [ 'decimals' => $decimals, 'currency' => $order_currency ] ) ); ?><br>
-						<?php } ?>
-					</p>
-				<?php } ?>
-
-				<?php if ( !is_wp_error( $prices ) && count( $prices ) > 0 || $order_currency === 'NIM') { ?>
-					<p class="form-row">
-						<?php _e( 'Please click the big button below to pay.', 'wc-gateway-nimiq' ); ?>
-					</p>
-				<?php } ?>
 			</div>
 
 			<div id="nim_payment_complete_block" class="hidden">
