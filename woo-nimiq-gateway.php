@@ -494,7 +494,7 @@ function wc_nimiq_gateway_init() {
 				] ),
 				'ORDER_TOTALS'   => json_encode( Crypto_Manager::coins_to_units( $order_totals_crypto ) ),
 				'TX_FEES'        => json_encode( $cryptoman->get_fees( count( $tx_message_bytes ) ) ),
-				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']', // json_encode would create an object
+				'TX_MESSAGE'     => $tx_message,
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 				'TIME'           => time(),
 				'EXPIRES'        => $expires ?: strtotime( '+15 minutes' ),

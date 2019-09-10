@@ -64,7 +64,7 @@
             shopLogoUrl: CONFIG.SHOP_LOGO_URL || undefined,
             callbackUrl: CONFIG.CALLBACK || undefined,
             time: CONFIG.TIME,
-            extraData: new Uint8Array(JSON.parse(CONFIG.TX_MESSAGE)),
+            extraData: CONFIG.TX_MESSAGE,
             fiatAmount: parseFloat(CONFIG.ORDER_AMOUNT),
             fiatCurrency: CONFIG.ORDER_CURRENCY,
             paymentOptions,
