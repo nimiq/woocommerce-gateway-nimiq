@@ -22,6 +22,8 @@ add_action( 'rest_api_init', function () {
  * @param array $request Options for the function.
  */
 function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
+    header( "Access-Control-Allow-Origin: *" );
+
     $id = $request[ 'id' ];
     $csrf_token = $request[ 'csrf_token' ];
     $command = strtolower( $request[ 'command' ] );
@@ -108,27 +110,51 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
         $protocolSpecific[ 'fee' ] = $fees[ $currency ];
     }
 
-    $paymentOption = [
+    return [
         'type' => 0, // DIRECT
-        'currency' => strtoupper( $currency ),
+        'currency' => $currency,
         'expires' => intval( $order->get_meta( 'crypto_rate_expires' ) ),
         'amount' => Order_Utils::get_order_total_crypto( $order ),
         'protocolSpecific' => $protocolSpecific,
     ];
-
-    return $paymentOption;
 }
 
 function woo_nimiq_checkout_callback_check_network( $request, $order, $gateway ) {
-    return new WP_Error( 'not_implemented', 'Not implemented', array( 'status' => 501 ) );
+    $currency = Order_Utils::get_order_currency( $order, false );
+
+    if ( empty( $currency ) ) {
+        return new WP_Error( 'method_not_allowed', 'Method not allowed. Select currency first.', [ 'status' => 405 ] );
+    }
+
+    if ( $currency === 'nim' ) {
+        return new WP_Error( 'forbidden', 'Forbidden. Cannot check the network for orders payed in NIM.', [ 'status' => 403 ] );
+    }
+
+    // Init validation service
+    $services = [];
+    $service_slug = $gateway->get_option( 'validation_service_' . $currency );
+    include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
+    $service = $services[ $currency ];
+
+    $transaction_hash = $order->get_meta('transaction_hash');
+
+    $is_loaded = $service->load_transaction( $transaction_hash, $order, $gateway );
+    if ( is_wp_error( $is_loaded ) ) {
+        return $is_loaded;
+    }
+
+    if ( $is_loaded ) {
+        // Delete CSRF token when transaction found
+        $order->delete_meta_data( 'checkout_csrf_token' );
+        $order->save();
+    }
+
+    return [
+        'transaction_found' => $is_loaded,
+    ];
 
     // For now, we need to update the status here, because at least for BTC and ETH the Hub request does not return yet.
     // $order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
-
-    // Delete CSRF token when transaction found
-    // $order->delete_meta_data( 'checkout_csrf_token' );
-
-    // $order->save();
 }
 
 function woo_nimiq_checkout_callback_unknown( $request, $order, $gateway ) {

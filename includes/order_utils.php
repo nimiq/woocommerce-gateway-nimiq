@@ -1,8 +1,8 @@
 <?php
 
 class Order_Utils {
-    public static function get_order_currency( $order ) {
-        return $order->get_meta('order_crypto_currency') ?: 'nim';
+    public static function get_order_currency( $order, $fallback_to_nim = true ) {
+        return $order->get_meta( 'order_crypto_currency' ) ?: ( $fallback_to_nim ? 'nim' : null );
     }
 
     public static function get_order_total_crypto( $order ) {
