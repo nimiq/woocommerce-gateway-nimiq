@@ -49,13 +49,13 @@ function woo_nimiq_checkout_callback( WP_REST_Request $request ) {
     // Call handler depending on command
     switch ( $command ) {
         case 'get_time':
-            return woo_nimiq_checkout_callback_get_time( $request, $order, $gateway ); break;
+            return woo_nimiq_checkout_callback_get_time( $request, $order, $gateway );
         case 'set_currency':
-            return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ); break;
+            return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway );
         case 'check_network':
-            return woo_nimiq_checkout_callback_check_network( $request, $order, $gateway ); break;
+            return woo_nimiq_checkout_callback_check_network( $request, $order, $gateway );
         default:
-            return woo_nimiq_checkout_callback_unknown( $request, $order, $gateway ); break;
+            return woo_nimiq_checkout_callback_unknown( $request, $order, $gateway );
     }
 }
 
@@ -94,6 +94,7 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
         'recipient' => $address,
     ];
 
+    $order_hash = $order->get_meta( 'order_hash' );
     $tx_message = ( !empty( $gateway->get_option( 'message' ) ) ? $gateway->get_option( 'message' ) . ' ' : '' )
         . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
     $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array

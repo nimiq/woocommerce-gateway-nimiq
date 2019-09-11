@@ -139,7 +139,8 @@ function wc_nimiq_gateway_init() {
 		 * Initialize Gateway Settings Form Fields
 		 */
 		public function init_form_fields() {
-			include_once( plugin_dir_path( __FILE__ ) . 'settings.php' );
+			// include_once() does not work here, as when saving the settings the file needs to be included twice
+			include( plugin_dir_path( __FILE__ ) . 'settings.php' );
 			$this->form_fields = $woo_nimiq_checkout_settings;
 		}
 

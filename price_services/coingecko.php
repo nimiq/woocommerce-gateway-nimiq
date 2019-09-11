@@ -36,10 +36,10 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
             return $api_response;
         }
 
-        $result = json_decode( $api_response[ 'body' ], true );
+        $result = json_decode( $api_response[ 'body' ], true ); // Return as associative array (instead of object)
 
-        if ( $result->error ) {
-            return new WP_Error( 'service', $result->error );
+        if ( array_key_exists( 'error', $result ) ) {
+            return new WP_Error( 'service', $result[ 'error' ] );
         }
 
         $prices = [];

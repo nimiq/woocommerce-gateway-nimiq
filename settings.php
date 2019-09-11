@@ -4,7 +4,7 @@ $redirect_behaviour_options = [
     'popup' => 'Popup'
 ];
 
-if ( $_SERVER['HTTPS'] === 'on' ) {
+if ( array_key_exists( 'HTTPS', $_SERVER ) && $_SERVER[ 'HTTPS' ] === 'on' ) {
     $redirect_behaviour_options['redirect'] = 'Redirect';
 }
 

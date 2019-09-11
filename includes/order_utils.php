@@ -32,8 +32,8 @@ class Order_Utils {
     public static function get_order_recipient_addresses( $order, $gateway ) {
         return [
             'nim' => $gateway->get_option( 'nimiq_address' ),
-            'btc' => $order->get_meta( 'order_' . $currency . '_address' ),
-            'eth' => strtolower( $order->get_meta( 'order_' . $currency . '_address' ) ),
+            'btc' => $order->get_meta( 'order_btc_address' ),
+            'eth' => strtolower( $order->get_meta( 'order_eth_address' ) ),
         ];
     }
 }
