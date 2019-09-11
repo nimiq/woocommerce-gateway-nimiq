@@ -102,6 +102,7 @@ function wc_nimiq_gateway_init() {
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
+			add_action( 'woocommerce_api_wc_gateway_nimiq', array( $this, 'handle_redirect_response' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_settings_script' ) );
 
@@ -253,6 +254,30 @@ function wc_nimiq_gateway_init() {
 			return $request;
 		}
 
+		private function handle_redirect_response() {
+			$order_id = $this->get_param( 'id' );
+
+			if ( empty( $order_id ) ) {
+				// Redirect to main site
+				wp_redirect( get_site_url() );
+				exit;
+			}
+
+			$is_valid = $this->validate_fields( $order_id );
+
+			if ( !$is_valid ) {
+				// Redirect to payment page
+				$order = wc_get_order( $order_id );
+				wp_redirect( $order->get_checkout_payment_url( $on_checkout = false ) );
+				exit;
+			}
+
+			$redirect = $this->process_payment( $order_id );
+
+			wp_redirect( $redirect[ 'redirect' ] );
+			exit;
+		}
+
 		public function payment_fields() {
 			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
 				$description = $this->get_description();
@@ -267,7 +292,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
-			$request = $this->get_payment_request( $order_id );
+			$request = $this->get_option( 'rpc_behavior' ) === 'popup' ? $this->get_payment_request( $order_id ) : [];
 
 			if ( is_wp_error( $request ) ) {
 				?>
@@ -295,14 +320,17 @@ function wc_nimiq_gateway_init() {
 			?>
 
 			<div id="nim_gateway_info_block">
-				<noscript>
-					<strong>
-						<?php _e( 'Javascript is required to pay with Nimiq. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
-					</strong>
-				</noscript>
+				<?php if ( $this->get_option( 'rpc_behavior' ) === 'popup' ) { ?>
+					<noscript>
+						<strong>
+							<?php _e( 'Javascript is required to use Nimiq Checkout. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
+						</strong>
+					</noscript>
 
-				<input type="hidden" name="transaction_hash" id="transaction_hash" value="<?php sanitize_text_field( $_POST['transaction_hash'] ) ?>">
-				<input type="hidden" name="customer_nim_address" id="customer_nim_address" value="">
+					<input type="hidden" name="rpcId" id="rpcId" value="">
+					<input type="hidden" name="status" id="status" value="">
+					<input type="hidden" name="result" id="result" value="">
+				<?php } ?>
 
 				<p class="form-row">
 					<?php _e( 'Please click the big button below to pay.', 'wc-gateway-nimiq' ); ?>
@@ -341,35 +369,54 @@ function wc_nimiq_gateway_init() {
 			return substr( $long_hash, 0, 6 );
 		}
 
-		public function validate_fields() {
-			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
-				return true;
+		private function get_param( $key, $method = 'get' ) {
+			$data = $method === 'get' ? $_GET : $_POST;
+
+			if ( !isset( $data[ $key ] ) ) return null;
+			return sanitize_text_field( $data[ $key ] );
+		}
+
+		public function validate_fields( $order_id = null ) {
+			if ( !isset( $_POST[ 'rpcId' ] ) ) return true;
+
+			$status = $this->get_param( 'status', 'post' );
+			$result = $this->get_param( 'result', 'post' );
+
+			if ( $status === 'error' || empty( $result ) ) return false;
+
+			$result = json_decode( $result );
+
+			// Get order_id from GET param (for when RPC behavior is 'popup')
+			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
+				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 			}
 
-			// TODO: Fetch POST response when rpc_behavior is redirect
+			if ( empty( $order_id ) ) return false;
 
-			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
-			if ( ! $transaction_hash ) {
-				wc_add_notice( __( 'You need to submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
-				return false;
-			}
+			$order = wc_get_order( $order_id );
+
+			$currency = Order_Utils::get_order_currency( $order, false );
+
+			if ( $currency === 'nim' ) {
+				$transaction_hash = $result->hash;
+				$customer_nim_address = $result->raw->sender;
+
+				if ( ! $transaction_hash ) {
+					wc_add_notice( __( 'You must submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
+					return false;
+				}
 
 			if ( strlen( $transaction_hash) !== 64 ) {
 				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
-				return false;
-			}
+					return false;
+				}
 
-			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
-				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
-				$this->update_order_meta_data( $order_id );
+				$order->update_meta_data( 'transaction_hash', $transaction_hash );
+				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
+				$order-save();
 			}
 
 			return true;
-		}
-
-		public function update_order_meta_data( $order_id ) {
-			update_post_meta( $order_id, 'customer_nim_address', sanitize_text_field( $_POST['customer_nim_address'] ) );
-			update_post_meta( $order_id, 'transaction_hash', sanitize_text_field( $_POST['transaction_hash'] ) );
 		}
 
 		/**
@@ -405,7 +452,7 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+			if ( !isset( $_POST[ 'rpcId' ] ) ) {
 				// Remove cart
 				WC()->cart->empty_cart();
 
@@ -416,7 +463,7 @@ function wc_nimiq_gateway_init() {
 
 					$target = $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : 'https://hub.nimiq-testnet.com';
 					$id = 42;
-					$returnUrl = $order->get_checkout_payment_url( $on_checkout = false );
+					$returnUrl = get_site_url() . '/wc-api/WC_Gateway_Nimiq?id=' . $order_id;
 					$command = 'checkout';
 					$args = [ $this->get_payment_request( $order_id ) ];
 					$responseMethod = 'post';
