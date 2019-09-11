@@ -213,7 +213,7 @@ function wc_nimiq_gateway_init() {
 				// Generate CSRF token, webhook URL
 				$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
 				$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
-				$callback_url = get_site_url() . '/wp-json/nimiq-checkout/v1/callback/' . $order_id . '/?csrf_token=' . $csrf_token;
+				$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id . '&csrf_token=' . $csrf_token;
 
 				// Use MultiCurrencyCheckoutRequest (version 2)
 				$payment_options = [];
