@@ -345,6 +345,8 @@ function wc_nimiq_gateway_init() {
 				return true;
 			}
 
+			// TODO: Fetch POST response when rpc_behavior is redirect
+
 			$transaction_hash = sanitize_text_field( $_POST['transaction_hash'] );
 			if ( ! $transaction_hash ) {
 				wc_add_notice( __( 'You need to submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
@@ -408,7 +410,34 @@ function wc_nimiq_gateway_init() {
 
 				$order->update_status( 'pending-payment', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
 
-				// Return payment-page redirect
+				if ( $this->get_option( 'rpc_behavior' ) === 'redirect' ) {
+					// Redirect to Hub for payment
+
+					$target = $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : 'https://hub.nimiq-testnet.com';
+					$id = 42;
+					$returnUrl = $order->get_checkout_payment_url( $on_checkout = false );
+					$command = 'checkout';
+					$args = [ $this->get_payment_request( $order_id ) ];
+					$responseMethod = 'post';
+
+					include_once( plugin_dir_path( __FILE__ ) . 'nimiq-utils/RpcUtils.php' );
+
+					$url = Nimiq\Utils\RpcUtils::prepareRedirectInvocation(
+						$target,
+						$id,
+						$returnUrl,
+						$command,
+						$args,
+						$responseMethod,
+					);
+
+					return [
+						'result'   => 'success',
+						'redirect' => $url
+					];
+				}
+
+				// Return payment-page redirect from where the Hub popup is opened
 				return array(
 					'result' 	=> 'success',
 					'redirect'	=> $order->get_checkout_payment_url( $on_checkout = false )
@@ -419,7 +448,7 @@ function wc_nimiq_gateway_init() {
 			$order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
 
 			// Reduce stock levels
-			wc_reduce_stock_levels($order_id);
+			wc_reduce_stock_levels( $order_id );
 
 			// Return thank-you redirect
 			return array(
