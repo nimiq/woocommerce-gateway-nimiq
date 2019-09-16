@@ -145,7 +145,7 @@ function wc_nimiq_gateway_init() {
 			$this->form_fields = $woo_nimiq_checkout_settings;
 		}
 
-		private function get_payment_request( $order_id ) {
+		public function get_payment_request( $order_id ) {
 			$order = wc_get_order( $order_id );
 
 			$order_total = floatval( $order->get_total() );
