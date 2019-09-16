@@ -243,7 +243,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Payment Method Title', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'This controls the title for the payment method the customer sees during checkout.', 'wc-gateway-nimiq' ),
-        'default'     => __( 'Pay with Nimiq', 'wc-gateway-nimiq' ),
+        'default'     => __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
     ],
 
@@ -251,7 +251,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Payment Method Description', 'wc-gateway-nimiq' ),
         'type'        => 'textarea',
         'description' => __( 'Payment method description that the customer will see during checkout.', 'wc-gateway-nimiq' ),
-        'default'     => __( 'Pay with your Nimiq Account directly in the browser.', 'wc-gateway-nimiq' ),
+        'default'     => __( 'Pay with Nimiq, Bitcoin or Ethereum!', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
     ],
 
