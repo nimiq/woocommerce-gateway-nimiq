@@ -492,7 +492,7 @@ function wc_nimiq_gateway_init() {
 						$returnUrl,
 						$command,
 						$args,
-						$responseMethod,
+						$responseMethod
 					);
 
 					return [
