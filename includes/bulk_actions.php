@@ -69,8 +69,10 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Only continue if order status is currently 'on hold'
 		if ( $order->get_status() !== 'on-hold' ) continue;
 
+		$currency = Order_Utils::get_order_currency( $order );
+
 		// Get currency-specific validation service
-		$service = $services[ Order_Utils::get_order_currency( $order ) ];
+		$service = $services[ $currency ];
 
 		$transaction_hash = $order->get_meta('transaction_hash');
 
@@ -120,7 +122,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			continue;
 		}
 
-		if ( Order_Utils::get_order_currency( $order ) === 'nim' ) {
+		if ( $currency === 'nim' ) {
 			// Validate transaction data to include correct shortened order hash
 			$message = $service->message();
 			// Look for the last pair of round brackets in the tx message
@@ -136,7 +138,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $service->block_height() ) || $service->confirmations() < $gateway->get_option( 'confirmations' ) ) {
+		if ( empty( $service->block_height() ) || $service->confirmations() < $gateway->get_option( 'confirmations_' . $currency ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}

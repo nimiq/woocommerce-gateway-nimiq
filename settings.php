@@ -215,11 +215,27 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
-    'confirmations' => [
-        'title'       => __( 'Required Confirmations', 'wc-gateway-nimiq' ),
+    'confirmations_nim' => [
+        'title'       => __( 'Required NIM Confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'The number of confirmations required to accept a transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 30,
+        'description' => __( 'The number of confirmations required to accept a Nimiq transaction.', 'wc-gateway-nimiq' ),
+        'default'     => 15,
+        'desc_tip'    => true,
+    ],
+
+    'confirmations_btc' => [
+        'title'       => __( 'Required BTC Confirmations', 'wc-gateway-nimiq' ),
+        'type'        => 'text',
+        'description' => __( 'The number of confirmations required to accept a Bitcoin transaction.', 'wc-gateway-nimiq' ),
+        'default'     => 3,
+        'desc_tip'    => true,
+    ],
+
+    'confirmations_eth' => [
+        'title'       => __( 'Required ETH Confirmations', 'wc-gateway-nimiq' ),
+        'type'        => 'text',
+        'description' => __( 'The number of confirmations required to accept an Ethereum transaction.', 'wc-gateway-nimiq' ),
+        'default'     => 12,
         'desc_tip'    => true,
     ],
 
