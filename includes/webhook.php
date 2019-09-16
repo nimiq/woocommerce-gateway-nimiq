@@ -33,13 +33,13 @@ function woo_nimiq_checkout_callback() {
 
     $request = [
         'id' => woo_nimiq_checkout_get_param( 'id' ),
-        'csrf_token' => woo_nimiq_checkout_get_param( 'csrf_token' ),
-        'command' => woo_nimiq_checkout_get_param( 'command' ),
-        'currency' => woo_nimiq_checkout_get_param( 'currency' ),
+        'csrf' => woo_nimiq_checkout_get_param( 'csrf', 'post' ),
+        'command' => woo_nimiq_checkout_get_param( 'command', 'post' ),
+        'currency' => woo_nimiq_checkout_get_param( 'currency', 'post' ),
     ];
 
     $id = $request[ 'id' ];
-    $csrf_token = $request[ 'csrf_token' ];
+    $csrf_token = $request[ 'csrf' ];
     $command = strtolower( $request[ 'command' ] );
 
     $order = wc_get_order( $id );

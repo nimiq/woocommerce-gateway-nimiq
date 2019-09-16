@@ -211,10 +211,12 @@ function wc_nimiq_gateway_init() {
 					$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 				}
 
-				// Generate CSRF token, webhook URL
+				// Generate CSRF token
 				$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
 				$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
-				$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id . '&csrf_token=' . $csrf_token;
+
+				// Generate callback URL
+				$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id;
 
 				// Use MultiCurrencyCheckoutRequest (version 2)
 				$payment_options = [];
@@ -242,6 +244,7 @@ function wc_nimiq_gateway_init() {
 				$request = array_merge( $request, [
 					'version' => 2,
 					'callbackUrl' => $callback_url,
+					'csrf' => $csrf_token,
 					'time' => time(),
 					'fiatAmount' => $order_total,
 					'fiatCurrency' => $order_currency,
@@ -372,9 +375,10 @@ function wc_nimiq_gateway_init() {
 		private function get_param( $key, $method = 'get' ) {
 			$data = $method === 'get'
 				? $_GET
-				: $method === 'post'
+				: ( $method === 'post'
 					? $_POST
-					: $method;
+					: $method
+				);
 
 			if ( !isset( $data[ $key ] ) ) return null;
 			return sanitize_text_field( $data[ $key ] );
