@@ -370,17 +370,23 @@ function wc_nimiq_gateway_init() {
 		}
 
 		private function get_param( $key, $method = 'get' ) {
-			$data = $method === 'get' ? $_GET : $_POST;
+			$data = $method === 'get'
+				? $_GET
+				: $method === 'post'
+					? $_POST
+					: $method;
 
 			if ( !isset( $data[ $key ] ) ) return null;
 			return sanitize_text_field( $data[ $key ] );
 		}
 
-		public function validate_fields( $order_id = null ) {
-			if ( !isset( $_POST[ 'rpcId' ] ) ) return true;
+		public function validate_fields( $order_id = null, $response = null) {
+			$response = $response ?: $_POST;
 
-			$status = $this->get_param( 'status', 'post' );
-			$result = $this->get_param( 'result', 'post' );
+			if ( !isset( $response[ 'rpcId' ] ) ) return true;
+
+			$status = $this->get_param( 'status', $response );
+			$result = $this->get_param( 'result', $response );
 
 			if ( $status === 'error' || empty( $result ) ) return false;
 
