@@ -221,23 +221,26 @@ function wc_nimiq_gateway_init() {
 				// Use MultiCurrencyCheckoutRequest (version 2)
 				$payment_options = [];
 				foreach ( $accepted_cryptos as $crypto ) {
-					$recipient = $crypto === 'nim' ? Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ] : null;
 					$amount = $order_totals_unit[ $crypto ];
 					$fee = $fees[ $crypto ];
+
+					$protocolSpecific = $crypto === 'eth' ? [
+						'gasLimit' => $fee[ 'gas_limit' ],
+						'gasPrice' => strval( $fee[ 'gas_price' ] ),
+					] : [
+						'fee' => $fee,
+					];
+
+					if ( $crypto === 'nim' ) {
+						$protocolSpecific[ 'recipient' ] = Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ];
+					}
 
 					$payment_options[] = [
 						'type' => 0, // 0 = DIRECT
 						'currency' => $crypto,
 						'expires' => $expires,
 						'amount' => $amount,
-						'protocolSpecific' => array_merge( [
-							'recipient' => $recipient,
-						], $crypto === 'eth' ? [
-							'gasLimit' => $fee[ 'gas_limit' ],
-							'gasPrice' => strval( $fee[ 'gas_price' ] ),
-						] : [
-							'fee' => $fee,
-						] ),
+						'protocolSpecific' => $protocolSpecific,
 					];
 				};
 
@@ -394,6 +397,7 @@ function wc_nimiq_gateway_init() {
 
 			if ( $status === 'error' || empty( $result ) ) return false;
 
+			$result = str_replace( "\\", "", $result ); // JSON string was "sanitized" with backslashes, which is a JSON syntax error
 			$result = json_decode( $result );
 
 			// Get order_id from GET param (for when RPC behavior is 'popup')
@@ -411,7 +415,7 @@ function wc_nimiq_gateway_init() {
 				$transaction_hash = $result->hash;
 				$customer_nim_address = $result->raw->sender;
 
-				if ( ! $transaction_hash ) {
+				if ( !$transaction_hash ) {
 					wc_add_notice( __( 'You must submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
 					return false;
 				}
@@ -423,10 +427,12 @@ function wc_nimiq_gateway_init() {
 
 				$order->update_meta_data( 'transaction_hash', $transaction_hash );
 				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
-				$order-save();
-			}
+				$order->save();
 
-			return true;
+				return true;
+			} else {
+				return $result->success ?: false;
+			}
 		}
 
 		/**

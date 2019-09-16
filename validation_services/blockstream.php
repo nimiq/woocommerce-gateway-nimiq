@@ -121,6 +121,12 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
             $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $last_seen_txid ) );
 
             if ( is_wp_error( $api_response ) ) {
+                // Protect against returning a temporary error that would trigger a request cancellation.
+                if ( substr( $api_response->get_error_message(), 0, 14) === 'cURL error 28:' ) {
+                    sleep(1);
+                    continue; // Retry
+                }
+
                 return $api_response;
             }
 
