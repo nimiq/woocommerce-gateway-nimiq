@@ -49,13 +49,9 @@ class Crypto_Manager {
         return $units;
     }
 
-    public static function required_decimals( $prices = [] ) {
-        // TODO: Find number of required significant decimals based on price
-        return [
-            'nim' => 0, // FIXME: For now, to reduce visual complexity
-            'btc' => 8,
-            'eth' => 6, // FIXME: For now, to reduce visual complexity
-        ];
+    public static function required_decimals( $crypto, $price = 1000000 ) {
+        // Find number of required significant decimals based on price
+        return max( min( ceil( log10( $price ) ) + 2, self::DECIMALS[ $crypto ] ), 0 );
     }
 
     public function __construct( $gateway ) {
@@ -73,7 +69,7 @@ class Crypto_Manager {
         $quotes = [];
         foreach ( $prices as $crypto => $price ) {
             // TODO: Add margins
-            $quotes[ $crypto ] = round( $value / $prices[ $crypto ], $this::required_decimals()[ $crypto ] );
+            $quotes[ $crypto ] = round( $value / $price, $this::required_decimals( $crypto, $price ) );
         }
         return $quotes;
     }
