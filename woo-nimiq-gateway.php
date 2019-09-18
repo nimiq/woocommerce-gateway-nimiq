@@ -477,6 +477,7 @@ function wc_nimiq_gateway_init() {
 
 				$order->update_meta_data( 'transaction_hash', $transaction_hash );
 				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
+				$order->delete_meta_data( 'checkout_csrf_token' );
 				$order->save();
 
 				return true;
