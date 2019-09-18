@@ -129,14 +129,52 @@ function wc_nimiq_gateway_init() {
 			 * - all # must be %23
 			 * - all double quotes (") must be single quotes (')
 			 * - :// must be %3A%2F%2F
-			 * - all slashes (/) must be %2F
+			 * - all slashes in attributes (/) must be %2F
 			 */
-			$icon_src = "data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' height='26' width='26' version='1.1' viewBox='0 0 72 72'><defs><radialGradient gradientTransform='matrix(0.99996243,0,0,1,0.00384744,3.9999988)' gradientUnits='userSpaceOnUse' r='72.019997' cy='63.169998' cx='54.169998' id='radial-gradient'><stop id='stop4' stop-color='%23ec991c' offset='0' /><stop id='stop6' stop-color='%23e9b213' offset='1' /></radialGradient></defs><path fill='url(%23radial-gradient)' stroke-width='0.99998122' d='M 71.201173,32.999999 56.201736,6.9999988 a 5.9997746,6 0 0 0 -5.199804,-3 H 21.003059 a 5.9997746,6 0 0 0 -5.189805,3 L 0.80381738,32.999999 a 5.9997746,6 0 0 0 0,6 l 14.99943662,26 a 5.9997746,6 0 0 0 5.199805,3 h 29.998873 a 5.9997746,6 0 0 0 5.189805,-3 l 14.999436,-26 a 5.9997746,6 0 0 0 0.01,-6 z' /></svg>";
 
-			$img  = '<img src="' . $icon_src . '" alt="' . esc_attr__( 'Nimiq logo', 'wc-gateway-nimiq' ) . '">';
-			$link = '<a href="https://nimiq.com/en/#splash" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a>';
+			$currencies = $this->crypto_manager->get_accepted_cryptos();
 
-			return $img . $link ;
+			// Widths of the source icons
+			$WIDTHS = [
+				'nim' => 26,
+				'btc' => 26,
+				'eth' => 18,
+			];
+
+			$SPACING = 12;
+
+			$image_width = array_reduce( array_map( function( $crypto ) use ( $WIDTHS ) {
+				return $WIDTHS[ $crypto ];
+			}, $currencies ), function( $acc, $width ) {
+				return $acc + $width;
+			}, 0 ) + $SPACING * ( count( $currencies ) - 1 );
+
+			$offsets = [
+				'nim' => 0,
+				'btc' => $WIDTHS[ 'nim' ] + $SPACING,
+				'eth' => in_array( 'btc', $currencies )
+					? $WIDTHS[ 'nim' ] + $WIDTHS[ 'btc' ] + $SPACING * 2
+					: $WIDTHS[ 'nim' ] + $SPACING,
+			];
+
+			$alt = implode( ', ', array_map( function( $crypto ) {
+				return ucfirst( Crypto_Manager::iso_to_name( $crypto ) );
+			}, $currencies ) );
+
+			$defs = "<radialGradient id='nimiq-radial-gradient' cx='-166.58' cy='275.96' r='1.06' gradientTransform='matrix(-24.62, 0, 0, 21.78, -4075.39, -5984.84)' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23ec991c'/><stop offset='1' stop-color='%23e9b213'/></radialGradient>";
+
+			$logo_nimiq = "<path fill='url(%23nimiq-radial-gradient)' d='M25.71,12.92,20.29,3.58A2.16,2.16,0,0,0,18.42,2.5H7.58A2.15,2.15,0,0,0,5.71,3.58L.29,12.92a2.14,2.14,0,0,0,0,2.16l5.42,9.34A2.15,2.15,0,0,0,7.58,25.5H18.42a2.16,2.16,0,0,0,1.87-1.08l5.42-9.34A2.14,2.14,0,0,0,25.71,12.92Z'/>";
+
+			$logo_bitcoin = in_array( 'btc', $currencies ) ? "<g transform='translate(" . $offsets[ 'btc' ] . " 0)'><path fill='%23f7931a' d='M25.61,17.15A13,13,0,1,1,16.14,1.39,13,13,0,0,1,25.61,17.15Z'/><path fill='%23fff' d='M18.73,12.15c.26-1.73-1.06-2.66-2.86-3.28l.59-2.35L15,6.17l-.57,2.28-1.14-.27.57-2.3-1.42-.35-.59,2.34L11,7.66h0L9,7.16,8.63,8.68s1,.24,1,.26a.77.77,0,0,1,.67.83l-.67,2.67s0,0,0,0l-.94,3.74a.52.52,0,0,1-.65.34s-1-.26-1-.26l-.7,1.63,1.85.46,1,.27L8.61,21l1.42.35L10.62,19l1.14.29-.59,2.34L12.6,22l.59-2.36c2.43.46,4.26.27,5-1.93a2.5,2.5,0,0,0-1.31-3.46A2.26,2.26,0,0,0,18.73,12.15Zm-3.26,4.57c-.44,1.77-3.42.81-4.39.57l.79-3.14C12.83,14.39,15.93,14.87,15.47,16.72Zm.44-4.6c-.4,1.61-2.88.79-3.69.59l.71-2.84C13.74,10.07,16.33,10.44,15.91,12.12Z'/></g>" : "";
+
+			$logo_ethereum = in_array( 'eth', $currencies ) ? "<g transform='translate(" . $offsets[ 'eth' ] . " 0)'><path class='cls-1' d='M9,21v7l9-12.08Z'/><path d='M9,10.36v9l9-5.09Z'/><path fill='%232f3030' d='M9,0V10.37l9,3.9Z'/><path fill='%23828384' d='M9,21v7L0,15.92Z'/><path fill='%23343535' d='M9,10.36v9L0,14.27Z'/><path fill='%23828384' d='M9,0V10.37l-9,3.9Z'/></g>" : "";
+
+			$icon_src = "data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='" . $image_width . "' height='28' viewBox='0 0 " . $image_width . " 28'><defs>" . $defs . "</defs>" . $logo_nimiq . $logo_bitcoin . $logo_ethereum . "</svg>";
+
+			$img  = '<img src="' . $icon_src . '" alt="' . $alt . '">';
+			// $link = '<a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a>';
+
+			return $img/* . $link */;
 		}
 
 		/**
