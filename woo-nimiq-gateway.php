@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nimiq Checkout for WooCommerce
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
- * Description: Let customers pay with their Nimiq account directly in the browser
+ * Description: Let customers pay with Nimiq, Bitcoin and Ethereum
  * Author: Nimiq
  * Author URI: https://nimiq.com
  * Version: 2.7.4
@@ -87,16 +87,16 @@ function wc_nimiq_gateway_init() {
 
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
-			$this->method_title       = 'Nimiq';
-			$this->method_description = __( 'Allows Nimiq payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
+			$this->method_title       = 'Nimiq Crypto Checkout';
+			$this->method_description = __( 'Allows crypto payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
 
 			// Load the settings.
 			$this->init_form_fields();
 			$this->init_settings();
 
 			// Define user set variables
-			$this->title        = $this->get_option( 'title' );
-			$this->description  = $this->get_option( 'description' );
+			$this->title        = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
+			$this->description  = __( 'You will be redirected to Nimiq to complete your purchase securely.', 'wc-gateway-nimiq' );
 			$this->instructions = $this->get_option( 'instructions' );
 
 			// Actions
