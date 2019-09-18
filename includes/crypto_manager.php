@@ -51,7 +51,7 @@ class Crypto_Manager {
 
     public static function required_decimals( $crypto, $price = 1000000 ) {
         // Find number of required significant decimals based on price
-        return max( min( ceil( log10( $price ) ) + 2, self::DECIMALS[ $crypto ] ), 0 );
+        return min( ceil( log10( $price ) ) + 2, self::DECIMALS[ $crypto ] );
     }
 
     public function __construct( $gateway ) {
