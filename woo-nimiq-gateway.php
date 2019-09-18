@@ -99,6 +99,9 @@ function wc_nimiq_gateway_init() {
 			$this->description  = __( 'You will be redirected to Nimiq to complete your purchase securely.', 'wc-gateway-nimiq' );
 			$this->instructions = $this->get_option( 'instructions' );
 
+			// Instantiate utility classes
+			$this->crypto_manager = new Crypto_Manager( $this );
+
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -151,8 +154,6 @@ function wc_nimiq_gateway_init() {
 			$order_total = floatval( $order->get_total() );
 			$order_currency = $order->get_currency();
 
-			$cryptoman = new Crypto_Manager( $this );
-
 			$order_hash = $order->get_meta( 'order_hash' );
 			if ( empty( $order_hash ) ) {
 				$order_hash = $this->compute_order_hash( $order );
@@ -166,7 +167,7 @@ function wc_nimiq_gateway_init() {
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-			$fees = $cryptoman->get_fees( count( $tx_message_bytes ) );
+			$fees = $this->crypto_manager->get_fees( count( $tx_message_bytes ) );
 
 			// Collect common request properties used in both request types
 			$request = [
@@ -191,7 +192,7 @@ function wc_nimiq_gateway_init() {
 				$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
 				$price_service = new $class( $this );
 
-				$accepted_cryptos = $cryptoman->get_accepted_cryptos();
+				$accepted_cryptos = $this->crypto_manager->get_accepted_cryptos();
 
 				$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
 
@@ -203,7 +204,7 @@ function wc_nimiq_gateway_init() {
 					return $prices;
 				}
 
-				$order_totals_crypto = $cryptoman->calculate_quotes( $order_total, $prices );
+				$order_totals_crypto = $this->crypto_manager->calculate_quotes( $order_total, $prices );
 				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 				foreach ( $accepted_cryptos as $crypto ) {
