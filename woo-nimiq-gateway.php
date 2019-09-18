@@ -426,20 +426,31 @@ function wc_nimiq_gateway_init() {
 			return sanitize_text_field( $data[ $key ] );
 		}
 
-		public function validate_fields( $order_id = null, $response = null) {
-			$response = $response ?: $_POST;
+		/**
+		 * This is a required method for WC gateways, to be used by WC internal processing
+		 *
+		 * DO NOT USE FOR CUSTOM INTEGRATION!
+		 * Use `validate_response` instead!
+		 */
+		public function validate_fields( $order_id = null ) {
+			if ( !isset( $_POST[ 'rpcId' ] ) ) return true;
 
-			if ( !isset( $response[ 'rpcId' ] ) ) return true;
+			return $this->validate_response( $order_id, $_POST );
+		}
 
+		/**
+		 * Response validation to be used by custom integrations
+		 */
+		public function validate_response( $order_id = null, $response ) {
 			$status = $this->get_param( 'status', $response );
 			$result = $this->get_param( 'result', $response );
 
-			if ( $status === 'error' || empty( $result ) ) return false;
+			if ( $status !== 'OK' || empty( $result ) ) return false;
 
-			$result = str_replace( "\\", "", $result ); // JSON string was "sanitized" with backslashes, which is a JSON syntax error
+			$result = str_replace( "\\", "", $result ); // JSON string may be "sanitized" with backslashes, which is a JSON syntax error
 			$result = json_decode( $result );
 
-			// Get order_id from GET param (for when RPC behavior is 'popup')
+			// Get order_id from GET param (for when RPC behavior is native 'popup')
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 			}
