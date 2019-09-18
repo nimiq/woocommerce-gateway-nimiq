@@ -1,4 +1,4 @@
-.payment_method_nimiq_gateway .hidden {
+#nim_payment_complete_block.hidden {
 	display: none;
 }
 
