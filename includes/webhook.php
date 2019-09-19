@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ERROR);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ERROR);
 
 add_action( 'woocommerce_api_nimiq_checkout_callback', 'woo_nimiq_checkout_callback' );
 
@@ -62,16 +62,20 @@ function woo_nimiq_checkout_callback() {
         return woo_nimiq_checkout_error( 'Invalid CSRF token', 403 );
     }
 
-    // Call handler depending on command
-    switch ( $command ) {
-        case 'get_time':
-            return woo_nimiq_checkout_callback_get_time( $request, $order, $gateway );
-        case 'set_currency':
-            return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway );
-        case 'check_network':
-            return woo_nimiq_checkout_callback_check_network( $request, $order, $gateway );
-        default:
-            return woo_nimiq_checkout_callback_unknown( $request, $order, $gateway );
+    try {
+        // Call handler depending on command
+        switch ( $command ) {
+            case 'get_time':
+                return woo_nimiq_checkout_callback_get_time( $request, $order, $gateway );
+            case 'set_currency':
+                return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway );
+            case 'check_network':
+                return woo_nimiq_checkout_callback_check_network( $request, $order, $gateway );
+            default:
+                return woo_nimiq_checkout_callback_unknown( $request, $order, $gateway );
+        }
+    } catch (Exception $error) {
+        return woo_nimiq_checkout_error( $error->getMessage(), 500 );
     }
 }
 
