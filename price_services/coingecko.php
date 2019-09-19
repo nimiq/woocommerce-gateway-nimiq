@@ -24,14 +24,14 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
      */
     public function get_prices( $crypto_currencies, $shop_currency, $order_amount ) {
         $fiat_currency = strtolower( $shop_currency );
-        $ids = implode( ',', array_map( function( $currency_iso ) {
+        $ids = array_map( function( $currency_iso ) {
             return [
                 'nim' => 'nimiq-2',
                 'btc' => 'bitcoin',
                 'eth' => 'ethereum',
             ][ $currency_iso ];
-        }, $crypto_currencies ) );
-        $api_response = wp_remote_get( $this->api_endpoint . '/simple/price?ids=' . $ids . '&vs_currencies=' . $fiat_currency );
+        }, $crypto_currencies );
+        $api_response = wp_remote_get( $this->api_endpoint . '/simple/price?ids=' . implode( ',', $ids ) . '&vs_currencies=' . $fiat_currency );
 
         if ( is_wp_error( $api_response ) ) {
             return $api_response;

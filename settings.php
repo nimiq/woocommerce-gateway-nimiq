@@ -46,7 +46,7 @@ $woo_nimiq_checkout_settings = [
     'ethereum_xpub' => [
         'title'       => __( 'ETH Extended Public Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Your Ethereum xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
+        'description' => __( 'Your Ethereum xpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
         'default'     => '',
         'placeholder' => '0x...',
         'desc_tip'    => true,
@@ -158,9 +158,9 @@ $woo_nimiq_checkout_settings = [
     'validation_interval' => [
         'title'       => __( 'Validation Interval', 'wc-gateway-nimiq' ),
         'type'        => 'number',
-        'description' => __( 'Interval in minutes to validate transactions. If you change this, disable and enable this plugin to put the change into effect.', 'wc-gateway-nimiq' ),
-        'default'     => 30,
-        'placeholder' => 'Default: 30',
+        'description' => __( 'Interval to validate transactions, in minutes. If you change this, disable and enable this plugin to apply the new interval.', 'wc-gateway-nimiq' ),
+        'default'     => 5,
+        'placeholder' => '5 minutes',
         'desc_tip'    => true,
     ],
 
@@ -194,7 +194,7 @@ $woo_nimiq_checkout_settings = [
 
     'fee_nim' => [
         'title'       => __( 'NIM Fee per Byte', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'Luna per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
         'default'     => 1,
         'desc_tip'    => true,
@@ -202,7 +202,7 @@ $woo_nimiq_checkout_settings = [
 
     'fee_btc' => [
         'title'       => __( 'BTC Fee per Byte', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'Satoshi per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
         'default'     => 40,
         'desc_tip'    => true,
@@ -210,7 +210,7 @@ $woo_nimiq_checkout_settings = [
 
     'fee_eth' => [
         'title'       => __( 'ETH Gas Price (Gwei)', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'Gas price in Gwei to be applied to transactions.', 'wc-gateway-nimiq' ),
         'default'     => 8,
         'desc_tip'    => true,
@@ -218,33 +218,33 @@ $woo_nimiq_checkout_settings = [
 
     'tx_wait_duration' => [
         'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'How many minutes to wait for a transaction to be found, before marking the order as failed.', 'wc-gateway-nimiq' ),
-        'default'     => 150, // 120 minutes (Nimiq tx validity window) + 30 min buffer
+        'default'     => 120, // 2 hours
         'desc_tip'    => true,
     ],
 
     'confirmations_nim' => [
         'title'       => __( 'Required NIM Confirmations', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Nimiq transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 15,
+        'default'     => 10, // ~ 10 minutes
         'desc_tip'    => true,
     ],
 
     'confirmations_btc' => [
         'title'       => __( 'Required BTC Confirmations', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Bitcoin transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 3,
+        'default'     => 1, // ~ 10 minutes
         'desc_tip'    => true,
     ],
 
     'confirmations_eth' => [
         'title'       => __( 'Required ETH Confirmations', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
+        'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept an Ethereum transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 12,
+        'default'     => 45, // ~ 10 minutes
         'desc_tip'    => true,
     ],
 
