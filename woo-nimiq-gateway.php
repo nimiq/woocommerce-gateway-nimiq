@@ -232,7 +232,11 @@ function wc_nimiq_gateway_init() {
 
 				$accepted_cryptos = $this->crypto_manager->get_accepted_cryptos();
 
-				$prices = $price_service->get_prices( $accepted_cryptos, $order_currency );
+				// Apply margin to order value
+				$margin = floatval( $this->get_option( 'margin', '0' ) ) / 100;
+				$effective_order_total = $order_total * ( 1 + $margin );
+
+				$prices = $price_service->get_prices( $accepted_cryptos, $order_currency, $effective_order_total );
 
 				$expires = strtotime( '+15 minutes' );
 				$order->update_meta_data( 'crypto_rate_expires', $expires );
@@ -242,11 +246,11 @@ function wc_nimiq_gateway_init() {
 					return $prices;
 				}
 
-				$order_totals_crypto = $this->crypto_manager->calculate_quotes( $order_total, $prices );
+				$order_totals_crypto = $this->crypto_manager->calculate_quotes( $effective_order_total, $prices );
 				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 				foreach ( $accepted_cryptos as $crypto ) {
-					$order->update_meta_data( $crypto . '_price', $prices[ $crypto ] );
+					// $order->update_meta_data( 'price_' . $crypto, $prices[ $crypto ] );
 					$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 				}
 

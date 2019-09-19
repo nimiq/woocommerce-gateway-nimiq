@@ -68,7 +68,6 @@ class Crypto_Manager {
     public function calculate_quotes( $value, $prices ) {
         $quotes = [];
         foreach ( $prices as $crypto => $price ) {
-            // TODO: Add margins
             $quotes[ $crypto ] = round( $value / $price, $this::required_decimals( $crypto, $price ) );
         }
         return $quotes;

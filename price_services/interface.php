@@ -12,7 +12,8 @@ interface WC_Gateway_Nimiq_Price_Service_Interface {
     /**
      * @param {string[]} $crypto_currencies
      * @param {string} $shop_currency
+     * @param {number} $order_amount
      * @return {{[iso: string]: number]}}
      */
-    public function get_prices( $crypto_currencies, $shop_currency );
+    public function get_prices( $crypto_currencies, $shop_currency, $order_amount );
 }

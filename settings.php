@@ -52,6 +52,15 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
+    'margin' => [
+        'title'       => __( 'Margin Percentage', 'wc-gateway-nimiq' ),
+        'type'        => 'number',
+        'description' => __( 'A margin to apply to crypto payments, in percent. Can also be negative.', 'wc-gateway-nimiq' ),
+        'default'     => 0,
+        'placeholder' => '0',
+        'desc_tip'    => true,
+    ],
+
     'price_service' => [
         'title'       => __( 'Price Service', 'wc-gateway-nimiq' ),
         'type'        => 'select',
