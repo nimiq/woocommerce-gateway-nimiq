@@ -119,13 +119,16 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
         . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
     $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-    $fees = $cryptoman->get_fees( count( $tx_message_bytes ) );
+    // Get fees from order meta
+    $fee = $order->get_meta( 'crypto_fee_' . $currency, $cryptoman->get_fees( count( $tx_message_bytes ) )[ $currency ] );
 
     if ( $currency === 'eth' ) {
-        $protocolSpecific[ 'gasLimit' ] = $fees[ $currency ]['gas_limit'];
-        $protocolSpecific[ 'gasPrice' ] = $fees[ $currency ]['gas_price'];
+        // For ETH, the fee stored in the order is the gas_price, but the Crypto_Manager fallback returns a keyed array
+        $gas_price = array_key_exists( 'gas_price', $fee ) ? $fee[ 'gas_price' ] : $fee;
+        $protocolSpecific[ 'gasLimit' ] = 21000;
+        $protocolSpecific[ 'gasPrice' ] = $gas_price;
     } else {
-        $protocolSpecific[ 'fee' ] = $fees[ $currency ];
+        $protocolSpecific[ 'fee' ] = $fee;
     }
 
     return woo_nimiq_checkout_reply( [

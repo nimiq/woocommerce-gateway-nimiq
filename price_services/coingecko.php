@@ -20,7 +20,11 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
      * @param {string[]} $crypto_currencies
      * @param {string} $shop_currency
      * @param {number} $order_amount
-     * @return {{[iso: string]: number]}}
+     * @return {[
+     *     'prices'? => [[iso: string]: number]],
+     *     'quotes'? => [[iso: string]: number]],
+     *     'fees'? => [[iso: string]: number | ['gas_limit' => number, 'gas_price' => number]],
+     * ]} - Must include either prices or quotes, may include fees
      */
     public function get_prices( $crypto_currencies, $shop_currency, $order_amount ) {
         $fiat_currency = strtolower( $shop_currency );
@@ -60,6 +64,8 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
             $prices[ $currency_iso ] = $price;
         }
 
-        return $prices;
+        return [
+            'prices' => $prices,
+        ];
     }
 }

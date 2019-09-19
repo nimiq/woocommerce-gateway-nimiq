@@ -30,12 +30,12 @@ class Crypto_Manager {
 
             // 1. Format as string without exponent
             $pad_length = self::DECIMALS[ $crypto ];
-            $coins = number_format($value, $pad_length, '.', '');
+            $coins = is_string( $value ) ? $value : number_format($value, $pad_length, '.', '');
 
             // 2. Split by decimal dot
             $split = explode( '.', $coins, 2 );
             $integers = $split[0];
-            $decimals = $split[1] ?: '';
+            $decimals = count( $split ) > 1 ? $split[1] : '';
 
             // 3. Extend decimals with 0s until number of crypto-specific decimals is reached
             $decimals = str_pad( $decimals, $pad_length, '0', STR_PAD_RIGHT );
@@ -44,14 +44,31 @@ class Crypto_Manager {
             $unit = implode( '', [ $integers, $decimals ] );
 
             // 5. Remove leading zeros
-            $units[ $crypto ] = ltrim($unit, '0');
+            $units[ $crypto ] = ltrim($unit, '0') ?: '0';
         }
         return $units;
     }
 
     public static function required_decimals( $crypto, $price = 1000000 ) {
-        // Find number of required significant decimals based on price
+        // Find number of required significant decimals based on price, can be negative
         return min( ceil( log10( $price ) ) + 2, self::DECIMALS[ $crypto ] );
+    }
+
+    public static function calculate_quotes( $value, $prices ) {
+        $quotes = [];
+        foreach ( $prices as $crypto => $price ) {
+            $quotes[ $crypto ] = $value / $price;
+        }
+        return self::format_quotes( $value, $quotes, $prices );
+    }
+
+    public static function format_quotes( $value, $quotes, $prices = null ) {
+        foreach ( $quotes as $crypto => $quote ) {
+            $price = !empty( $prices ) ? $prices[ $crypto ] : $value / $quote;
+            $decimals = self::required_decimals( $crypto, $price );
+            $quotes[ $crypto ] = number_format( $quote, $decimals, '.', '' );
+        }
+        return $quotes;
     }
 
     public function __construct( $gateway ) {
@@ -65,21 +82,13 @@ class Crypto_Manager {
         return $accepted_cryptos;
     }
 
-    public function calculate_quotes( $value, $prices ) {
-        $quotes = [];
-        foreach ( $prices as $crypto => $price ) {
-            $quotes[ $crypto ] = round( $value / $price, $this::required_decimals( $crypto, $price ) );
-        }
-        return $quotes;
-    }
-
     public function get_fees( $message_length ) {
         return [
-            'nim' => ( 166 + $message_length ) * ( intval( $this->gateway->get_option( 'fee_nim' ) ?: 0 ) ),
-            'btc' => 250 * ( intval( $this->gateway->get_option( 'fee_btc' ) ?: 0 ) ),
+            'nim' => ( 166 + $message_length ) * ( floatval( $this->gateway->get_option( 'fee_nim' ) ?: 0 ) ),
+            'btc' => 250 * ( floatval( $this->gateway->get_option( 'fee_btc' ) ?: 0 ) ),
             'eth' => [
                 'gas_limit' => 21000,
-                'gas_price' => intval( $this->gateway->get_option( 'fee_eth' ) ?: 0 ) * 1e9, // Gwei
+                'gas_price' => floatval( $this->gateway->get_option( 'fee_eth' ) ?: 0 ) * 1e9, // Gwei
             ],
         ];
     }

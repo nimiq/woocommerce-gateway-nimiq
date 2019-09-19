@@ -236,23 +236,45 @@ function wc_nimiq_gateway_init() {
 				$margin = floatval( $this->get_option( 'margin', '0' ) ) / 100;
 				$effective_order_total = $order_total * ( 1 + $margin );
 
-				$prices = $price_service->get_prices( $accepted_cryptos, $order_currency, $effective_order_total );
+				// Get pricing info from price service
+				$pricing_info = $price_service->get_prices( $accepted_cryptos, $order_currency, $effective_order_total );
 
+				if ( is_wp_error( $pricing_info ) ) {
+					$order->update_meta_data( 'conversion_error', $pricing_info->get_error_message() );
+					return $pricing_info;
+				}
+
+				// Set quote expirery
 				$expires = strtotime( '+15 minutes' );
 				$order->update_meta_data( 'crypto_rate_expires', $expires );
 
-				if ( is_wp_error( $prices ) ) {
-					$order->update_meta_data( 'conversion_error', $prices->get_error_message() );
-					return $prices;
+				// Process result from price service
+				// Price service can either return prices or quotes, requiring different handling
+				$order_totals_crypto = [];
+				if ( array_key_exists( 'prices', $pricing_info ) ) {
+					$prices = $pricing_info[ 'prices' ];
+					$order_totals_crypto = Crypto_Manager::calculate_quotes( $effective_order_total, $prices );
+				} else if ( array_key_exists( 'quotes', $pricing_info ) ) {
+					$quotes = $pricing_info[ 'quotes' ];
+					$order_totals_crypto = Crypto_Manager::format_quotes( $effective_order_total, $quotes );
+				} else {
+					return new WP_Error( 'service', 'Price service did not return any pricing information.' );
 				}
 
-				$order_totals_crypto = $this->crypto_manager->calculate_quotes( $effective_order_total, $prices );
-				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
+				$fees = array_key_exists( 'fees', $pricing_info )
+					? $pricing_info[ 'fees' ]
+					: $fees;
 
 				foreach ( $accepted_cryptos as $crypto ) {
-					// $order->update_meta_data( 'price_' . $crypto, $prices[ $crypto ] );
+					$order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
+						? $fees[ $crypto ][ 'gas_price' ]
+						: $fees[ $crypto ]
+					);
 					$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 				}
+
+				// Convert coins into smallest units
+				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 				// Generate CSRF token
 				$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
@@ -474,8 +496,8 @@ function wc_nimiq_gateway_init() {
 					return false;
 				}
 
-			if ( strlen( $transaction_hash) !== 64 ) {
-				wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
+				if ( strlen( $transaction_hash) !== 64 ) {
+					wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
 					return false;
 				}
 

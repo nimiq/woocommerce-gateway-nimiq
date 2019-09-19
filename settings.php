@@ -69,6 +69,7 @@ $woo_nimiq_checkout_settings = [
         'options'     => [
             // List available price services here. The option value must match the file name.
             'coingecko' => 'Coingecko',
+            'fastspot'  => 'Fastspot (also estimates fees)',
             // 'nimiqx'    => 'NimiqX (Nimiq only)',
         ],
         'desc_tip'    => true,

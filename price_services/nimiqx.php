@@ -29,7 +29,11 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
      * @param {string[]} $crypto_currencies
      * @param {string} $shop_currency
      * @param {number} $order_amount
-     * @return {{[iso: string]: number]}}
+     * @return {[
+     *     'prices'? => [[iso: string]: number]],
+     *     'quotes'? => [[iso: string]: number]],
+     *     'fees'? => [[iso: string]: number | ['gas_limit' => number, 'gas_price' => number]],
+     * ]} - Must include either prices or quotes, may include fees
      */
     public function get_prices( $crypto_currencies, $shop_currency, $order_amount ) {
         $currency = strtolower( $shop_currency );
@@ -51,7 +55,11 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
             return new WP_Error( 'service', sprintf( __( 'The currency %s is not supported by NimiqX.', 'wc-gateway-nimiq' ), strtoupper( $currency ) ) );
         };
 
-        return $price;
+        return [
+            'prices' => [
+                'nim' => $price,
+            ],
+        ];
     }
 
     private function makeUrl( $path ) {
