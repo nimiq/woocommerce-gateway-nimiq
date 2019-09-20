@@ -35,6 +35,10 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 	return;
 }
 
+// Un-hide Wordpress' regular Custom Fields
+// TODO: Integrate with ACF to display plugin data instead
+add_filter('acf/settings/remove_wp_meta_box', '__return_false');
+
 
 /**
  * Add the gateway to WC Available Gateways
