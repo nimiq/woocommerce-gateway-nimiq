@@ -12,7 +12,7 @@ $woo_nimiq_checkout_settings = [
     'enabled' => [
         'title'   => __( 'Enable/Disable', 'wc-gateway-nimiq' ),
         'type'    => 'checkbox',
-        'label'   => __( 'Enable Nimiq payments', 'wc-gateway-nimiq' ),
+        'label'   => __( 'Enable Nimiq Crypto Checkout', 'wc-gateway-nimiq' ),
         'default' => 'yes'
     ],
 
