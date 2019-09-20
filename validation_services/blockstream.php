@@ -17,7 +17,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
         $this->head_height = null;
         $this->last_seen_txid = null;
 
-        $this->api_url = $gateway->get_option( 'network' ) === 'main'
+        $this->api_url = $gateway->get_option( 'network_btc_eth' ) === 'main'
             ? 'https://blockstream.info/api'
             : 'https://blockstream.info/testnet/api';
     }

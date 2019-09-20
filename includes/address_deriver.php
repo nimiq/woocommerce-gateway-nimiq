@@ -22,7 +22,7 @@ class Address_Deriver {
         }
 
         $coin = $currency;
-        if ( $currency === 'btc' && $this->gateway->get_option( 'network' ) === 'test' ) {
+        if ( $currency === 'btc' && $this->gateway->get_option( 'network_btc_eth' ) === 'test' ) {
             $coin .= '-test';
         }
 

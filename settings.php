@@ -17,7 +17,16 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'network' => [
-        'title'       => __( 'Network', 'wc-gateway-nimiq' ),
+        'title'       => __( 'Nimiq Network', 'wc-gateway-nimiq' ),
+        'type'        => 'select',
+        'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
+        'default'     => 'test',
+        'options'     => [ /*'main' => 'Mainnet', */'test' => 'Testnet' ],
+        'desc_tip'    => true,
+    ],
+
+    'network_btc_eth' => [
+        'title'       => __( 'BTC/ETH Network', 'wc-gateway-nimiq' ),
         'type'        => 'select',
         'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
         'default'     => 'main',
