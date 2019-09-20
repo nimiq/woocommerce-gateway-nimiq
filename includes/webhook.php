@@ -128,7 +128,7 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
         $protocolSpecific[ 'gasLimit' ] = 21000;
         $protocolSpecific[ 'gasPrice' ] = $gas_price;
     } else {
-        $protocolSpecific[ 'fee' ] = $fee;
+        $protocolSpecific[ 'fee' ] = intval( $fee );
     }
 
     return woo_nimiq_checkout_reply( [

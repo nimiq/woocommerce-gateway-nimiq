@@ -84,11 +84,11 @@ class Crypto_Manager {
 
     public function get_fees( $message_length ) {
         return [
-            'nim' => ( 166 + $message_length ) * ( floatval( $this->gateway->get_option( 'fee_nim' ) ?: 0 ) ),
-            'btc' => 250 * ( floatval( $this->gateway->get_option( 'fee_btc' ) ?: 0 ) ),
+            'nim' => ( 166 + $message_length ) * $this->gateway->get_option( 'fee_nim', 0 ),
+            'btc' => 250 * $this->gateway->get_option( 'fee_btc', 0 ),
             'eth' => [
                 'gas_limit' => 21000,
-                'gas_price' => floatval( $this->gateway->get_option( 'fee_eth' ) ?: 0 ) * 1e9, // Gwei
+                'gas_price' => strval( $this->gateway->get_option( 'fee_eth', 0 ) * 1e9 ), // Gwei
             ],
         ];
     }

@@ -63,14 +63,11 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
             $quotes[ $currency_iso ] = $price_object[ 'amount' ];
 
             $fee = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'fee' ] ] )[ $currency_iso ];
-            if ( $currency_iso === 'eth' ) {
-                $fee = strval( $fee / 21000 ); // Convert to gas price
-            }
             $fees[ $currency_iso ] = $currency_iso === 'eth'
                 ? [
                     'gas_limit' => 21000,
-                    'gas_price' => $fee,
-                ] : $fee;
+                    'gas_price' => strval( $fee / 21000 ), // Convert to gas price,
+                ] : intval( $fee );
         }
 
         return [
