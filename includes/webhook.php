@@ -151,13 +151,19 @@ function woo_nimiq_checkout_callback_check_network( $request, $order, $gateway )
         return woo_nimiq_checkout_error( 'Forbidden. Cannot check the network for orders payed in NIM.', 403 );
     }
 
+    $transaction_hash = $order->get_meta('transaction_hash');
+
+    if ( !empty( $transaction_hash ) ) {
+        return woo_nimiq_checkout_reply( [
+            'transaction_found' => true,
+        ] );
+    }
+
     // Init validation service
     $services = [];
     $service_slug = $gateway->get_option( 'validation_service_' . $currency );
     include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'validation_services' . DIRECTORY_SEPARATOR . $service_slug . '.php' );
     $service = $services[ $currency ];
-
-    $transaction_hash = $order->get_meta('transaction_hash');
 
     $is_loaded = $service->load_transaction( $transaction_hash, $order, $gateway );
     if ( is_wp_error( $is_loaded ) ) {
