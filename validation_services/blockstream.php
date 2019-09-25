@@ -245,7 +245,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
                 foreach ( $tx->vout as $output ) {
                     if (
                         $output->scriptpubkey_address === $recipient_address &&
-                        strval( $output->value ) === Order_Utils::get_order_total_crypto( $order )
+                        Crypto_Manager::unit_compare( strval( $output->value ), Order_Utils::get_order_total_crypto( $order ) ) >= 0
                     ) {
                         return $tx;
                     }

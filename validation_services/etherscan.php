@@ -198,12 +198,16 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
 
     private function find_transaction( $transaction_hash, $recipient_address, $order, $transactions ) {
         foreach ( $transactions as $tx ) {
-            if ( $tx->hash === $transaction_hash || (
-                empty( $transaction_hash ) &&
-                $tx->to === $recipient_address &&
-                $tx->value === Order_Utils::get_order_total_crypto( $order )
-            ) ) {
+            if ( $tx->hash === $transaction_hash ) {
                 return $tx;
+            }
+            if ( empty( $transaction_hash ) ) {
+                if (
+                    $tx->to === $recipient_address &&
+                    Crypto_Manager::unit_compare( $tx->value, Order_Utils::get_order_total_crypto( $order ) ) >= 0
+                ) {
+                    return $tx;
+                }
             }
         }
         return null;

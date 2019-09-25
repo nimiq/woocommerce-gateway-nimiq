@@ -71,6 +71,22 @@ class Crypto_Manager {
         return $quotes;
     }
 
+    /**
+     * Returns 1 if $a > $b, -1 if $b > $a, 0 if equal
+     */
+    public static function unit_compare( $a, $b ) {
+        $a = ltrim($a, '0');
+        $b = ltrim($b, '0');
+
+        $a_length = strlen( $a );
+        $b_length = strlen( $b );
+
+        if ( $a_length > $b_length ) return 1;
+        if ( $a_length < $b_length ) return -1;
+
+        return strcmp( $a, $b );
+    }
+
     public function __construct( $gateway ) {
         $this->gateway = $gateway;
     }

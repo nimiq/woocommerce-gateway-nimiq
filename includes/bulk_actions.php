@@ -116,8 +116,8 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		$order_total_crypto = Order_Utils::get_order_total_crypto( $order );
-		if ( $service->value() !== $order_total_crypto ) {
-			fail_order( $order, __( 'Transaction value does not match.', 'wc-gateway-nimiq' ) );
+		if ( Crypto_Manager::unit_compare( $service->value(), $order_total_crypto ) >= 0 ) {
+			fail_order( $order, __( 'Transaction value is too small.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
