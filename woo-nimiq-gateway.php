@@ -193,6 +193,10 @@ function wc_nimiq_gateway_init() {
 		public function get_payment_request( $order_id ) {
 			$order = wc_get_order( $order_id );
 
+			if ( $order->get_status() !== 'pending' ) {
+				return new WP_Error( 'order', 'Order is not in pending state and thus cannot be paid.' );
+			}
+
 			$order_total = floatval( $order->get_total() );
 			$order_currency = $order->get_currency();
 
@@ -229,99 +233,110 @@ function wc_nimiq_gateway_init() {
 					'fee' => $fees[ 'nim' ],
 				] );
 			} else {
-				$price_service = $this->get_option( 'price_service' );
-				include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
-				$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
-				$price_service = new $class( $this );
-
-				$accepted_cryptos = $this->crypto_manager->get_accepted_cryptos();
-
-				// Apply margin to order value
-				$margin = floatval( $this->get_option( 'margin', '0' ) ) / 100;
-				$effective_order_total = $order_total * ( 1 + $margin );
-
-				// Get pricing info from price service
-				$pricing_info = $price_service->get_prices( $accepted_cryptos, $order_currency, $effective_order_total );
-
-				if ( is_wp_error( $pricing_info ) ) {
-					$order->update_meta_data( 'conversion_error', $pricing_info->get_error_message() );
-					return $pricing_info;
-				}
-
-				// Set quote expirery
-				$expires = strtotime( '+15 minutes' );
-				$order->update_meta_data( 'crypto_rate_expires', $expires );
-
-				// Process result from price service
-				// Price service can either return prices or quotes, requiring different handling
-				$order_totals_crypto = [];
-				if ( array_key_exists( 'prices', $pricing_info ) ) {
-					$prices = $pricing_info[ 'prices' ];
-					$order_totals_crypto = Crypto_Manager::calculate_quotes( $effective_order_total, $prices );
-				} else if ( array_key_exists( 'quotes', $pricing_info ) ) {
-					$quotes = $pricing_info[ 'quotes' ];
-					$order_totals_crypto = Crypto_Manager::format_quotes( $effective_order_total, $quotes );
+				// Check if the order already has an unexpired quote
+				$expires = $order->get_meta( 'crypto_rate_expires' ) ?: 0;
+				$stored_request = $order->get_meta( 'nc_payment_request' ) ?: null;
+				$request = [];
+				if ( $expires > time() && $stored_request ) {
+					// Send stored request
+					$request = json_decode( $stored_request );
 				} else {
-					return new WP_Error( 'service', 'Price service did not return any pricing information.' );
-				}
+					$price_service = $this->get_option( 'price_service' );
+					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
+					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
+					$price_service = new $class( $this );
 
-				$fees = array_key_exists( 'fees', $pricing_info )
-					? $pricing_info[ 'fees' ]
-					: $fees;
+					$accepted_cryptos = $this->crypto_manager->get_accepted_cryptos();
 
-				foreach ( $accepted_cryptos as $crypto ) {
-					$order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
-						? $fees[ $crypto ][ 'gas_price' ]
-						: $fees[ $crypto ]
-					);
-					$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
-				}
+					// Apply margin to order value
+					$margin = floatval( $this->get_option( 'margin', '0' ) ) / 100;
+					$effective_order_total = $order_total * ( 1 + $margin );
 
-				// Convert coins into smallest units
-				$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
+					// Get pricing info from price service
+					$pricing_info = $price_service->get_prices( $accepted_cryptos, $order_currency, $effective_order_total );
 
-				// Generate CSRF token
-				$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
-				$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
-
-				// Generate callback URL
-				$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id;
-
-				// Use MultiCurrencyCheckoutRequest (version 2)
-				$payment_options = [];
-				foreach ( $accepted_cryptos as $crypto ) {
-					$amount = $order_totals_unit[ $crypto ];
-					$fee = $fees[ $crypto ];
-
-					$protocolSpecific = $crypto === 'eth' ? [
-						'gasLimit' => $fee[ 'gas_limit' ],
-						'gasPrice' => strval( $fee[ 'gas_price' ] ),
-					] : [
-						'fee' => $fee,
-					];
-
-					if ( $crypto === 'nim' ) {
-						$protocolSpecific[ 'recipient' ] = Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ];
+					if ( is_wp_error( $pricing_info ) ) {
+						$order->update_meta_data( 'conversion_error', $pricing_info->get_error_message() );
+						return $pricing_info;
 					}
 
-					$payment_options[] = [
-						'type' => 0, // 0 = DIRECT
-						'currency' => $crypto,
-						'expires' => $expires,
-						'amount' => $amount,
-						'protocolSpecific' => $protocolSpecific,
-					];
-				};
+					// Set quote expirery
+					$expires = strtotime( '+15 minutes' );
+					$order->update_meta_data( 'crypto_rate_expires', $expires );
 
-				$request = array_merge( $request, [
-					'version' => 2,
-					'callbackUrl' => $callback_url,
-					'csrf' => $csrf_token,
-					'time' => time(),
-					'fiatAmount' => $order_total,
-					'fiatCurrency' => $order_currency,
-					'paymentOptions' => $payment_options,
-				] );
+					// Process result from price service
+					// Price service can either return prices or quotes, requiring different handling
+					$order_totals_crypto = [];
+					if ( array_key_exists( 'prices', $pricing_info ) ) {
+						$prices = $pricing_info[ 'prices' ];
+						$order_totals_crypto = Crypto_Manager::calculate_quotes( $effective_order_total, $prices );
+					} else if ( array_key_exists( 'quotes', $pricing_info ) ) {
+						$quotes = $pricing_info[ 'quotes' ];
+						$order_totals_crypto = Crypto_Manager::format_quotes( $effective_order_total, $quotes );
+					} else {
+						return new WP_Error( 'service', 'Price service did not return any pricing information.' );
+					}
+
+					$fees = array_key_exists( 'fees', $pricing_info )
+						? $pricing_info[ 'fees' ]
+						: $fees;
+
+					foreach ( $accepted_cryptos as $crypto ) {
+						$order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
+							? $fees[ $crypto ][ 'gas_price' ]
+							: $fees[ $crypto ]
+						);
+						$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
+					}
+
+					// Convert coins into smallest units
+					$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
+
+					// Generate CSRF token
+					$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
+					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
+
+					// Generate callback URL
+					$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id;
+
+					// Use MultiCurrencyCheckoutRequest (version 2)
+					$payment_options = [];
+					foreach ( $accepted_cryptos as $crypto ) {
+						$amount = $order_totals_unit[ $crypto ];
+						$fee = $fees[ $crypto ];
+
+						$protocolSpecific = $crypto === 'eth' ? [
+							'gasLimit' => $fee[ 'gas_limit' ],
+							'gasPrice' => strval( $fee[ 'gas_price' ] ),
+						] : [
+							'fee' => $fee,
+						];
+
+						if ( $crypto === 'nim' ) {
+							$protocolSpecific[ 'recipient' ] = Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ];
+						}
+
+						$payment_options[] = [
+							'type' => 0, // 0 = DIRECT
+							'currency' => $crypto,
+							'expires' => $expires,
+							'amount' => $amount,
+							'protocolSpecific' => $protocolSpecific,
+						];
+					};
+
+					$request = array_merge( $request, [
+						'version' => 2,
+						'callbackUrl' => $callback_url,
+						'csrf' => $csrf_token,
+						'time' => time(),
+						'fiatAmount' => $order_total,
+						'fiatCurrency' => $order_currency,
+						'paymentOptions' => $payment_options,
+					] );
+
+					$order->update_meta_data( 'nc_payment_request', json_encode( $request ) );
+				}
 			}
 
 			$order->save();
