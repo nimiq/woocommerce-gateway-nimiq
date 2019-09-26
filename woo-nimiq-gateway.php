@@ -233,11 +233,13 @@ function wc_nimiq_gateway_init() {
 					'fee' => $fees[ 'nim' ],
 				] );
 			} else {
-				// Check if the order already has an unexpired quote
+				// Check if the order already has a payment or an unexpired quote
+				$transaction_hash = $order->get_meta( 'transaction_hash' ) ?: null;
 				$expires = $order->get_meta( 'crypto_rate_expires' ) ?: 0;
 				$stored_request = $order->get_meta( 'nc_payment_request' ) ?: null;
 				$request = [];
-				if ( $expires > time() && $stored_request ) {
+				// Send the old quote if the expiry is still more than 3 minutes (180 seconds) away
+				if ( ( $transaction_hash || ( $expires - 180 ) > time() ) && $stored_request ) {
 					// Send stored request
 					$request = json_decode( $stored_request );
 				} else {
