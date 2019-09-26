@@ -36,4 +36,16 @@ class Order_Utils {
             'eth' => strtolower( $order->get_meta( 'order_eth_address' ) ),
         ];
     }
+
+    /**
+     * @param {WC_Order} $order
+     * @return {number|boolean} A timestamp or false if the order does not expire
+     */
+    public static function get_order_hold_expiry( $order ) {
+        $order_hold_minutes = get_option( 'woocommerce_hold_stock_minutes' );
+        if ( empty( $order_hold_minutes ) ) return false;
+
+        $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+        return $order_date + $order_hold_minutes * 60;
+    }
 }

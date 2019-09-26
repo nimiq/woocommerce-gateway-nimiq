@@ -262,6 +262,8 @@ function wc_nimiq_gateway_init() {
 
 					// Set quote expirery
 					$expires = strtotime( '+15 minutes' );
+					$order_expiry = Order_Utils::get_order_hold_expiry( $order );
+					if ( $order_expiry ) $expires = min( $expires, $order_expiry );
 					$order->update_meta_data( 'crypto_rate_expires', $expires );
 
 					// Process result from price service
