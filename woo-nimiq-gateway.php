@@ -611,9 +611,6 @@ function wc_nimiq_gateway_init() {
 			// Mark as on-hold (we're awaiting transaction validation)
 			$order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
 
-			// Reduce stock levels
-			wc_reduce_stock_levels( $order_id );
-
 			// Return thank-you redirect
 			return array(
 				'result' 	=> 'success',
