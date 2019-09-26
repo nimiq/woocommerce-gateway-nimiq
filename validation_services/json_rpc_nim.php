@@ -165,6 +165,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
      * @return {number}
      */
     public function confirmations() {
+        if ( empty( $this->block_height() ) ) return 0;
         return $this->blockchain_height() + 1 - $this->block_height();
     }
 }

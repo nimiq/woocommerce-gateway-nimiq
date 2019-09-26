@@ -82,14 +82,13 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			continue;
 		}
 
-		// TODO: Obsolete when API returns mempool transactions
-		if ( !$service->transaction_found() ) {
+		if ( !$service->transaction_found() || $service->confirmations() === 0 ) {
 			// Check if order date is earlier than setting(tx_wait_duration) ago
 			$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
-				fail_order( $order, __( 'Transaction not found within mempool wait duration.', 'wc-gateway-nimiq' ) );
+				fail_order( $order, __( 'Transaction not found or mined within wait duration.', 'wc-gateway-nimiq' ) );
 				$count_orders_updated++;
 			}
 
@@ -138,7 +137,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( empty( $service->block_height() ) || $service->confirmations() < $gateway->get_option( 'confirmations_' . $currency ) ) {
+		if ( $service->confirmations() < $gateway->get_option( 'confirmations_' . $currency ) ) {
 			// Transaction valid but not yet confirmed
 			continue;
 		}
