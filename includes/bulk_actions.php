@@ -83,7 +83,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		if ( !$service->transaction_found() || $service->confirmations() === 0 ) {
-			// Check if order date is earlier than setting(tx_wait_duration) ago
+			// Check if order date is earlier than tx_wait_duration ago
 			$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
 			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
@@ -100,6 +100,19 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// If a tx is returned, validate it
+
+		// If this is the first time we see this tx, check if the quote was already expired during the last run.
+		// Since this monitoring only runs on a scheduled interval, that gives a transaction some leeway,
+		// even after quote expiry.
+		// Note that in the regular case, when the Hub returns successfully, a valid transaction hash is already stored
+		// in the order and this case is not relevant.
+		$expires = $order->get_meta( 'crypto_rate_expires' );
+		$interval = $gateway->get_option( 'validation_interval' );
+		if ( $expires && empty( $transaction_hash ) && $expires < strtotime( '-' . $interval . ' minutes' ) ) {
+			fail_order( $order, __( 'Transaction only found after quote expired.', 'wc-gateway-nimiq' ) );
+			$count_orders_updated++;
+			continue;
+		}
 
 		$order_sender_address = Order_Utils::get_order_sender_address( $order );
 		if ( !empty( $order_sender_address ) && $service->sender_address() !== $order_sender_address ) {
