@@ -13,6 +13,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
     public function __construct( $gateway ) {
         $this->transaction = null;
         $this->output = null;
+        $this->payment_state = null;
         $this->transactions = [];
         $this->head_height = null;
         $this->last_seen_txid = null;
@@ -55,12 +56,13 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
      * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @param {WP_Order} $order
-     * @return {void|WP_Error}
+     * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
         // Reset loaded transaction
         $this->transaction = null;
         $this->output = null;
+        $this->payment_state = null;
 
         $recipient_address = null;
 
@@ -92,22 +94,26 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
 
         while ( !$this->transaction ) {
             $transaction = $this->find_transaction( $transaction_hash, $recipient_address, $order, $response );
-            if ( $transaction ) {
+            if ( $transaction && $this->payment_state ) {
                 $this->transaction = $transaction;
                 if ( empty( $transaction_hash ) ) {
                     // Store tx hash in order
-                    update_post_meta( $order->get_id(), 'transaction_hash', $transaction->txid );
+                    $order->update_meta_data( 'transaction_hash', $transaction->txid );
+                    $order->update_meta_data( 'nc_payment_state', $this->payment_state );
+                    $order->save();
                 }
                 foreach ( $this->transaction->vout as $output ) {
                     if ( $output->scriptpubkey_address === $recipient_address ) $this->output = $output;
                 }
-                return true;
+                return $this->payment_state;
             }
+
+            if ( $this->payment_state === 'UNDERPAID' ) return $this->payment_state;
 
             // Stop when no more transactions are available
             // ($last_seen_txid is set to EOL below, when a paged API call returns less than API_TX_PER_PAGE transactions)
             if ( $last_seen_txid === 'EOL' ) {
-                return false;
+                return 'NOT_FOUND';
             }
 
             // Stop when earlierst transaction is earlier than the order date
@@ -115,7 +121,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
             // The first call to Blockstream returns up to 50 mempool tx AND up to 25 mined tx.
             // So if the last returned tx is not mined (confirmed), there are no mined tx at all.
             if ( end( $response ) && ( !end( $response )->status->confirmed || end( $response )->status->block_time < $order_date ) ) {
-                return false;
+                return 'NOT_FOUND';
             }
 
             $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $last_seen_txid ) );
@@ -239,6 +245,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
         $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             if ( $tx->txid === $transaction_hash ) {
+                $this->payment_state = $order->get_meta( 'nc_payment_state' ) ?: 'PAID';
                 return $tx;
             }
             if ( empty( $transaction_hash ) ) {
@@ -246,11 +253,10 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
                 if ($tx->status->confirmed && $tx->status->block_time < $order_date) continue;
                 // Search outputs
                 foreach ( $tx->vout as $output ) {
-                    if (
-                        $output->scriptpubkey_address === $recipient_address &&
-                        Crypto_Manager::unit_compare( strval( $output->value ), Order_Utils::get_order_total_crypto( $order ) ) >= 0
-                    ) {
-                        return $tx;
+                    if ( $output->scriptpubkey_address === $recipient_address ) {
+                        $comparison = Crypto_Manager::unit_compare( strval( $output->value ), Order_Utils::get_order_total_crypto( $order ) );
+                        $this->payment_state = Order_Utils::get_payment_state( $comparison );
+                        if ( $comparison >= 0 ) return $tx;
                     }
                 }
             }

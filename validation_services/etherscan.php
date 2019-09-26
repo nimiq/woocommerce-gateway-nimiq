@@ -12,6 +12,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
+        $this->payment_state = null;
         $this->transactions = [];
         $this->page = 0;
         $this->last_api_call_time = null;
@@ -30,11 +31,12 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      * Loads a transaction from the service
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @param {WP_Order} $order
-     * @return {void|WP_Error}
+     * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
         // Reset loaded transaction
         $this->transaction = null;
+        $this->payment_state = null;
 
         $recipient_address = null;
 
@@ -60,25 +62,29 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
 
         while ( !$this->transaction ) {
             $transaction = $this->find_transaction( $transaction_hash, $recipient_address, $order, $response->result );
-            if ( $transaction ) {
+            if ( $transaction && $this->payment_state ) {
                 $this->transaction = $transaction;
                 if ( empty( $transaction_hash ) ) {
                     // Store tx hash in order
-                    update_post_meta( $order->get_id(), 'transaction_hash', $transaction->hash );
+                    $order->update_meta_data( 'transaction_hash', $transaction->hash );
+                    $order->update_meta_data( 'nc_payment_state', $this->payment_state );
+                    $order->save();
                 }
-                return true;
+                return $this->payment_state;
             }
+
+            if ( $this->payment_state === 'UNDERPAID' ) return $this->payment_state;
 
             // Stop when no more transactions are available
             // ($page is set to -1 below, when a paged API call returns less than API_TX_PER_PAGE transactions)
             if ( $page < 0 ) {
-                return false;
+                return 'NOT_FOUND';
             }
 
             // Stop when earlierst transaction is earlier than the order date
             $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
             if ( end( $response->result ) && end( $response->result )->timeStamp < $order_date ) {
-                return false;
+                return 'NOT_FOUND';
             }
 
             // Etherscan API has a rate-limit of 5 requests/second, so we need to sleep for 200ms between requests
@@ -200,16 +206,16 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             if ( $tx->hash === $transaction_hash ) {
+                $this->payment_state = $order->get_meta( 'nc_payment_state' ) ?: 'PAID';
                 return $tx;
             }
             // Check that tx is not too old
             if ($tx->timeStamp < $order_date) continue;
             if ( empty( $transaction_hash ) ) {
-                if (
-                    $tx->to === $recipient_address &&
-                    Crypto_Manager::unit_compare( $tx->value, Order_Utils::get_order_total_crypto( $order ) ) >= 0
-                ) {
-                    return $tx;
+                if ( $tx->to === $recipient_address ) {
+                    $comparison = Crypto_Manager::unit_compare( $tx->value, Order_Utils::get_order_total_crypto( $order ) );
+                    $this->payment_state = Order_Utils::get_payment_state( $comparison );
+                    if ( $comparison >= 0 ) return $tx;
                 }
             }
         }

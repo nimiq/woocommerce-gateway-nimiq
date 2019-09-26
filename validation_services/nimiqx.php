@@ -54,7 +54,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @param {WP_Order} $order
      * @param {WC_Gateway_Nimiq} $gateway
-     * @return {void|WP_Error}
+     * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
@@ -79,6 +79,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
         }
 
         $this->transaction = $transaction;
+        return $this->transaction_found() ? 'PAID' : 'NOT_FOUND';
     }
 
     /**

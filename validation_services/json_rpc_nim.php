@@ -53,7 +53,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
      * @param {string} $transaction_hash - Transaction hash as HEX string
      * @param {WP_Order} $order
      * @param {WC_Gateway_Nimiq} $gateway
-     * @return {void|WP_Error}
+     * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
         if ( !ctype_xdigit( $transaction_hash ) ) {
@@ -97,6 +97,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
         }
 
         $this->transaction = $response->result;
+        return $this->transaction_found() ? 'PAID' : 'NOT_FOUND';
     }
 
     /**

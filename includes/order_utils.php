@@ -48,4 +48,8 @@ class Order_Utils {
         $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         return $order_date + $order_hold_minutes * 60;
     }
+
+    public static function get_payment_state( $comparison ) {
+        return $comparison > 0 ? 'OVERPAID' : ( $comparison < 0 ? 'UNDERPAID' : 'PAID' );
+    }
 }
