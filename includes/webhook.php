@@ -116,7 +116,7 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
 
     if ( $currency === 'eth' ) {
         // For ETH, the fee stored in the order is the gas_price, but the Crypto_Manager fallback returns a keyed array
-        $gas_price = array_key_exists( 'gas_price', $fee ) ? $fee[ 'gas_price' ] : $fee;
+        $gas_price = is_array( $fee ) ? $fee[ 'gas_price' ] : $fee;
         $protocolSpecific[ 'gasLimit' ] = 21000;
         $protocolSpecific[ 'gasPrice' ] = $gas_price;
     } else {
