@@ -240,8 +240,9 @@ function wc_nimiq_gateway_init() {
 				$request = [];
 				// Send the old quote if the expiry is still more than 3 minutes (180 seconds) away
 				if ( ( $transaction_hash || ( $expires - 180 ) > time() ) && $stored_request ) {
-					// Send stored request
+					// Send stored request (with updated server time)
 					$request = json_decode( $stored_request );
+					$request[ 'time' ] = time();
 				} else {
 					$price_service = $this->get_option( 'price_service' );
 					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
