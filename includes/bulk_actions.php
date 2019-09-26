@@ -142,8 +142,9 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			continue;
 		}
 
-		// Mark as 'processing' when confirmed
-		$order->update_status( 'processing', __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ), false );
+		// Mark payment as complete when confirmed
+		$order->add_order_note( __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ) );
+		$order->payment_complete();
 		$count_orders_updated++;
 
 	} // end foreach loop
