@@ -197,10 +197,13 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
     }
 
     private function find_transaction( $transaction_hash, $recipient_address, $order, $transactions ) {
+        $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             if ( $tx->hash === $transaction_hash ) {
                 return $tx;
             }
+            // Check that tx is not too old
+            if ($tx->timeStamp < $order_date) continue;
             if ( empty( $transaction_hash ) ) {
                 if (
                     $tx->to === $recipient_address &&

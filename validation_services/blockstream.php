@@ -236,11 +236,14 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
     }
 
     private function find_transaction( $transaction_hash, $recipient_address, $order, $transactions ) {
+        $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             if ( $tx->txid === $transaction_hash ) {
                 return $tx;
             }
             if ( empty( $transaction_hash ) ) {
+                // Check that tx is not too old
+                if ($tx->status->confirmed && $tx->status->block_time < $order_date) continue;
                 // Search outputs
                 foreach ( $tx->vout as $output ) {
                     if (
