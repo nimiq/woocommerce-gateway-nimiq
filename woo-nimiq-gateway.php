@@ -524,6 +524,7 @@ function wc_nimiq_gateway_init() {
 					return false;
 				}
 
+				$order->update_meta_data( 'order_crypto_currency', $currency );
 				$order->update_meta_data( 'transaction_hash', $transaction_hash );
 				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
 				$order->delete_meta_data( 'checkout_csrf_token' );
@@ -572,7 +573,7 @@ function wc_nimiq_gateway_init() {
 				// Remove cart
 				WC()->cart->empty_cart();
 
-				$order->update_status( 'pending-payment', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
+				$order->update_status( 'pending', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
 
 				if ( $this->get_option( 'rpc_behavior' ) === 'redirect' ) {
 					// Redirect to Hub for payment

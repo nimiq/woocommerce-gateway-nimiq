@@ -42,6 +42,8 @@ class Order_Utils {
      * @return {number|boolean} A timestamp or false if the order does not expire
      */
     public static function get_order_hold_expiry( $order ) {
+        // TODO: Respect $gateway->get_option( 'tx_wait_duration' ) here?
+
         $order_hold_minutes = get_option( 'woocommerce_hold_stock_minutes' );
         if ( empty( $order_hold_minutes ) ) return false;
 

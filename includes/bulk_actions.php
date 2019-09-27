@@ -66,10 +66,13 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Only continue if payment method is this plugin
 		if ( $order->get_payment_method() !== $gateway->id ) continue;
 
-		// Only continue if order status is currently 'on hold'
-		if ( $order->get_status() !== 'on-hold' ) continue;
+		// Only continue if order status is currently 'on hold' or 'pending'
+		if ( !in_array( $order->get_status(), [ 'on-hold', 'pending' ] ) ) continue;
 
-		$currency = Order_Utils::get_order_currency( $order );
+		$currency = Order_Utils::get_order_currency( $order, false );
+
+		// Do not continue when no currency selected
+		if ( !$currency ) continue;
 
 		// Get currency-specific validation service
 		$service = $services[ $currency ];
@@ -152,6 +155,16 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Check if transaction is 'confirmed' yet according to confirmation setting
 		if ( $service->confirmations() < $gateway->get_option( 'confirmations_' . $currency ) ) {
 			// Transaction valid but not yet confirmed
+
+			if ( $order->get_status() === 'pending' ) {
+				// Set order to 'on-hold', if order expires (hold_stock) before next scheduled run
+				$order_expiry = Order_Utils::get_order_hold_expiry( $order );
+				$interval = $gateway->get_option( 'validation_interval' );
+				if ( $order_expiry && $order_expiry < strtotime( '+' . $interval . ' minutes' ) ) {
+					$order->update_status( 'on-hold', __( 'Valid transaction found, awaiting confirmation.', 'wc-gateway-nimiq' ) );
+				}
+			}
+
 			continue;
 		}
 
@@ -167,24 +180,15 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 } // end _do_bulk_validate_transactions()
 
 function fail_order($order, $reason) {
-	$order->update_status( 'failed', $reason, false );
+	if ( $order->get_status() === 'on-hold' || $order->get_meta( 'nc_payment_state' ) === 'UNDERPAID' || !empty( $order->get_meta( 'transaction_hash' ) ) ) {
+		$order->update_status( 'failed', $reason );
+	} else {
+		$order->update_status( 'cancelled', $reason );
+	}
 
 	// Restock inventory
-	$line_items = $order->get_items();
-	foreach ( $line_items as $item_id => $item ) {
-		$product = $item->get_product();
-		if ( $product && $product->managing_stock() ) {
-			$old_stock = $product->get_stock_quantity();
-			$new_stock = wc_update_product_stock( $product, $item['qty'], 'increase' );
-			$order->add_order_note( sprintf(
-				__( '%1$s (%2$s) stock increased from %3$s to %4$s.', 'woocommerce' ),
-				$product->get_name(),
-				$product->get_sku(),
-				$old_stock,
-				$new_stock
-			) );
-		}
-	}
+	wc_maybe_increase_stock_levels( $order->get_id() );
+
 } // end fail_order()
 
 function handle_bulk_admin_notices_after_redirect() {

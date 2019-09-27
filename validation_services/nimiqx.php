@@ -57,6 +57,11 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
      * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
+        $this->transaction = null;
+
+        // Automatic transaction finding is not yet available for Nimiq
+        if ( empty( $transaction_hash ) ) return 'NOT_FOUND';
+
         if ( !ctype_xdigit( $transaction_hash ) ) {
             return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
         }
@@ -87,7 +92,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
      * @return {boolean}
      */
     public function transaction_found() {
-        return $this->transaction->error !== 'Transaction not found';
+        return !!$this->transaction;
     }
 
     /**
@@ -95,10 +100,7 @@ class WC_Gateway_Nimiq_Service_NimiqX implements WC_Gateway_Nimiq_Validation_Ser
      * @return {string|false}
      */
     public function error() {
-        if ( empty( $this->transaction ) ) {
-            return __( 'Could not retrieve transaction information from NimiqX.', 'wc-gateway-nimiq' );
-        }
-        return $this->transaction->error || false;
+        return $this->transaction->error ?: false;
     }
 
     /**
