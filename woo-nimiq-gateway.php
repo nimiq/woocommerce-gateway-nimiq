@@ -239,9 +239,9 @@ function wc_nimiq_gateway_init() {
 				$stored_request = $order->get_meta( 'nc_payment_request' ) ?: null;
 				// Send the old quote if the expiry is still more than 3 minutes (180 seconds) away
 				if ( ( $transaction_hash || ( $expires - 180 ) > time() ) && $stored_request ) {
-					// Send stored request (with updated server time)
+					// Send stored request
 					$request = json_decode( $stored_request, true );
-					$request[ 'time' ] = time();
+					// The 'time' property is not updated on purpose, so that the Hub displays a run-down timer instead of a full timer
 				} else {
 					$price_service = $this->get_option( 'price_service' );
 					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
