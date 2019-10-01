@@ -274,10 +274,12 @@ function wc_nimiq_gateway_init() {
 					if ( array_key_exists( 'prices', $pricing_info ) ) {
 						$prices = $pricing_info[ 'prices' ];
 						$order_totals_crypto = Crypto_Manager::calculate_quotes( $effective_order_total, $prices );
-					} else if ( array_key_exists( 'quotes', $pricing_info ) ) {
+					}
+					else if ( array_key_exists( 'quotes', $pricing_info ) ) {
 						$quotes = $pricing_info[ 'quotes' ];
 						$order_totals_crypto = Crypto_Manager::format_quotes( $effective_order_total, $quotes );
-					} else {
+					}
+					else {
 						return new WP_Error( 'service', 'Price service did not return any pricing information.' );
 					}
 
