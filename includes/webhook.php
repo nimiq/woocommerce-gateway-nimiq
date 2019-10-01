@@ -135,17 +135,13 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
 function woo_nimiq_checkout_callback_get_state( $request, $order, $gateway ) {
     $currency = Order_Utils::get_order_currency( $order, false );
 
-    if ( empty( $currency ) ) {
-        // return woo_nimiq_checkout_error( 'Method not allowed. Select currency first.', 405 );
+    if ( empty( $currency ) || $currency === 'nim' ) {
+        // When no currency was selected, or the currency is NIM, respond with the time only.
         return woo_nimiq_checkout_reply( [
             'time' => time(),
             'payment_accepted' => false,
             'payment_state' => 'NOT_FOUND',
         ] );
-    }
-
-    if ( $currency === 'nim' ) {
-        return woo_nimiq_checkout_error( 'Forbidden. Cannot get the status for orders payed in NIM.', 403 );
     }
 
     $transaction_hash = $order->get_meta( 'transaction_hash' );
