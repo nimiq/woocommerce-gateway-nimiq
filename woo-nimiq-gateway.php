@@ -99,12 +99,18 @@ function wc_nimiq_gateway_init() {
 			$this->init_settings();
 
 			// Define user set variables
-			$this->title        = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
-			$this->description  = __( 'You will be redirected to Nimiq to complete your purchase securely.', 'wc-gateway-nimiq' );
 			$this->instructions = $this->get_option( 'instructions' );
 
 			// Instantiate utility classes
 			$this->crypto_manager = new Crypto_Manager( $this );
+
+			$accepted_currency_names = array_map( function( $iso ) {
+				return ucfirst( Crypto_Manager::iso_to_name( $iso ) );
+			}, $this->crypto_manager->get_accepted_cryptos() );
+
+			// Define display texts
+			$this->title       = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
+			$this->description = sprintf( __( 'Pay with %s.', 'wc-gateway-nimiq' ),  implode(', ', $accepted_currency_names) );
 
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
