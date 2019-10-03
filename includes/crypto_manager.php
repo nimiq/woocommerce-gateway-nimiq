@@ -98,13 +98,22 @@ class Crypto_Manager {
         return $accepted_cryptos;
     }
 
-    public function get_fees( $message_length ) {
+    public function get_fees_per_byte() {
         return [
-            'nim' => ( 166 + $message_length ) * $this->gateway->get_option( 'fee_nim', 0 ),
-            'btc' => 250 * $this->gateway->get_option( 'fee_btc', 0 ),
+            'nim' => $this->gateway->get_option( 'fee_nim', 0 ),
+            'btc' => $this->gateway->get_option( 'fee_btc', 0 ),
+            'eth' => strval( $this->gateway->get_option( 'fee_eth', 0 ) * 1e9 ), // Option is in Gwei
+        ];
+    }
+
+    public function get_fees( $message_length ) {
+        $perFees = $this->get_fees_per_byte();
+        return [
+            'nim' => ( 166 + $message_length ) * $perFees[ 'nim' ],
+            'btc' => 250 * $perFees[ 'btc' ],
             'eth' => [
                 'gas_limit' => 21000,
-                'gas_price' => strval( $this->gateway->get_option( 'fee_eth', 0 ) * 1e9 ), // Gwei
+                'gas_price' => $perFees[ 'eth' ],
             ],
         ];
     }

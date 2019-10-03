@@ -287,6 +287,10 @@ function wc_nimiq_gateway_init() {
 						? $pricing_info[ 'fees' ]
 						: $fees;
 
+					$fees_per_byte = array_key_exists( 'fees_per_byte', $pricing_info )
+						? $pricing_info[ 'fees_per_byte' ]
+						: $this->crypto_manager->get_fees_per_byte();
+
 					foreach ( $accepted_cryptos as $crypto ) {
 						$order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
 							? $fees[ $crypto ][ 'gas_price' ]
@@ -310,12 +314,14 @@ function wc_nimiq_gateway_init() {
 					foreach ( $accepted_cryptos as $crypto ) {
 						$amount = $order_totals_unit[ $crypto ];
 						$fee = $fees[ $crypto ];
+						$fee_per_byte = $fees_per_byte[ $crypto ];
 
 						$protocolSpecific = $crypto === 'eth' ? [
 							'gasLimit' => $fee[ 'gas_limit' ],
 							'gasPrice' => strval( $fee[ 'gas_price' ] ),
 						] : [
 							'fee' => $fee,
+							'feePerByte' => $fee_per_byte,
 						];
 
 						if ( $crypto === 'nim' ) {

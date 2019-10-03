@@ -24,6 +24,7 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
      *     'prices'? => [[iso: string]: number]],
      *     'quotes'? => [[iso: string]: number]],
      *     'fees'? => [[iso: string]: number | ['gas_limit' => number, 'gas_price' => number]],
+     *     'fees_per_byte'? => [[iso: string]: number],
      * ]} - Must include either prices or quotes, may include fees
      */
     public function get_prices( $crypto_currencies, $shop_currency, $order_amount ) {
@@ -57,22 +58,26 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
 
         $quotes = [];
         $fees = [];
+        $feesPerByte = [];
         foreach ( $result[ 'from' ] as $price_object ) {
             $currency_iso = strtolower( $price_object[ 'symbol' ] );
 
             $quotes[ $currency_iso ] = $price_object[ 'amount' ];
 
             $fee = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'fee' ] ] )[ $currency_iso ];
+            $feePerByte = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'perFee' ] ] )[ $currency_iso ];
             $fees[ $currency_iso ] = $currency_iso === 'eth'
                 ? [
                     'gas_limit' => 21000,
-                    'gas_price' => strval( $fee / 21000 ), // Convert to gas price,
-                ] : intval( $fee );
+                    'gas_price' => $feePerByte,
+                ] : $fee;
+            $feesPerByte[ $currency_iso ] = $feePerByte;
         }
 
         return [
             'quotes' => $quotes,
             'fees' => $fees,
+            'fees_per_byte' => $feesPerByte,
         ];
     }
 }

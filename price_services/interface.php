@@ -17,6 +17,7 @@ interface WC_Gateway_Nimiq_Price_Service_Interface {
      *     'prices'? => [[iso: string]: number]],
      *     'quotes'? => [[iso: string]: number]],
      *     'fees'? => [[iso: string]: number | ['gas_limit' => number, 'gas_price' => number]],
+     *     'fees_per_byte'? => [[iso: string]: number],
      * ]} - Must include either prices or quotes, may include fees
      */
     public function get_prices( $crypto_currencies, $shop_currency, $order_amount );
