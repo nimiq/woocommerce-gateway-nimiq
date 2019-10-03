@@ -28,9 +28,6 @@ function woo_nimiq_checkout_get_param( $key, $method = 'get' ) {
  * @param array $request Options for the function.
  */
 function woo_nimiq_checkout_callback() {
-    header( 'Access-Control-Allow-Origin: *' );
-    header( 'Content-Type: application/json' );
-
     $request = [
         'id' => woo_nimiq_checkout_get_param( 'id' ),
         'csrf' => woo_nimiq_checkout_get_param( 'csrf', 'post' ),
@@ -50,6 +47,11 @@ function woo_nimiq_checkout_callback() {
     }
 
     $gateway = new WC_Gateway_Nimiq();
+
+    // Set headers
+    $cors_origin = $gateway->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : '*';
+    header( 'Access-Control-Allow-Origin: ' . $cors_origin );
+    header( 'Content-Type: application/json' );
 
     // Validate that the order's payment method is this plugin and that the order is currently 'pending'
     if ( $order->get_payment_method() !== $gateway->id || $order->get_status() !== 'pending' ) {
