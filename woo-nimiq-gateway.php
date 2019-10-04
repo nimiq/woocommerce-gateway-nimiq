@@ -104,13 +104,12 @@ function wc_nimiq_gateway_init() {
 			// Instantiate utility classes
 			$this->crypto_manager = new Crypto_Manager( $this );
 
-			$accepted_currency_names = array_map( function( $iso ) {
-				return ucfirst( Crypto_Manager::iso_to_name( $iso ) );
-			}, $this->crypto_manager->get_accepted_cryptos() );
-
 			// Define display texts
 			$this->title       = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
-			$this->description = sprintf( __( 'Pay with %s.', 'wc-gateway-nimiq' ),  implode(', ', $accepted_currency_names) );
+			$cfd = $this->get_currencies_for_description();
+			$this->description = count( $cfd ) === 1
+				? sprintf( __( 'Pay with %s.', 'wc-gateway-nimiq' ), $cfd[ 0 ] )
+				: sprintf( __( 'Pay with %s or %s.', 'wc-gateway-nimiq' ), $cfd[ 0 ], $cfd[ 1 ] );
 
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -185,6 +184,21 @@ function wc_nimiq_gateway_init() {
 			// $link = '<a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a>';
 
 			return $img/* . $link */;
+		}
+
+		public function get_currencies_for_description() {
+			$names = array_map( function( $iso ) {
+				return ucfirst( Crypto_Manager::iso_to_name( $iso ) ) . ' (' . strtoupper( $iso ) . ')';
+			}, $this->crypto_manager->get_accepted_cryptos() );
+			// Join all names except the last one, but at least the first one
+			$first = implode( ', ', array_slice( $names, 0, -1 ) ) ?: $names[ 0 ];
+			// Get the last name, or false if there is only one
+			$second = count( $names ) > 1 ? end( $names ) : false;
+			// Create result array
+			$result = [ $first ];
+			// Only return the second string if it exists
+			if ( $second ) $result[] = $second;
+			return $result;
 		}
 
 		/**
