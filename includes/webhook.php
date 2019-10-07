@@ -79,6 +79,13 @@ function woo_nimiq_checkout_callback() {
     }
 }
 
+function woo_nimiq_checkout_array_find($function, $array) {
+    foreach ($array as $item) {
+        if (call_user_func($function, $item) === true) return $item;
+    }
+    return null;
+}
+
 function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) {
     $currency = strtolower( $request[ 'currency' ] );
 
@@ -92,6 +99,18 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
 
     $order->update_meta_data( 'order_crypto_currency', $currency );
 
+    // Get payment option for the selected currency from stored request
+    $stored_request = $order->get_meta( 'nc_payment_request' ) ?: null;
+    if ( !$stored_request ) return woo_nimiq_checkout_error( 'Original request not found in order', 500 );
+
+    $request = json_decode( $stored_request, true );
+
+    $payment_option = woo_nimiq_checkout_array_find( function( $option ) use ( $currency ) {
+        return $option[ 'currency' ] === $currency;
+    }, $request[ 'paymentOptions' ] );
+    if ( !$payment_option ) return woo_nimiq_checkout_error( 'Selected currency not found in original request', 500 );
+
+    // Get the order address, or derive a new one
     $address = Order_Utils::get_order_recipient_address( $order, $gateway );
     if ( empty( $address ) && ( $currency === 'btc' || $currency === 'eth' ) ) {
         include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'address_deriver.php' );
@@ -104,34 +123,39 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
 
     $order->save();
 
-    $protocolSpecific = [
-        'recipient' => $address,
-    ];
+    $payment_option[ 'protocolSpecific' ][ 'recipient' ] = $address;
 
-    $order_hash = $order->get_meta( 'order_hash' );
-    $tx_message = ( !empty( $gateway->get_option( 'message' ) ) ? $gateway->get_option( 'message' ) . ' ' : '' )
-        . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
-    $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
+    return woo_nimiq_checkout_reply( $payment_option );
 
-    // Get fees from order meta
-    $fee = $order->get_meta( 'crypto_fee_' . $currency ) ?: $cryptoman->get_fees( count( $tx_message_bytes ) )[ $currency ];
+    // // Rebuild the payment option for the selected currency from stored data
+    // $protocolSpecific = [
+    //     'recipient' => $address,
+    // ];
 
-    if ( $currency === 'eth' ) {
-        // For ETH, the fee stored in the order is the gas_price, but the Crypto_Manager fallback returns a keyed array
-        $gas_price = is_array( $fee ) ? $fee[ 'gas_price' ] : $fee;
-        $protocolSpecific[ 'gasLimit' ] = 21000;
-        $protocolSpecific[ 'gasPrice' ] = $gas_price;
-    } else {
-        $protocolSpecific[ 'fee' ] = intval( $fee );
-    }
+    // $order_hash = $order->get_meta( 'order_hash' );
+    // $tx_message = ( !empty( $gateway->get_option( 'message' ) ) ? $gateway->get_option( 'message' ) . ' ' : '' )
+    //     . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
+    // $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
-    return woo_nimiq_checkout_reply( [
-        'type' => 0, // DIRECT
-        'currency' => $currency,
-        'expires' => intval( $order->get_meta( 'crypto_rate_expires' ) ),
-        'amount' => Order_Utils::get_order_total_crypto( $order ),
-        'protocolSpecific' => $protocolSpecific,
-    ] );
+    // // Get fees from order meta
+    // $fee = $order->get_meta( 'crypto_fee_' . $currency ) ?: $cryptoman->get_fees( count( $tx_message_bytes ) )[ $currency ];
+
+    // if ( $currency === 'eth' ) {
+    //     // For ETH, the fee stored in the order is the gas_price, but the Crypto_Manager fallback returns a keyed array
+    //     $gas_price = is_array( $fee ) ? $fee[ 'gas_price' ] : $fee;
+    //     $protocolSpecific[ 'gasLimit' ] = 21000;
+    //     $protocolSpecific[ 'gasPrice' ] = $gas_price;
+    // } else {
+    //     $protocolSpecific[ 'fee' ] = intval( $fee );
+    // }
+
+    // return woo_nimiq_checkout_reply( [
+    //     'type' => 0, // DIRECT
+    //     'currency' => $currency,
+    //     'expires' => intval( $order->get_meta( 'crypto_rate_expires' ) ),
+    //     'amount' => Order_Utils::get_order_total_crypto( $order ),
+    //     'protocolSpecific' => $protocolSpecific,
+    // ] );
 }
 
 function woo_nimiq_checkout_callback_get_state( $request, $order, $gateway ) {

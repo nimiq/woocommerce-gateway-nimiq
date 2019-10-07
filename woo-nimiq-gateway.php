@@ -312,10 +312,10 @@ function wc_nimiq_gateway_init() {
 						: $this->crypto_manager->get_fees_per_byte();
 
 					foreach ( $accepted_cryptos as $crypto ) {
-						$order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
-							? $fees[ $crypto ][ 'gas_price' ]
-							: $fees[ $crypto ]
-						);
+						// $order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
+						// 	? $fees[ $crypto ][ 'gas_price' ]
+						// 	: $fees[ $crypto ]
+						// );
 						$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 					}
 
