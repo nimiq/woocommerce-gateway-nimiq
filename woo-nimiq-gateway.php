@@ -602,8 +602,6 @@ function wc_nimiq_gateway_init() {
 				// Remove cart
 				WC()->cart->empty_cart();
 
-				$order->update_status( 'pending', __( 'Awaiting payment.', 'wc-gateway-nimiq' ) );
-
 				if ( $this->get_option( 'rpc_behavior' ) === 'redirect' ) {
 					// Redirect to Hub for payment
 
