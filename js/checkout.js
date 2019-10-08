@@ -15,13 +15,6 @@
         return;
     }
 
-    if (request.time) {
-        // Count up server time for the request
-        setInterval(function() {
-            request.time++;
-        }, 1000);
-    }
-
     // Status variables
     var awaiting_transaction_signing = false;
     var nim_payment_completed = false;
