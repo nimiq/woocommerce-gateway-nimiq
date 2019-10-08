@@ -257,7 +257,8 @@ function wc_nimiq_gateway_init() {
 				$transaction_hash = $order->get_meta( 'transaction_hash' ) ?: null;
 				$expires = $order->get_meta( 'crypto_rate_expires' ) ?: 0;
 				$stored_request = $order->get_meta( 'nc_payment_request' ) ?: null;
-				// Send the old quote if the expiry is still more than 3 minutes (180 seconds) away
+				// Send the old quote if a tx for the order has already been found, or
+				// the expiry is still more than 3 minutes (180 seconds) away
 				if ( ( $transaction_hash || ( $expires - 180 ) > time() ) && $stored_request ) {
 					// Send stored request
 					$request = json_decode( $stored_request, true );
