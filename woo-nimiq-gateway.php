@@ -188,7 +188,7 @@ function wc_nimiq_gateway_init() {
 
 		public function get_currencies_for_description() {
 			$names = array_map( function( $iso ) {
-				return ucfirst( Crypto_Manager::iso_to_name( $iso ) ) . ' (' . strtoupper( $iso ) . ')';
+				return ucfirst( Crypto_Manager::iso_to_name( $iso ) )/* . ' (' . strtoupper( $iso ) . ')'*/;
 			}, $this->crypto_manager->get_accepted_cryptos() );
 			// Join all names except the last one, but at least the first one
 			$first = implode( ', ', array_slice( $names, 0, -1 ) ) ?: $names[ 0 ];
