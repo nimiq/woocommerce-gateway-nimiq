@@ -61,6 +61,14 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
+    'reuse_eth_addresses' => [
+        'title'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'type'    => 'checkbox',
+        'description' => __( 'Re-using addresses reduces your shop\'s privacy.', 'wc-gateway-nimiq' ),
+        'label'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'default' => 'no'
+    ],
+
     'margin' => [
         'title'       => __( 'Margin Percentage', 'wc-gateway-nimiq' ),
         'type'        => 'number',

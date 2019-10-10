@@ -30,7 +30,7 @@ function wc_nimiq_validate_orders() {
     $log_context = array( 'source' => 'wc-gateway-nimiq' );
 
     // Get all orders that are on-hold or pending, and have a crypto currency set
-    $orders = get_posts( [
+    $posts = get_posts( [
         'post_type'   => 'shop_order',
         'post_status' => [ 'wc-on-hold', 'wc-pending' ],
         'meta_key' => 'order_crypto_currency',
@@ -38,12 +38,12 @@ function wc_nimiq_validate_orders() {
         'meta_value' => '',
     ] );
 
-    $logger->info( sprintf( _n( 'Processing %s order', 'Processing %s orders', count( $orders ), 'wc-gateway-nimiq' ), count( $orders ) ), $log_context );
+    $logger->info( sprintf( _n( 'Processing %s order', 'Processing %s orders', count( $posts ), 'wc-gateway-nimiq' ), count( $posts ) ), $log_context );
 
-    if ( empty( $orders ) ) return;
+    if ( empty( $posts ) ) return;
 
-    $ids = array_reduce( $orders, function( $acc, $order ) {
-        $acc[] = $order->ID;
+    $ids = array_reduce( $posts, function( $acc, $post ) {
+        $acc[] = $post->ID;
         return $acc;
     }, [] );
 
