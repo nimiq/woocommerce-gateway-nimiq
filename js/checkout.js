@@ -50,7 +50,6 @@
         $('button#place_order').prop('disabled', true);
 
         // Write result into the hidden inputs
-        $('#rpcId').val(42); // Required to trigger validate_fields()
         $('#status').val('OK'); // Required to pass validate_fields()
         $('#result').val(JSON.stringify(signed_transaction));
 

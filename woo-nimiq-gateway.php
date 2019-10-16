@@ -386,7 +386,7 @@ function wc_nimiq_gateway_init() {
 				exit;
 			}
 
-			$is_valid = $this->validate_fields( $order_id );
+			$is_valid = $this->validate_response( $order_id );
 
 			if ( !$is_valid ) {
 				// Redirect to payment page
@@ -402,7 +402,7 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function payment_fields() {
-			if ( ! is_wc_endpoint_url( 'order-pay' ) ) {
+			if ( is_checkout() ) {
 				$description = $this->get_description();
 				if ( $description ) {
 					echo wpautop( wptexturize( $description ) );
@@ -450,7 +450,6 @@ function wc_nimiq_gateway_init() {
 						</strong>
 					</noscript>
 
-					<input type="hidden" name="rpcId" id="rpcId" value="">
 					<input type="hidden" name="status" id="status" value="">
 					<input type="hidden" name="result" id="result" value="">
 				<?php } ?>
@@ -511,7 +510,7 @@ function wc_nimiq_gateway_init() {
 		 * Use `validate_response` instead!
 		 */
 		public function validate_fields( $order_id = null ) {
-			if ( !isset( $_POST[ 'rpcId' ] ) ) return true;
+			if ( is_checkout() ) return true;
 
 			return $this->validate_response( $order_id, $_POST );
 		}
@@ -598,7 +597,7 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			if ( !isset( $_POST[ 'rpcId' ] ) ) {
+			if ( is_checkout() ) {
 				// Remove cart
 				WC()->cart->empty_cart();
 
