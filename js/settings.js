@@ -10,14 +10,23 @@
 
         // Disable all non-common conditional fields
         var conditional_fields = [
+            '#woocommerce_nimiq_gateway_fee_nim',
+            '#woocommerce_nimiq_gateway_fee_btc',
+            '#woocommerce_nimiq_gateway_fee_eth',
             // '#conditional_field_id',
         ];
-        // $(conditional_fields.join(',')).closest('tr').addClass('hidden');
+        $(conditional_fields.join(',')).closest('tr').addClass('hidden');
 
         // Enable service-specific fields
         switch (service_slug) {
             case 'coingecko':
+                $('#woocommerce_nimiq_gateway_fee_nim, ' +
+                  '#woocommerce_nimiq_gateway_fee_btc, ' +
+                  '#woocommerce_nimiq_gateway_fee_eth')
+                    .closest('tr').removeClass('hidden');
                 break;
+            case 'fastspot':
+                    break;
             // case '':
             //    $('#conditional_field_id').closest('tr').removeClass('hidden'); break;
         }
