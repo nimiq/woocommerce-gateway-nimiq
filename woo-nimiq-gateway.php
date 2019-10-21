@@ -5,7 +5,7 @@
  * Description: Let customers pay with Nimiq, Bitcoin and Ethereum
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 3.0.0-alpha
+ * Version: 3.0.0-beta.1
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /i18n/languages/
  * Requires at least: 4.9
