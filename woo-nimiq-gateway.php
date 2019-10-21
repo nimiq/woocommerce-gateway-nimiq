@@ -402,11 +402,12 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function payment_fields() {
-			if ( is_checkout() ) {
+			if ( is_checkout() && !is_wc_endpoint_url( 'order-pay' ) ) {
 				$description = $this->get_description();
 				if ( $description ) {
 					echo wpautop( wptexturize( $description ) );
 				}
+				echo '<input type="hidden" name="goToPayment" value="yes">';
 				return;
 			}
 
@@ -422,7 +423,7 @@ function wc_nimiq_gateway_init() {
 				<div id="nim_gateway_info_block">
 					<p class="form-row" style="color: red; font-style: italic;">
 						<?php _e( 'ERROR:', 'wc-gateway-nimiq' ); ?><br>
-						<?php echo( $request->get_error_message() ); ?>
+						<?php echo $request->get_error_message(); ?>
 					</p>
 				</div>
 				<?php
@@ -503,6 +504,10 @@ function wc_nimiq_gateway_init() {
 			return sanitize_text_field( $data[ $key ] );
 		}
 
+		private function should_go_to_payment() {
+			return isset( $_POST[ 'goToPayment' ] ) && $_POST[ 'goToPayment' ] === 'yes';
+		}
+
 		/**
 		 * This is a required method for WC gateways, to be used by WC internal processing
 		 *
@@ -510,7 +515,7 @@ function wc_nimiq_gateway_init() {
 		 * Use `validate_response` instead!
 		 */
 		public function validate_fields( $order_id = null ) {
-			if ( is_checkout() ) return true;
+			if ( is_checkout() && $this->should_go_to_payment() ) return true;
 
 			return $this->validate_response( $order_id, $_POST );
 		}
@@ -597,7 +602,7 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			if ( is_checkout() ) {
+			if ( is_checkout() && $this->should_go_to_payment() ) {
 				// Remove cart
 				WC()->cart->empty_cart();
 
