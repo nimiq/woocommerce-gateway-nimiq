@@ -254,7 +254,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Required BTC Confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Bitcoin transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 1, // ~ 10 minutes
+        'default'     => 2, // ~ 20 minutes
         'desc_tip'    => true,
     ],
 
@@ -270,7 +270,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Email Instructions', 'wc-gateway-nimiq' ),
         'type'        => 'textarea',
         'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
-        'default'     => __( 'You will receive email updates after your payment has been confirmed and when we sent your order.', 'wc-gateway-nimiq' ),
+        'default'     => __( 'You will receive email updates after your payment has been confirmed and when we shipped your order.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
     ],
 
