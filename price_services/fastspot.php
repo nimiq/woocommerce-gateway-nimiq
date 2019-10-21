@@ -66,6 +66,12 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
 
             $fee = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'fee' ] ] )[ $currency_iso ];
             $feePerByte = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'perFee' ] ] )[ $currency_iso ];
+
+            // Round ETH $feePerByte to its first three significant digits
+            if ( $currency_iso === 'eth' ) {
+                $feePerByte = strval( round( $feePerByte, -( strlen( $feePerByte ) - 3 ) ) );
+            }
+
             $fees[ $currency_iso ] = $currency_iso === 'eth'
                 ? [
                     'gas_limit' => 21000,
