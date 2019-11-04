@@ -70,10 +70,11 @@
 
     var on_signing_error = function(e) {
         console.error(e);
-        if (e.message !== 'CANCELED') alert('Error: ' + e.message);
+        if (e.message !== 'CANCELED' && e !== 'Connection was closed' && e.message !== 'Connection was closed') alert('Error: ' + e.message);
         awaiting_transaction_signing = false;
         // Reenable checkout button
         $('button#place_order').prop('disabled', false);
+        jQuery('#order_review').unblock();
     }
 
     // Add submit event listener to form, preventDefault()
