@@ -340,6 +340,7 @@ function wc_nimiq_gateway_init() {
 			$nim_price = 0;
 			$order_currency = '';
 			$order_hash = '';
+			$order = null;
 			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
 				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
 				$order = wc_get_order( $order_id );
@@ -376,12 +377,27 @@ function wc_nimiq_gateway_init() {
 				}
 			}
 
+			$message = '';
+
+			foreach ($order->get_items() as $item) {
+				$product_id = $item->get_product_id();
+				$meta_msg = get_post_meta( $product_id, 'wc-nimiq-transaction-message', true);
+				if (!empty($meta_msg)) {
+					$quantity = $item->get_quantity();
+					$message = sprintf($meta_msg, $quantity);
+					break;
+				}
+			}
+
+			if (empty($message)) $message = $this->get_option( 'message' );
+
+			if (!empty($message)) $message .= ' '; // Add a space to the end
+
 			// To uniquely identify the payment transaction, we add a shortened hash of
 			// the order details to the transaction message.
-			$tx_message = ( !empty( $this->get_option( 'message' ) ) ? $this->get_option( 'message' ) . ' ' : '' )
-				. '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
+			$message = $message . '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
 
-			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
+			$message_bytes = unpack('C*', $message); // Convert to byte array
 
 			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'HubApi' ], $this->version(), true );
 			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
@@ -390,8 +406,8 @@ function wc_nimiq_gateway_init() {
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
 				'ORDER_TOTAL'    => intval( $order_total_nim * 1e5 ),
-				'TX_FEE'         => ( 166 + count( $tx_message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) ?: 0 ),
-				'TX_MESSAGE'     => '[' . implode( ',', $tx_message_bytes ) . ']',
+				'TX_FEE'         => ( 166 + count( $message_bytes ) ) * ( intval( $this->get_option( 'fee' ) ) ?: 0 ),
+				'TX_MESSAGE'     => '[' . implode( ',', $message_bytes ) . ']',
 				'RPC_BEHAVIOR'   => $this->get_option( 'rpc_behavior' ),
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
@@ -582,3 +598,32 @@ function wc_nimiq_gateway_init() {
 include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
+
+
+/**
+ * Display the custom text field
+ * @since 1.0.0
+ */
+function wc_nimiq_add_custom_product_meta_field() {
+	$args = array(
+		'id' => 'wc-nimiq-transaction-message',
+		'label' => __( 'Payment message', 'wc-gateway-nimiq' ),
+		'class' => 'wc-nq-tx-message',
+		'desc_tip' => true,
+		'description' => __( 'Set a custom payment message when this product is bought. Use %d to write the bought quantity into the message.', 'wc-gateway-nimiq' ),
+	);
+	woocommerce_wp_text_input( $args );
+}
+add_action( 'woocommerce_product_options_general_product_data', 'wc_nimiq_add_custom_product_meta_field' );
+
+/**
+ * Save the custom field
+ * @since 1.0.0
+ */
+function wc_nimiq_save_custom_product_field( $post_id ) {
+	$product = wc_get_product( $post_id );
+	$title = isset( $_POST['wc-nimiq-transaction-message'] ) ? $_POST['wc-nimiq-transaction-message'] : '';
+	$product->update_meta_data( 'wc-nimiq-transaction-message', sanitize_text_field( $title ) );
+	$product->save();
+}
+add_action( 'woocommerce_process_product_meta', 'wc_nimiq_save_custom_product_field' );
