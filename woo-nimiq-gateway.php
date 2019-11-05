@@ -180,10 +180,7 @@ function wc_nimiq_gateway_init() {
 
 			$icon_src = "data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='" . $image_width . "' height='28' viewBox='0 0 " . $image_width . " 28'><defs>" . $defs . "</defs>" . $logo_nimiq . $logo_bitcoin . $logo_ethereum . "</svg>";
 
-			$img  = '<img src="' . $icon_src . '" alt="' . $alt . '">';
-			// $link = '<a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a>';
-
-			return $img/* . $link */;
+			return '<img src="' . $icon_src . '" alt="' . $alt . '">';
 		}
 
 		public function get_currencies_for_description() {
@@ -406,6 +403,7 @@ function wc_nimiq_gateway_init() {
 				$description = $this->get_description();
 				if ( $description ) {
 					echo wpautop( wptexturize( $description ) );
+					echo '<p><a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a></p>';
 				}
 				echo '<input type="hidden" name="goToPayment" value="yes">';
 				return;
