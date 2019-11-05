@@ -198,7 +198,7 @@ $woo_nimiq_checkout_settings = [
                              'The URL must be under the same domain as the webshop. ' .
                              'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
         'default'     => '',
-        'placeholder' => '(optional) No image set',
+        'placeholder' => 'Required for BTC and ETH, falls back to Wordpress Site Icon.',
         'desc_tip'    => true,
     ],
 
