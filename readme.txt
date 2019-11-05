@@ -5,10 +5,10 @@ Tags: woocommerce, payment gateway, checkout, gateway, nimiq, crypto, cryptocurr
 Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 3.6
+Tested WooCommerce up to: 3.8
 Stable tag: v2.7.4
-Requires PHP: 5.2.4
-License: GPLv3 or later
+Requires PHP: 7.0.0
+License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
