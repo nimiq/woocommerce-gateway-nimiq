@@ -1,8 +1,5 @@
-(async function($) {
+(function($) {
     'use strict';
-
-    // Check the T&C box, which was already checked on the page before
-    $('input#terms').prop('checked', true);
 
     // When behavior is redirect, don't do anything, as redirect is triggered from server-side on form-submit
     if (CONFIG.RPC_BEHAVIOR === 'redirect') return;
@@ -11,16 +8,16 @@
     try {
         request = JSON.parse(CONFIG.REQUEST);
     } catch (error) {
-        alert('Could not decode JSON: ' + error.message);
+        alert('Could not decode CONFIG JSON: ' + error.message);
         return;
     }
 
     // Status variables
     var awaiting_transaction_signing = false;
-    var nim_payment_completed = false;
+    var nim_payment_received = false;
 
     var checkout_pay_order_hook = function(event) {
-        if (nim_payment_completed) return true;
+        if (nim_payment_received) return true;
 
         event.preventDefault();
 
@@ -32,7 +29,7 @@
 
     var do_payment = async function() {
         awaiting_transaction_signing = true;
-        $('button#place_order').prop('disabled', true);
+        $pay_button.prop('disabled', true);
 
         // Start Hub action
         try {
@@ -45,9 +42,9 @@
     }
 
     var on_signed_transaction = function(signed_transaction) {
-        console.log("signed_transaction", signed_transaction);
+        console.debug("signed_transaction", signed_transaction);
 
-        $('button#place_order').prop('disabled', true);
+        $pay_button.prop('disabled', true);
 
         // Write result into the hidden inputs
         $('#status').val('OK'); // Required to pass validate_fields()
@@ -56,29 +53,30 @@
         awaiting_transaction_signing = false;
 
         $('#nim_gateway_info_block').addClass('hidden');
-        $('#nim_payment_complete_block').removeClass('hidden');
+        $('#nim_payment_received_block').removeClass('hidden');
 
-        nim_payment_completed = true;
+        nim_payment_received = true;
 
-        checkout_form.submit();
+        $checkout_form.submit();
     }
 
     var on_signing_error = function(e) {
         console.error(e);
-        // if (e.message !== 'CANCELED' && e.message !== 'Connection was closed') alert('Error: ' + e.message);
-        if (e.message !== 'CANCELED' && e.message !== 'Connection was closed' && e !== 'Connection was closed' && e.message !== 'Request aborted') {
+        if (e.message !== 'CANCELED' && e.message !== 'Connection was closed' && e !== 'Connection was closed') {
             alert('Error: ' + e.message);
         }
         awaiting_transaction_signing = false;
         // Reenable checkout button
-        $('button#place_order').prop('disabled', false);
-        jQuery('#order_review').unblock();
+        $pay_button.prop('disabled', false);
     }
 
+    // Store reference to payment button
+    var $pay_button = $('#nim_pay_button');
+
     // Add submit event listener to form
-    var checkout_form = $('form#order_review');
-    checkout_form.on('submit', checkout_pay_order_hook);
+    var $checkout_form = $('form#pay_with_nimiq');
+    $checkout_form.on('submit', checkout_pay_order_hook);
 
     // Initialize HubApi
-    window.hubApi = new HubApi(CONFIG.HUB_URL);
+    var hubApi = new HubApi(CONFIG.HUB_URL);
 })(jQuery);

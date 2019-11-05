@@ -1,18 +1,39 @@
-#nim_payment_complete_block.hidden {
+#nim_pay_button {
+	margin: auto;
+	background: #1F2348;
+	background: #0582CA;
+	background-image: radial-gradient(ellipse at bottom right, #260133, #1F2348);
+	background-image: radial-gradient(ellipse at bottom right, #265DD7, #0582CA);
+	box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+	color: white;
+	font-size: 1.25em;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 500px;
+}
+
+#nim_pay_button img {
+	margin-left: 16px;
+}
+
+#nim_gateway_info_block.hidden,
+#nim_payment_received_block.hidden {
 	display: none;
 }
 
-#nim_payment_complete_block {
+#nim_gateway_info_block,
+#nim_payment_received_block {
 	text-align: center;
 }
 
-#nim_payment_complete_block .fa-check-circle {
+#nim_payment_received_block .fa-check-circle {
 	color: seagreen;
 	font-size: 2em;
 	margin-bottom: 8px;
 	display: block;
 }
 
-#nim_payment_complete_block small {
+#nim_payment_received_block small {
 	display: block;
 }

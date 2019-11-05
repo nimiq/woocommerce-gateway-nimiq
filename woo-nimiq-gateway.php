@@ -113,8 +113,9 @@ function wc_nimiq_gateway_init() {
 
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
-			add_action( 'woocommerce_api_wc_gateway_nimiq', array( $this, 'handle_redirect_response' ) );
+			add_action( 'before_woocommerce_pay', array ($this, 'add_payment_button'));
+			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'add_instructions' ) );
+			add_action( 'woocommerce_api_wc_gateway_nimiq', array( $this, 'handle_payment_response' ) );
 			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_settings_script' ) );
 
@@ -133,14 +134,6 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function get_icon() {
-			/**
-			 * Data URLs need to be escaped like this:
-			 * - all # must be %23
-			 * - all double quotes (") must be single quotes (')
-			 * - :// must be %3A%2F%2F
-			 * - all slashes in attributes (/) must be %2F
-			 */
-
 			$currencies = $this->crypto_manager->get_accepted_cryptos();
 
 			// Widths of the source icons
@@ -169,6 +162,14 @@ function wc_nimiq_gateway_init() {
 			$alt = implode( ', ', array_map( function( $crypto ) {
 				return ucfirst( Crypto_Manager::iso_to_name( $crypto ) );
 			}, $currencies ) );
+
+			/**
+			 * Data URLs need to be escaped like this:
+			 * - all # must be %23
+			 * - all double quotes (") must be single quotes (')
+			 * - :// must be %3A%2F%2F
+			 * - all slashes in attributes (/) must be %2F
+			 */
 
 			$defs = "<radialGradient id='nimiq-radial-gradient' cx='-166.58' cy='275.96' r='1.06' gradientTransform='matrix(-24.62, 0, 0, 21.78, -4075.39, -5984.84)' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%23ec991c'/><stop offset='1' stop-color='%23e9b213'/></radialGradient>";
 
@@ -211,7 +212,7 @@ function wc_nimiq_gateway_init() {
 			$order = wc_get_order( $order_id );
 
 			if ( $order->get_status() !== 'pending' ) {
-				return new WP_Error( 'order', 'Order is not in pending state and thus cannot be paid.' );
+				return new WP_Error( 'order_state_invalid', 'Order is not in pending state and thus cannot be paid.' );
 			}
 
 			$order_total = floatval( $order->get_total() );
@@ -240,6 +241,7 @@ function wc_nimiq_gateway_init() {
 			];
 
 			if ( $order_currency === 'NIM') {
+				$order->update_meta_data( 'order_crypto_currency', 'nim' );
 				$order->update_meta_data( 'order_total_nim', $order_total );
 
 				// Use NimiqCheckoutRequest (version 1)
@@ -374,7 +376,7 @@ function wc_nimiq_gateway_init() {
 			return $request;
 		}
 
-		private function handle_redirect_response() {
+		public function handle_payment_response() {
 			$order_id = $this->get_param( 'id' );
 
 			if ( empty( $order_id ) ) {
@@ -388,7 +390,7 @@ function wc_nimiq_gateway_init() {
 			if ( !$is_valid ) {
 				// Redirect to payment page
 				$order = wc_get_order( $order_id );
-				wp_redirect( $order->get_checkout_payment_url( $on_checkout = false ) );
+				wp_redirect( $order->get_checkout_payment_url( $on_checkout = true ) );
 				exit;
 			}
 
@@ -399,32 +401,26 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function payment_fields() {
-			if ( is_checkout() && !is_wc_endpoint_url( 'order-pay' ) ) {
-				$description = $this->get_description();
-				if ( $description ) {
-					echo wpautop( wptexturize( $description ) );
-					echo '<p><a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a></p>';
-				}
-				echo '<input type="hidden" name="goToPayment" value="yes">';
-				return;
+			$description = $this->get_description();
+			if ( $description ) {
+				echo wpautop( wptexturize( $description ) );
+				echo '<p><a href="https://nimiq.com" class="about_nimiq" target="_blank">' . esc_html__( 'What is Nimiq?', 'wc-gateway-nimiq' ) . '</a></p>';
 			}
+		}
 
-			if ( !isset( $_GET['pay_for_order'] ) || !isset( $_GET['key'] ) ) {
-				return;
-			}
+		public function add_payment_button() {
+			$order_key = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : '';
+			$order_id = wc_get_order_id_by_order_key( $order_key );
+			$order = wc_get_order( $order_id );
 
-			$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+			if ( !$order || $order->get_payment_method() !== $this->id ) return;
+
 			$request = $this->get_option( 'rpc_behavior' ) === 'popup' ? $this->get_payment_request( $order_id ) : [];
 
 			if ( is_wp_error( $request ) ) {
-				?>
-				<div id="nim_gateway_info_block">
-					<p class="form-row" style="color: red; font-style: italic;">
-						<?php _e( 'ERROR:', 'wc-gateway-nimiq' ); ?><br>
-						<?php echo $request->get_error_message(); ?>
-					</p>
-				</div>
-				<?php
+				// This type of error is handled by WooCommerce itself already
+				if ( $request->get_error_code() === 'order_state_invalid' ) return;
+				wc_print_notice( $request->get_error_message(), 'error' );
 				return;
 			}
 
@@ -439,29 +435,32 @@ function wc_nimiq_gateway_init() {
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
 
+			$returnUrl = get_site_url() . '/wc-api/WC_Gateway_Nimiq?id=' . $order_id;
 			?>
+			<form id="pay_with_nimiq" method="POST" action="<?php echo $returnUrl; ?>">
+				<div id="nim_gateway_info_block">
+					<?php if ( $this->get_option( 'rpc_behavior' ) === 'popup' ) { ?>
+						<noscript>
+							<strong>
+								<?php _e( 'Javascript is required to use Nimiq Checkout. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
+							</strong>
+						</noscript>
 
-			<div id="nim_gateway_info_block">
-				<?php if ( $this->get_option( 'rpc_behavior' ) === 'popup' ) { ?>
-					<noscript>
-						<strong>
-							<?php _e( 'Javascript is required to use Nimiq Checkout. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
-						</strong>
-					</noscript>
+						<input type="hidden" name="status" id="status" value="">
+						<input type="hidden" name="result" id="result" value="">
+					<?php } ?>
 
-					<input type="hidden" name="status" id="status" value="">
-					<input type="hidden" name="result" id="result" value="">
-				<?php } ?>
+					<button type="submit" class="button" id="nim_pay_button">
+						<?php _e( 'Pay with Crypto', 'wc-gateway-nimiq' ) ?>
+						<?php echo $this->get_icon(); ?>
+					</button>
+				</div>
 
-				<p class="form-row">
-					<?php _e( 'Please click the big button below to pay.', 'wc-gateway-nimiq' ); ?>
-				</p>
-			</div>
-
-			<div id="nim_payment_complete_block" class="hidden">
-				<i class="fas fa-check-circle" style="color: seagreen;"></i>
-				<?php _e( 'Payment complete', 'wc-gateway-nimiq' ); ?>
-			</div>
+				<div id="nim_payment_received_block" class="hidden">
+					<i class="fas fa-check-circle" style="color: seagreen;"></i>
+					<?php _e( 'Payment received', 'wc-gateway-nimiq' ); ?>
+				</div>
+			</form>
 			<?php
 		}
 
@@ -490,52 +489,44 @@ function wc_nimiq_gateway_init() {
 			return substr( $long_hash, 0, 6 );
 		}
 
-		private function get_param( $key, $method = 'get' ) {
-			$data = $method === 'get'
-				? $_GET
-				: ( $method === 'post'
-					? $_POST
-					: $method
-				);
+		private function get_param( $key, $data = 'request' ) {
+			if ( is_string( $data ) ) {
+				switch ( $data ) {
+					case 'get': $data = $_GET; break;
+					case 'post': $data = $_POST; break;
+					case 'request': $data = $_REQUEST; break;
+					default: throw new Exception( 'Unknown data type: ' . htmlspecialchars( $data ) ); break;
+				}
+			}
 
 			if ( !isset( $data[ $key ] ) ) return null;
 			return sanitize_text_field( $data[ $key ] );
 		}
 
-		private function should_go_to_payment() {
-			return isset( $_POST[ 'goToPayment' ] ) && $_POST[ 'goToPayment' ] === 'yes';
-		}
-
-		/**
-		 * This is a required method for WC gateways, to be used by WC internal processing
-		 *
-		 * DO NOT USE FOR CUSTOM INTEGRATION!
-		 * Use `validate_response` instead!
-		 */
-		public function validate_fields( $order_id = null ) {
-			if ( is_checkout() && $this->should_go_to_payment() ) return true;
-
-			return $this->validate_response( $order_id, $_POST );
-		}
-
 		/**
 		 * Response validation to be used by custom integrations
+		 *
+		 * @param {number} $order_id
+		 * @param {object|string} [$response]
 		 */
-		public function validate_response( $order_id = null, $response ) {
+		public function validate_response( $order_id, $response = 'request' ) {
 			$status = $this->get_param( 'status', $response );
-			$result = $this->get_param( 'result', $response );
-
-			if ( $status !== 'OK' || empty( $result ) ) return false;
-
-			$result = str_replace( "\\", "", $result ); // JSON string may be "sanitized" with backslashes, which is a JSON syntax error
-			$result = json_decode( $result );
-
-			// Get order_id from GET param (for when RPC behavior is native 'popup')
-			if ( isset( $_GET['pay_for_order'] ) && isset( $_GET['key'] ) ) {
-				$order_id = wc_get_order_id_by_order_key( wc_clean( $_GET['key'] ) );
+			if ( $status !== 'OK' ) {
+				wc_add_notice( __( 'Hub response status is not "OK".', 'wc-gateway-nimiq' ), 'error' );
+				return false;
 			}
 
-			if ( empty( $order_id ) ) return false;
+			$result = $this->get_param( 'result', $response );
+			$result = str_replace( "\\", "", $result ); // JSON string may be "sanitized" with backslashes, which is a JSON syntax error
+			try {
+				$result = json_decode( $result );
+			} catch (Exception $e) {
+				wc_add_notice( __( 'Could not decode Hub result:', 'wc-gateway-nimiq' ) . ' ' . $e->getMessage(), 'error' );
+			}
+			if ( empty( $result ) ) {
+				wc_add_notice( __( 'Hub result is empty.', 'wc-gateway-nimiq' ), 'error' );
+				return false;
+			}
 
 			$order = wc_get_order( $order_id );
 
@@ -555,7 +546,6 @@ function wc_nimiq_gateway_init() {
 					return false;
 				}
 
-				$order->update_meta_data( 'order_crypto_currency', $currency );
 				$order->update_meta_data( 'transaction_hash', $transaction_hash );
 				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
 				$order->delete_meta_data( 'checkout_csrf_token' );
@@ -570,7 +560,7 @@ function wc_nimiq_gateway_init() {
 		/**
 		 * Output for the order received page.
 		 */
-		public function thankyou_page() {
+		public function add_instructions() {
 			if ( $this->instructions ) {
 				echo wpautop( wptexturize( $this->instructions ) );
 			}
@@ -600,7 +590,7 @@ function wc_nimiq_gateway_init() {
 
 			$order = wc_get_order( $order_id );
 
-			if ( is_checkout() && $this->should_go_to_payment() ) {
+			if ( is_checkout() ) {
 				// Remove cart
 				WC()->cart->empty_cart();
 
@@ -634,7 +624,7 @@ function wc_nimiq_gateway_init() {
 				// Return payment-page redirect from where the Hub popup is opened
 				return array(
 					'result' 	=> 'success',
-					'redirect'	=> $order->get_checkout_payment_url( $on_checkout = false )
+					'redirect'	=> $order->get_checkout_payment_url( $on_checkout = true )
 				);
 			}
 
@@ -644,12 +634,12 @@ function wc_nimiq_gateway_init() {
 			// Return thank-you redirect
 			return array(
 				'result' 	=> 'success',
-				'redirect'	=> $this->get_return_url( $order )
+				'redirect'	=> $order->get_checkout_order_received_url(),
 			);
 		}
 
 		// Check if the store NIM address is set and show admin notice otherwise
-		// Custom function not required by the Gateway
+		// Custom function not required by the gateway
 		public function do_store_nim_address_check() {
 			if( $this->enabled == "yes" ) {
 				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
