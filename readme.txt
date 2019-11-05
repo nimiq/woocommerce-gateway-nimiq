@@ -45,151 +45,17 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 
 == Changelog ==
 
-= 2.7.4 - 2019.06.21 =
-* Remove unused CSS
-* Set network to mainnet by default
-* Improve default setting for mempool wait limit (now 150 min)
-* Enable translations for many more strings
-* Add "What is Nimiq?" link to checkout method selector
-* Fix NimiqX transaction validator
+= 3.0.0 - 2019.11.xx =
 
-= 2.7.3 - 2019.06.20 =
-* Fix payment method icon size on cart checkout page for themes other than Storefront
-
-= 2.7.2 - 2019.06.20 =
-* Select Coingecko price service by default to reduce setup effort
-* Add assets and adapt README for WordPress plugin page (https://wordpress.org/plugins/woo-nimiq-gateway)
-
-= 2.7.1 - 2019.06.13 =
-* Fix wrong variable name preventing use of plugin outside of nimiq.com and nimiq-testnet.com
-* Remove package tracking code
-* Normalize tested WP and WC version numbers between readme and plugin file
-
-= 2.7.0 - 2019.06.05 =
-
-* Enable automatic currency conversion to NIM on checkout
-* Make transaction validation interval configurable
-
-= 2.6.0 - 2019.05.23 =
-
-* Update to Nimiq Hub API 1.0.0
-* Enable mainnet option
-
-= 2.5.0 - 2019.05.17 =
-
-* Bug fix for JS error
-* Disable redirect option on non-SSL sites
-* Allow using Basic Auth with a Nimiq RPC server
-* Update to Nimiq Hub API RC5
-
-= 2.4.0 - 2019.03.22 =
-
-* Update to new Nimiq Accounts API
-* Add DPD carrier handling for tracking links
-
-= 2.3.0 - 2019.01.15 =
-
-* Fix error displayed in front-end
-* Add JSON-RPC as a validation service (thanks to @terorie)
-* Add scheduled automatic transaction validation
-
-= 2.2.1 - 2019.01.11 =
-
-* Add script to settings page with scaffolding for showing/hiding conditional fields
-
-= 2.2.0 - 2019.01.11 =
-
-* Add setting for checkout behavior: popup or redirect
-* Add setting for displaying an image (e.g. the shop's logo) during checkout
-* Enable easy addition and configuration of transaction validation services
-
-= 2.1.0 - 2019.01.08 =
-
-* Fix transaction message order hash detection to always match the *last* pair of round brackets
-* Calculate fee from byte array length, instead of string length
-* Use site title as appName in Accounts Manager request
-* Clean up code and comments for public release
-
-= 2.0.0 - 2018.11.25 =
-
-* Use new Nimiq Accounts checkout experience
-
-= 1.10.0 - 2018.11.15 =
-
-* Add tracking details, such as carrier and tracking number, to "completed" emails (This should be moved to a separate plugin in the future, as this plugin should only be for the payment gateway.)
-
-= 1.9.2 - 2018.11.14 =
-
-* Fix tx message not being displayed correctly in the Keyguard
-
-= 1.9.1 - 2018.10.22 =
-
-* Update Nimiq logo
-
-= 1.9 - 2018.09.17 =
-
-* Restock inventory when an order fails during bulk transaction-validation
-
-= 1.8.2 - 2018.09.17 =
-
-* Display hint instead of empty drop-down when no accounts are available on the device
-
-= 1.8.1 - 2018.06.27 =
-
-* Fix transaction validation bug
-* Fix function access bug from bulk action
-
-= 1.8.0 - 2018.06.20 =
-
-* Add transaction fee setting
-* Improve setting naming
-* Update keyguard and network clients
-
-= 1.7.0 - 2018.06.20 =
-
-* Replace order ID with abbreviated order hash in transaction message
-* Prevent users from having to accept T&C on pay-order page again
-* Fix display of muliple transaction validation errors in admin backend
-* Internal file reorganization
-
-= 1.6.0 - 2018.06.08 =
-
-* Handle Nimiq payment on separate page, after order has been placed
-* Add bulk transaction validation action on 'Orders' page
-
-= 1.5.0 - 2018.06.07 =
-
-* Add "Payment complete" message
-
-= 1.4.0 - 2018.06.07 =
-
-* Fix network selector setting values
-* Fix checkout form multi submissions
-* Store transaction hashes in HEX format
-
-= 1.3.0 - 2018.06.07 =
-
-* Fix network-client urls
-
-= 1.2.2 - 2018.06.06 =
-
-* Fix checkout icon
-* Remove coupon form hiding code
-
-= 1.2.0 - 2018.06.06 =
-
-* Made network and message configurable
-* Prepare for online deployment
-
-= 1.1.0 - 2018.06.05 =
-
-* Adapted [plugin](https://github.com/bekarice/woocommerce-gateway-offline) for payments with Nimiq
+* Add support for Bitcoin and Ethereum payments
+* Remove other payment options from payment page
+* Various smaller fixes
 
 == Upgrade Notice ==
 
-= 2.7.4 =
+= 3.0.0 =
 
-Removes CSS that hid T&C info on payment page, fixes NimiqX transaction validator.
+Nimiq Checkout for WooCommerce now supports taking payments in Bitcoin and Ethereum!
 
 == Development ==
 
