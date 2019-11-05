@@ -1,0 +1,143 @@
+{
+    "meta": {
+        "symbol": "BSD",
+        "name": "BitSend",
+        "supply": {
+            "max": 210000000
+        },
+        "web": {
+            "websites": [
+                "http:\/\/www.bitsend.info\/",
+                "http:\/\/www.mybitsend.com\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1370307",
+            "source_code": "https:\/\/github.com\/LIMXTEC\/BitSend",
+            "explorers": [
+                "http:\/\/exp.mybitsend.com\/",
+                "https:\/\/chainz.cryptoid.info\/bsd\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/bitsend\/",
+            "message_board": [],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "BSD",
+        "name": "BitSend - Mainnet",
+        "testnet": false,
+        "port": 8886,
+        "port_rpc": 8800,
+        "protocol": {
+            "magic": "0xa3d5c2f9"
+        },
+        "seeds_dns": [
+            "seed.mybitsend.com"
+        ],
+        "prefixes": {
+            "private": 204,
+            "public": 102,
+            "scripthash": 5,
+            "bech32": null,
+            "bip44": 91,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0000012e1b8843ac9ce8c18603658eaf8895f99d3f5e7e1b7b1686f35e3c087a",
+        "message_magic": "\u0018Bitsend Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "BSD",
+        "name": "BitSend - Testnet",
+        "testnet": true,
+        "port": 18333,
+        "port_rpc": 18800,
+        "protocol": {
+            "magic": "0x0b110907"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 111,
+            "scripthash": 196,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "43f9bd8f69fabb104a127606edc72c9a144da46d27ddb0817fb3462021d9e367",
+        "message_magic": "\u0018Bitsend Signed Message:\n",
+        "decimals": 8
+    },
+    "regtest": {
+        "symbol": "BSD",
+        "name": "BitSend - Regtest",
+        "testnet": true,
+        "port": 8885,
+        "port_rpc": 18332,
+        "protocol": {
+            "magic": "0x4c1a2caf"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 111,
+            "scripthash": 196,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                }
+            }
+        },
+        "hash_genesis_block": "ae142a92fc1bc3506477d3fee69396a6f2d281802759585645009274df15810e",
+        "message_magic": "\u0018Bitsend Signed Message:\n",
+        "decimals": 8
+    }
+}

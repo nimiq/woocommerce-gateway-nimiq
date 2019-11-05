@@ -1,0 +1,82 @@
+{
+    "meta": {
+        "symbol": "AUR",
+        "name": "Auroracoin",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "http:\/\/auroracoin.is\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1467050.0",
+            "source_code": "https:\/\/github.com\/aurarad\/auroracoin",
+            "explorers": [
+                "https:\/\/chainz.cryptoid.info\/aur\/",
+                "http:\/\/insight.auroracoin.is\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/auroracoin\/",
+            "message_board": [
+                "http:\/\/auroraspjall.is\/"
+            ],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "AUR",
+        "name": "Auroracoin - Mainnet",
+        "testnet": false,
+        "port": 12340,
+        "port_rpc": 12341,
+        "protocol": {
+            "magic": "0xfda4dc6c"
+        },
+        "seeds_dns": [
+            "s1.auroraseed.net",
+            "aurseed1.criptoe.com",
+            "s1.auroraseed.com",
+            "s1.auroraseed.org",
+            "s1.auroraseed.eu",
+            "electrum2.aurorcoin.is",
+            "electrum3.auroracoin.is",
+            "electrum4.auroracoin.is"
+        ],
+        "prefixes": {
+            "private": 176,
+            "public": 23,
+            "scripthash": 5,
+            "bech32": null,
+            "bip44": 85,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "2a8e100939494904af825b488596ddd536b3a96226ad02e0f7ab7ae472b27a8e",
+        "message_magic": "\u001bAuroracoin Signed Message:\n",
+        "decimals": 8
+    }
+}

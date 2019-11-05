@@ -1,0 +1,125 @@
+{
+    "meta": {
+        "symbol": "PIVX",
+        "name": "PIVX",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "http:\/\/www.pivx.org"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1262920",
+            "source_code": "https:\/\/github.com\/PIVX-Project\/PIVX",
+            "explorers": [
+                "https:\/\/chainz.cryptoid.info\/pivx\/",
+                "http:\/\/www.presstab.pw\/phpexplorer\/PIVX\/",
+                "http:\/\/pivx.presstab.pw"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/pivx\/",
+            "message_board": [
+                "https:\/\/forum.pivx.org\/"
+            ],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "PIVX",
+        "name": "PIVX - Mainnet",
+        "testnet": false,
+        "port": 51472,
+        "port_rpc": 51473,
+        "protocol": {
+            "magic": "0x90c4fde9"
+        },
+        "seeds_dns": [
+            "pivx.seed.fuzzbawls.pw",
+            "pivx.seed2.fuzzbawls.pw",
+            "coin-server.com",
+            "s3v3nh4cks.ddns.net"
+        ],
+        "prefixes": {
+            "private": 212,
+            "public": 30,
+            "scripthash": 13,
+            "bech32": null,
+            "bip44": 119,
+            "extended": {
+                "xpub": {
+                    "public": "0x022d2533",
+                    "private": "0x0221312b"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0000041e482b9b9691d98eefb48473405c0b8ec31b76df3797c74a78680ef818",
+        "message_magic": "\u0018DarkNet Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "PIVX",
+        "name": "PIVX - Testnet",
+        "testnet": true,
+        "port": 51474,
+        "port_rpc": 51475,
+        "protocol": {
+            "magic": "0x457665ba"
+        },
+        "seeds_dns": [
+            "pivx-testnet.seed.fuzzbawls.pw",
+            "pivx-testnet.seed2.fuzzbawls.pw",
+            "s3v3nh4cks.ddns.net"
+        ],
+        "prefixes": {
+            "private": 239,
+            "public": 139,
+            "scripthash": 19,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x3a8061a0",
+                    "private": "0x3a805837"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0000041e482b9b9691d98eefb48473405c0b8ec31b76df3797c74a78680ef818",
+        "message_magic": "\u0018DarkNet Signed Message:\n",
+        "decimals": 8
+    }
+}

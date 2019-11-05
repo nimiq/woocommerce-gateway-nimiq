@@ -1,0 +1,114 @@
+{
+    "meta": {
+        "symbol": "SPHR",
+        "name": "Sphere",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "https:\/\/sphrpay.io\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1052560",
+            "source_code": "https:\/\/github.com\/SphereDevs\/sphere",
+            "explorers": [
+                "http:\/\/sphere.iquidus.io\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/sphere\/",
+            "message_board": [],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "SPHR",
+        "name": "Sphere - Mainnet",
+        "testnet": false,
+        "port": 37544,
+        "port_rpc": 37545,
+        "protocol": {
+            "magic": "0xa8b81130"
+        },
+        "seeds_dns": [
+            "gqunlgogqx7x42zy.onion"
+        ],
+        "prefixes": {
+            "private": 153,
+            "public": 25,
+            "scripthash": 85,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00001f60dc7ff24d6eefb369ce6878e886815907cf44ceb45aa12a1d30b28acd",
+        "message_magic": "\u0017Sphere Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "SPHR",
+        "name": "Sphere - Testnet",
+        "testnet": true,
+        "port": 27544,
+        "port_rpc": 27545,
+        "protocol": {
+            "magic": "0x8de74912"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 127,
+            "scripthash": 196,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00001f60dc7ff24d6eefb369ce6878e886815907cf44ceb45aa12a1d30b28acd",
+        "message_magic": "\u0017Sphere Signed Message:\n",
+        "decimals": 8
+    }
+}

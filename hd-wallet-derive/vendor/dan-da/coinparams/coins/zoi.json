@@ -1,0 +1,147 @@
+{
+    "meta": {
+        "symbol": "ZOI",
+        "name": "Zoin",
+        "supply": {
+            "max": "21000000"
+        },
+        "web": {
+            "websites": [
+                "http:\/\/zoinofficial.com\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=2085112.0",
+            "source_code": "https:\/\/github.com\/zoinofficial\/zoin",
+            "explorers": [
+                "https:\/\/chainz.cryptoid.info\/zoi\/",
+                "http:\/\/explorer.zoinofficial.com\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/zoin\/",
+            "message_board": [],
+            "chat": [
+                "https:\/\/discordapp.com\/invite\/mE3KemF",
+                "https:\/\/t.me\/zoincommunity"
+            ]
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "ZOI",
+        "name": "Zoin - Mainnet",
+        "testnet": false,
+        "port": 8255,
+        "port_rpc": 8255,
+        "protocol": {
+            "magic": "0xf503a951"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 208,
+            "public": 80,
+            "scripthash": 7,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0x23911212a525e3d149fcad6c559c8b17f1e8326a272a75ff9bb315c8d96433ef0x4f193d83c304ebd3bf2319611cbb84f26af7960f23d06dd243b6c93ebf4d7797",
+        "message_magic": "\u0015Zoin Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "ZOI",
+        "name": "Zoin - Testnet",
+        "testnet": true,
+        "port": 28168,
+        "port_rpc": 28168,
+        "protocol": {
+            "magic": "0xae5dbf09"
+        },
+        "seeds_dns": [
+            "seed.tbtc.petertodd.org",
+            "testnet-seed.bluematt.me",
+            "testnet-seed.bitcoin.schildbach.de"
+        ],
+        "prefixes": {
+            "private": 193,
+            "public": 65,
+            "scripthash": 178,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0x6283b7fafca969a803f6f539f5e8fb1a4f8a28fc1ec2106ad35b39354a4647e50x04ff9bc3453a83687a95daf2342eceedac19dd73e356569704533aae02e9d6a9",
+        "message_magic": "\u0015Zoin Signed Message:\n",
+        "decimals": 8
+    },
+    "regtest": {
+        "symbol": "ZOI",
+        "name": "Zoin - Regtest",
+        "testnet": true,
+        "port": 18444,
+        "port_rpc": 18888,
+        "protocol": {
+            "magic": "0xae5dbf09"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 65,
+            "scripthash": 178,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                }
+            }
+        },
+        "hash_genesis_block": "0x6283b7fafca969a803f6f539f5e8fb1a4f8a28fc1ec2106ad35b39354a4647e50x04ff9bc3453a83687a95daf2342eceedac19dd73e356569704533aae02e9d6a9",
+        "message_magic": "\u0015Zoin Signed Message:\n",
+        "decimals": 8
+    }
+}

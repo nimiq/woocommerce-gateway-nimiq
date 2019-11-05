@@ -1,0 +1,117 @@
+{
+    "meta": {
+        "symbol": "BTGEM",
+        "symbol_comment": "BTG --> BTGEM due to collision between Bitcoin Gold and Bitgem.  Bitcoin Gold presently has much higher market cap and slip44 entry, so it won.",
+        "name": "Bitgem",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "http:\/\/www.bitgem.pw\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=207008.0",
+            "source_code": "https:\/\/github.com\/bitgem\/bitgem",
+            "explorers": [
+                "http:\/\/abe.alfter.us\/chain\/Bitgem"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/bitgem\/",
+            "message_board": [],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "BTGEM",
+        "name": "Bitgem - Mainnet",
+        "testnet": false,
+        "port": 7692,
+        "port_rpc": 8348,
+        "protocol": {
+            "magic": "0xe4e8e9e5"
+        },
+        "seeds_dns": [
+            "seed.bitgem.us"
+        ],
+        "prefixes": {
+            "public": 98,
+            "scripthash": 8,
+            "private": 226,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00000b91c4ef8fd7e86329e11cff7f03c96208dac5c057b3fa6877b9fbd97c74",
+        "message_magic": "\u0017BitGem Signed Message:\n",
+        "decimals": 6
+    },
+    "test": {
+        "symbol": "BTGEM",
+        "name": "Bitgem - Testnet",
+        "testnet": true,
+        "port": 17692,
+        "port_rpc": 18348,
+        "protocol": {
+            "magic": "0xcdf2c0ef"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "public": 111,
+            "scripthash": 196,
+            "private": 239,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x043587cf",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "000003d7b81b08a6fd709d76e9d235605a811b71bef07950a307370a191d419b",
+        "message_magic": "\u0017BitGem Signed Message:\n",
+        "decimals": 6
+    }
+}

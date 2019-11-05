@@ -1,0 +1,34 @@
+{
+    "name": "olegabr/keccak",
+    "description": "Pure PHP implementation of Keccak with PHP 5.6+ support",
+    "keywords": ["keccak", "sha-3"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Boris Momcilovic",
+            "homepage": "https://github.com/kornrunner/php-keccak"
+        },
+        {
+            "name": "Oleg Abrosimov",
+            "homepage": "https://github.com/olegabr/php-keccak"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "kornrunner\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "kornrunner\\": "test"
+        }
+    },
+    "require-dev": {
+        "php": ">=5.6",
+        "phpunit/phpunit": "5.7.27|6.5"
+    }
+}

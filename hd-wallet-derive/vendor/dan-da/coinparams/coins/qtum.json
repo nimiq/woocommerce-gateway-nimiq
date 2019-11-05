@@ -1,0 +1,149 @@
+{
+    "meta": {
+        "symbol": "QTUM",
+        "name": "Qtum",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "https:\/\/qtum.org\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1720632.0",
+            "source_code": "https:\/\/github.com\/qtumproject\/qtum",
+            "explorers": [
+                "https:\/\/qtum.info\/",
+                "https:\/\/qtumexplorer.io\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/qtum\/",
+            "message_board": [],
+            "chat": [
+                "https:\/\/t.me\/joinchat\/D5oBaw29NeOdpw6qqqf2lw"
+            ]
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "QTUM",
+        "name": "Qtum - Mainnet",
+        "testnet": false,
+        "port": 3888,
+        "port_rpc": 3889,
+        "protocol": {
+            "magic": "0xf1cfa6d3"
+        },
+        "seeds_dns": [
+            "qtum3.dynu.net",
+            "qtum5.dynu.net",
+            "qtum6.dynu.net",
+            "qtum7.dynu.net"
+        ],
+        "prefixes": {
+            "private": 128,
+            "public": 58,
+            "scripthash": 50,
+            "bech32": null,
+            "bip44": 2301,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "000075aef83cf2853580f8ae8ce6f8c3096cfa21d98334d6e3f95e5582ed986c",
+        "message_magic": "\u0015Qtum Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "QTUM",
+        "name": "Qtum - Testnet",
+        "testnet": true,
+        "port": 13888,
+        "port_rpc": 13889,
+        "protocol": {
+            "magic": "0x0d221506"
+        },
+        "seeds_dns": [
+            "qtum4.dynu.net"
+        ],
+        "prefixes": {
+            "private": 239,
+            "public": 120,
+            "scripthash": 110,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0000e803ee215c0684ca0d2f9220594d3f828617972aad66feb2ba51f5e14222",
+        "message_magic": "\u0015Qtum Signed Message:\n",
+        "decimals": 8
+    },
+    "regtest": {
+        "symbol": "QTUM",
+        "name": "Qtum - Regtest",
+        "testnet": true,
+        "port": 23888,
+        "port_rpc": 13889,
+        "protocol": {
+            "magic": "0xfdddc6e1"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 120,
+            "scripthash": 110,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                }
+            }
+        },
+        "hash_genesis_block": "665ed5b402ac0b44efc37d8926332994363e8a7278b7ee9a58fb972efadae943",
+        "message_magic": "\u0015Qtum Signed Message:\n",
+        "decimals": 8
+    }
+}

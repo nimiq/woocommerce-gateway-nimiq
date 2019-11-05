@@ -1,0 +1,116 @@
+{
+    "meta": {
+        "symbol": "PLACO",
+        "name": "PlayerCoin",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "http:\/\/www.playercoin.world\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=2085643.0",
+            "source_code": "https:\/\/github.com\/TheCryptoServices\/PlayerCoin",
+            "explorers": [
+                "http:\/\/miningpool2.thruhere.net:11003\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/playercoin\/",
+            "message_board": [],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "PLACO",
+        "name": "PlayerCoin - Mainnet",
+        "testnet": false,
+        "port": 16666,
+        "port_rpc": 17321,
+        "protocol": {
+            "magic": "0xeb3d1cc4"
+        },
+        "seeds_dns": [
+            "playercoin1.dyndns.org"
+        ],
+        "prefixes": {
+            "public": 55,
+            "scripthash": 85,
+            "private": 183,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00000f2c9cbab0cf50346d1dd4d55e44afe6430fcaea9eef6f26b1868acb2f9f",
+        "message_magic": "\u001bPlayerCoin Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "PLACO",
+        "name": "PlayerCoin - Testnet",
+        "testnet": true,
+        "port": 15666,
+        "port_rpc": 20786,
+        "protocol": {
+            "magic": "0x70e49e63"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "public": 111,
+            "scripthash": 196,
+            "private": 239,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x043587cf",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00000f2c9cbab0cf50346d1dd4d55e44afe6430fcaea9eef6f26b1868acb2f9f",
+        "message_magic": "\u001bPlayerCoin Signed Message:\n",
+        "decimals": 8
+    }
+}

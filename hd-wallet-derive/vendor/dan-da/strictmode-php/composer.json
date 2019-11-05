@@ -1,0 +1,16 @@
+{
+    "name": "dan-da/strictmode-php",
+    
+    "autoload": {
+        "classmap": [
+            "strictmode.php"
+        ]
+    },
+
+    "suggest": {
+        "dan-da/tester-php": "For running the test cases"
+    },
+
+    "require-dev": {
+    }
+}

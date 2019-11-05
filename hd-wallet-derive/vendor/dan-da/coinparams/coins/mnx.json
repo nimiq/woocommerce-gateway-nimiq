@@ -1,0 +1,147 @@
+{
+    "meta": {
+        "symbol": "MNX",
+        "name": "MinexCoin",
+        "supply": {
+            "max": "19000000"
+        },
+        "web": {
+            "websites": [
+                "https:\/\/minexcoin.com\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1847292.0",
+            "source_code": "https:\/\/github.com\/minexcoin\/minexcoin",
+            "explorers": [
+                "https:\/\/minexexplorer.com\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/minexcoin\/",
+            "message_board": [],
+            "chat": [
+                "https:\/\/t.me\/minexcoin"
+            ]
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "MNX",
+        "name": "MinexCoin - Mainnet",
+        "testnet": false,
+        "port": 8335,
+        "port_rpc": 17786,
+        "protocol": {
+            "magic": "0x4b4a4c5d"
+        },
+        "seeds_dns": [
+            "seed.bitcoin.sipa.be",
+            "dnsseed.bluematt.me",
+            "dnsseed.bitcoin.dashjr.org",
+            "seed.bitcoinstats.com",
+            "seed.bitcoin.jonasschnelli.ch"
+        ],
+        "prefixes": {
+            "private": 128,
+            "public": 75,
+            "scripthash": 5,
+            "bech32": null,
+            "bip44": 182,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "490a36d9451a55ed197e34aca7414b35d775baa4a8e896f1c577f65ce2d214cb",
+        "message_magic": "\u0018Bitcoin Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "MNX",
+        "name": "MinexCoin - Testnet",
+        "testnet": true,
+        "port": 8336,
+        "port_rpc": 17788,
+        "protocol": {
+            "magic": "0x544a4c54"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 111,
+            "scripthash": 196,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "6ef2e897f7acb347086f9860b2ad401f133fe1b103f77de771aac7b5e88cfe70",
+        "message_magic": "\u0018Bitcoin Signed Message:\n",
+        "decimals": 8
+    },
+    "regtest": {
+        "symbol": "MNX",
+        "name": "MinexCoin - Regtest",
+        "testnet": true,
+        "port": 18444,
+        "port_rpc": 18332,
+        "protocol": {
+            "magic": "0x4b4a4c5d"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 239,
+            "public": 111,
+            "scripthash": 196,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                }
+            }
+        },
+        "hash_genesis_block": "490a36d9451a55ed197e34aca7414b35d775baa4a8e896f1c577f65ce2d214cb",
+        "message_magic": "\u0018Bitcoin Signed Message:\n",
+        "decimals": 8
+    }
+}

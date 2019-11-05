@@ -1,0 +1,118 @@
+{
+    "meta": {
+        "symbol": "MNM",
+        "name": "Mineum",
+        "supply": {
+            "max": null
+        },
+        "web": {
+            "websites": [
+                "https:\/\/mineum.org\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1461341.0",
+            "source_code": "https:\/\/github.com\/antho281\/MINEUM",
+            "explorers": [
+                "http:\/\/70.83.227.32:3000\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/mineum\/",
+            "message_board": [
+                "https:\/\/forum.mineum.org\/"
+            ],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "MNM",
+        "name": "Mineum - Mainnet",
+        "testnet": false,
+        "port": 31316,
+        "port_rpc": 31315,
+        "protocol": {
+            "magic": "0x5ac382d3"
+        },
+        "seeds_dns": [
+            "nodes.muex.io"
+        ],
+        "prefixes": {
+            "public": 51,
+            "scripthash": 85,
+            "private": 179,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "000003572d81eb2b1bbae0720300714f9791f440988d3c04e46fe255de8e281d",
+        "message_magic": "\u0017Mineum Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "MNM",
+        "name": "Mineum - Testnet",
+        "testnet": true,
+        "port": 31317,
+        "port_rpc": 31317,
+        "protocol": {
+            "magic": "0x70352205"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "public": 111,
+            "scripthash": 196,
+            "private": 239,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x043587cf",
+                    "undefined_used_btc": true
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00",
+        "message_magic": "\u0017Mineum Signed Message:\n",
+        "decimals": 8
+    }
+}

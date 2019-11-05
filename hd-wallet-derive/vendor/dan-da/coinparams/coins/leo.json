@@ -1,0 +1,113 @@
+{
+    "meta": {
+        "symbol": "LEO",
+        "name": "LEOcoin",
+        "supply": {
+            "max": "1000000000"
+        },
+        "web": {
+            "websites": [
+                "http:\/\/www.leocoin.org\/",
+                "http:\/\/leocoinfoundation.org\/"
+            ],
+            "announcement": "https:\/\/bitcointalk.org\/index.php?topic=1545712.0",
+            "source_code": "https:\/\/github.com\/Leocoin-project\/LEOcoin",
+            "explorers": [
+                "https:\/\/insight.leocoin.org\/"
+            ],
+            "coinmarketcap": "https:\/\/coinmarketcap.com\/currencies\/leocoin\/",
+            "message_board": [],
+            "chat": []
+        },
+        "original_codebase": "bitcoin"
+    },
+    "main": {
+        "symbol": "LEO",
+        "name": "LEOcoin - Mainnet",
+        "testnet": false,
+        "port": 5840,
+        "port_rpc": 5211,
+        "protocol": {
+            "magic": "0x646e7882"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 144,
+            "public": 18,
+            "scripthash": 88,
+            "bech32": null,
+            "bip44": null,
+            "extended": {
+                "xpub": {
+                    "public": "0x0488b21e",
+                    "private": "0x0488ade4"
+                },
+                "ypub": {
+                    "public": "0x049d7cb2",
+                    "private": "0x049d7878",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x04b24746",
+                    "private": "0x04b2430c",
+                    "undefined_used_btc": true
+                },
+                "Ypub": {
+                    "public": "0x0295b43f",
+                    "private": "0x0295b005",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02aa7ed3",
+                    "private": "0x02aa7a99",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "00000b486d79051b82d3d843550fb893bf605005f098877c4a911f1f58dfd5ca",
+        "message_magic": "\u0018LEOcoin Signed Message:\n",
+        "decimals": 8
+    },
+    "test": {
+        "symbol": "LEO",
+        "name": "LEOcoin - Testnet",
+        "testnet": true,
+        "port": 15840,
+        "port_rpc": 15211,
+        "protocol": {
+            "magic": "0x8c96a0aa"
+        },
+        "seeds_dns": [],
+        "prefixes": {
+            "private": 194,
+            "public": 66,
+            "scripthash": 76,
+            "bech32": null,
+            "bip44": 1,
+            "extended": {
+                "xpub": {
+                    "public": "0x043587cf",
+                    "private": "0x04358394"
+                },
+                "ypub": {
+                    "public": "0x044a5262",
+                    "private": "0x044a4e28",
+                    "undefined_used_btc": true
+                },
+                "zpub": {
+                    "public": "0x045f1cf6",
+                    "private": "0x045f18bc",
+                    "undefined_used_btc": true
+                },
+                "Zpub": {
+                    "public": "0x02575483",
+                    "private": "0x02575048",
+                    "undefined_used_btc": true
+                }
+            }
+        },
+        "hash_genesis_block": "0000fd740a38215055ebf8cff390775524f03b7450673736a733330ebbd424d9",
+        "message_magic": "\u0018LEOcoin Signed Message:\n",
+        "decimals": 8
+    }
+}

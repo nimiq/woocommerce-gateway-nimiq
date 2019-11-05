@@ -1,0 +1,17 @@
+{
+    "name": "dan-da/texttable-php",
+    
+    "autoload": {
+        "classmap": [
+            "texttable.class.php",
+            "texttable_markdown.class.php"
+        ]
+    },
+
+    "require": {
+        "dan-da/strictmode-php": "^1.0"
+    },
+
+    "require-dev": {
+    }
+}
