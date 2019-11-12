@@ -31,7 +31,11 @@ defined( 'ABSPATH' ) or exit;
 
 
 // Make sure WooCommerce is active
-if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+	function nq_show_no_woocommerce_warning() {
+		echo '<div class="notice notice-warning"><p>'. __( 'To use the <strong>Nimiq Checkout for WooCommerce</strong> extension, you must have the WooCommerce plugin installed!', 'wc-gateway-nimiq' ) .'</p></div>';
+	}
+	add_action( 'admin_notices', 'nq_show_no_woocommerce_warning' );
 	return;
 }
 
