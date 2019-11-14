@@ -1,0 +1,32 @@
+{
+    "name": "nimiq/xpub",
+    "version": "1.0.0",
+    "description": "A simple class to derive BTC and ETH extended public keys and addresses without GMP.",
+    "keywords": ["nimiq", "blockchain", "bitcoin", "ethereum", "address", "derivation", "bcmath"],
+    "homepage": "https://github.com/nimiq/php-xpub",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Sören Schwert",
+            "email": "soeren@nimiq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "scripts": {
+        "test": "php test/test.php"
+    },
+    "require": {
+        "php": "^7.1",
+        "ext-bcmath": "*",
+        "simplito/elliptic-php": "^1.0",
+        "stephenhill/base58": "^1.1",
+        "kornrunner/keccak": "^1.0",
+        "bitwasp/bech32": "^0.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nimiq\\": "src/"
+        }
+    }
+}
