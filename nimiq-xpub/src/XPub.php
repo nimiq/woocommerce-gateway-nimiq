@@ -39,6 +39,15 @@ class XPub {
         $c = bin2hex(substr($xpub_bin, 13, 32));
         $K = bin2hex(substr($xpub_bin, 45, 33));
 
+        // Validate checksum if available
+        $checksum = substr($xpub_bin, 78, 4);
+        if (!empty($checksum)) {
+            $base_xpub_hex = bin2hex(substr($xpub_bin, 0, 78));
+            if (substr(self::doubleSha256($base_xpub_hex), 0, 8) !== bin2hex($checksum)) {
+                throw new \Exception('Checksum of xpub is invalid!');
+            }
+        }
+
         return new self(
             $version,
             $depth,
@@ -132,7 +141,7 @@ class XPub {
         switch ($coin) {
             case 'btc': return $this->toBTCAddress();
             case 'eth': return $this->toETHAddress();
-            default: throw new Exception('Coin type "' . $coin . '" not supported!');
+            default: throw new \Exception('Coin type "' . $coin . '" not supported!');
         }
     }
 
@@ -140,7 +149,7 @@ class XPub {
         switch ($this->version) {
             case 'xpub': case 'tpub': return $this->toBTCP2PKHAddress();
             case 'zpub': case 'vpub': return $this->toBTCP2WPKHAddress();
-            default: throw new Exception('Version "' . $this->version . '" not supported!');
+            default: throw new \Exception('Version "' . $this->version . '" not supported!');
         }
     }
 
