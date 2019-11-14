@@ -8,30 +8,43 @@ if ( array_key_exists( 'HTTPS', $_SERVER ) && $_SERVER[ 'HTTPS' ] === 'on' ) {
     $redirect_behaviour_options['redirect'] = 'Redirect';
 }
 
+
+
+// Check if the store NIM address is set and show admin notice otherwise
+// Custom function not required by the gateway
+// function do_php_extension_check() {
+//     if( $this->enabled === "yes" ) {
+//         if( !function_exists('\gmp_init') && !function_exists('\bcmul') ) {
+//             echo '<div class="error notice"><p>'. __( 'You must install & enable either the php-bcmath or php-gmp extension to use Nimiq Checkout for WooCommerce.', 'wc-gateway-nimiq' ) .'</p></div>';
+//         }
+//     }
+// }
+
 $woo_nimiq_checkout_settings = [
-    'enabled' => [
-        'title'   => __( 'Enable/Disable', 'wc-gateway-nimiq' ),
-        'type'    => 'checkbox',
-        'label'   => __( 'Enable Crypto Checkout', 'wc-gateway-nimiq' ),
-        'default' => 'yes'
-    ],
-
-    'network' => [
-        'title'       => __( 'Nimiq Network Mode', 'wc-gateway-nimiq' ),
-        'type'        => 'select',
-        'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
-        'default'     => 'test',
-        'options'     => [ 'main' => 'Mainnet', 'test' => 'Testnet' ],
+    'shop_logo_url' => [
+        'title'       => __( 'Shop Logo URL', 'wc-gateway-nimiq' ),
+        'type'        => 'text',
+        'description' => __( 'An image that should be displayed instead of the shop\'s identicon. ' .
+                             'The URL must be under the same domain as the webshop. ' .
+                             'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
+        'default'     => '',
+        'placeholder' => 'Leave empty to use your WordPress\'s site icon.',
         'desc_tip'    => true,
     ],
 
-    'network_btc_eth' => [
-        'title'       => __( 'BTC/ETH Network Mode', 'wc-gateway-nimiq' ),
-        'type'        => 'select',
-        'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
-        'default'     => 'main',
-        'options'     => [ 'main' => 'Mainnet', 'test' => 'Testnet' ],
+    'instructions' => [
+        'title'       => __( 'Email Instructions', 'wc-gateway-nimiq' ),
+        'type'        => 'textarea',
+        'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
+        'default'     => __( 'You will receive email updates after your payment has been confirmed and when we shipped your order.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
+    ],
+
+    'section_nimiq' => [
+        'title'       => 'Nimiq',
+        'type'        => 'title',
+        'description' => 'All Nimiq-related settings',
+        'class'       => 'nimiq-section',
     ],
 
     'nimiq_address' => [
@@ -43,52 +56,11 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
-    'bitcoin_xpub' => [
-        'title'       => __( 'Wallet BTC xPublic Key', 'wc-gateway-nimiq' ),
+    'message' => [
+        'title'       => __( 'NIM Transaction Message', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Your Bitcoin xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
-        'default'     => '',
-        'placeholder' => 'xpub...',
-        'desc_tip'    => true,
-    ],
-
-    'ethereum_xpub' => [
-        'title'       => __( 'Wallet ETH xPublic Key', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
-        'description' => __( 'Your Ethereum xpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
-        'default'     => '',
-        'placeholder' => '0x...',
-        'desc_tip'    => true,
-    ],
-
-    'reuse_eth_addresses' => [
-        'title'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
-        'type'    => 'checkbox',
-        'description' => __( 'Re-using addresses reduces your shop\'s privacy.', 'wc-gateway-nimiq' ),
-        'label'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
-        'default' => 'no'
-    ],
-
-    'margin' => [
-        'title'       => __( 'Margin Percentage', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'description' => __( 'A margin to apply to crypto payments, in percent. Can also be negative.', 'wc-gateway-nimiq' ),
-        'default'     => 0,
-        'placeholder' => '0',
-        'desc_tip'    => true,
-    ],
-
-    'price_service' => [
-        'title'       => __( 'Exchange Rate Source', 'wc-gateway-nimiq' ),
-        'type'        => 'select',
-        'description' => __( 'Which service to use for fetching price information for currency conversion.', 'wc-gateway-nimiq' ),
-        'default'     => 'coingecko',
-        'options'     => [
-            // List available price services here. The option value must match the file name.
-            'coingecko' => 'Coingecko',
-            'fastspot'  => 'Fastspot (also estimates fees)',
-            // 'nimiqx'    => 'NimiqX (Nimiq only)',
-        ],
+        'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
+        'default'     => __( 'Thank you for shopping with us!', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
     ],
 
@@ -140,6 +112,22 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
+    'section_bitcoin' => [
+        'title'       => 'Bitcoin',
+        'type'        => 'title',
+        'description' => 'All Bitcoin-related settings',
+        'class'       => 'bitcoin-section',
+    ],
+
+    'bitcoin_xpub' => [
+        'title'       => __( 'Wallet BTC xPublic Key', 'wc-gateway-nimiq' ),
+        'type'        => 'text',
+        'description' => __( 'Your Bitcoin xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
+        'default'     => '',
+        'placeholder' => 'xpub...',
+        'desc_tip'    => true,
+    ],
+
     'validation_service_btc' => [
         'title'       => __( 'Bitcoin Chain Monitoring', 'wc-gateway-nimiq' ),
         'type'        => 'select',
@@ -150,6 +138,30 @@ $woo_nimiq_checkout_settings = [
             'blockstream'  => 'Blockstream.info (testnet & mainnet)',
         ],
         'desc_tip'    => true,
+    ],
+
+    'section_ethereum' => [
+        'title'       => 'Ethereum',
+        'type'        => 'title',
+        'description' => 'All Ethereum-related settings',
+        'class'       => 'ethereum-section',
+    ],
+
+    'ethereum_xpub' => [
+        'title'       => __( 'Wallet ETH xPublic Key', 'wc-gateway-nimiq' ),
+        'type'        => 'text',
+        'description' => __( 'Your Ethereum xpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
+        'default'     => '',
+        'placeholder' => '0x...',
+        'desc_tip'    => true,
+    ],
+
+    'reuse_eth_addresses' => [
+        'title'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'type'    => 'checkbox',
+        'description' => __( 'Re-using addresses reduces your shop\'s privacy.', 'wc-gateway-nimiq' ),
+        'label'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'default' => 'no'
     ],
 
     'validation_service_eth' => [
@@ -173,6 +185,44 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
+    'section_advanced' => [
+        'title' => 'Advanced',
+        'type' => 'title',
+        'description' => 'All Bitcoin-related settings',
+    ],
+
+    'network' => [
+        'title'       => __( 'Network Mode', 'wc-gateway-nimiq' ),
+        'type'        => 'select',
+        'description' => __( 'Which network to use. Use the Testnet for testing.', 'wc-gateway-nimiq' ),
+        'default'     => 'main',
+        'options'     => [ 'main' => 'Mainnet', 'test' => 'Testnet' ],
+        'desc_tip'    => true,
+    ],
+
+    'price_service' => [
+        'title'       => __( 'Exchange Rate Source', 'wc-gateway-nimiq' ),
+        'type'        => 'select',
+        'description' => __( 'Which service to use for fetching price information for currency conversion.', 'wc-gateway-nimiq' ),
+        'default'     => 'fastspot',
+        'options'     => [
+            // List available price services here. The option value must match the file name.
+            'fastspot'  => 'Fastspot (also estimates fees)',
+            'coingecko' => 'Coingecko',
+            // 'nimiqx'    => 'NimiqX (Nimiq only)',
+        ],
+        'desc_tip'    => true,
+    ],
+
+    'margin' => [
+        'title'       => __( 'Margin Percentage', 'wc-gateway-nimiq' ),
+        'type'        => 'number',
+        'description' => __( 'A margin to apply to crypto payments, in percent. Can also be negative.', 'wc-gateway-nimiq' ),
+        'default'     => 0,
+        'placeholder' => '0',
+        'desc_tip'    => true,
+    ],
+
     'validation_interval' => [
         'title'       => __( 'Validation Interval', 'wc-gateway-nimiq' ),
         'type'        => 'number',
@@ -188,25 +238,6 @@ $woo_nimiq_checkout_settings = [
         'description' => __( 'How the user should visit the Nimiq Checkout.', 'wc-gateway-nimiq' ),
         'default'     => 'popup',
         'options'     => $redirect_behaviour_options,
-        'desc_tip'    => true,
-    ],
-
-    'shop_logo_url' => [
-        'title'       => __( 'Shop Logo URL', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
-        'description' => __( 'An image that should be displayed instead of the shop\'s identicon. ' .
-                             'The URL must be under the same domain as the webshop. ' .
-                             'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
-        'default'     => '',
-        'placeholder' => 'Required for BTC and ETH, falls back to Wordpress Site Icon.',
-        'desc_tip'    => true,
-    ],
-
-    'message' => [
-        'title'       => __( 'NIM Transaction Message', 'wc-gateway-nimiq' ),
-        'type'        => 'text',
-        'description' => __( 'Enter a message that should be included in every transaction. 50 byte limit.', 'wc-gateway-nimiq' ),
-        'default'     => __( 'Thank you for shopping with us!', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
     ],
 
@@ -266,29 +297,21 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
-    'instructions' => [
-        'title'       => __( 'Email Instructions', 'wc-gateway-nimiq' ),
-        'type'        => 'textarea',
-        'description' => __( 'Instructions that will be added to the thank-you page and emails.', 'wc-gateway-nimiq' ),
-        'default'     => __( 'You will receive email updates after your payment has been confirmed and when we shipped your order.', 'wc-gateway-nimiq' ),
-        'desc_tip'    => true,
-    ],
+    // 'current_address_index_btc' => [
+    //     'title'       => __( '[BTC Address Index]', 'wc-gateway-nimiq' ),
+    //     'type'        => 'number',
+    //     'min'    => '-1',
+    //     'description' => __( 'DO NOT CHANGE! The current BTC address derivation index.', 'wc-gateway-nimiq' ),
+    //     'default'     => -1,
+    //     'desc_tip'    => true,
+    // ],
 
-    'current_address_index_btc' => [
-        'title'       => __( '[BTC Address Index]', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'min'    => '-1',
-        'description' => __( 'DO NOT CHANGE! The current BTC address derivation index.', 'wc-gateway-nimiq' ),
-        'default'     => -1,
-        'desc_tip'    => true,
-    ],
-
-    'current_address_index_eth' => [
-        'title'       => __( '[ETH Address Index]', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'min'    => '-1',
-        'description' => __( 'DO NOT CHANGE! The current ETH address derivation index.', 'wc-gateway-nimiq' ),
-        'default'     => -1,
-        'desc_tip'    => true,
-    ],
+    // 'current_address_index_eth' => [
+    //     'title'       => __( '[ETH Address Index]', 'wc-gateway-nimiq' ),
+    //     'type'        => 'number',
+    //     'min'    => '-1',
+    //     'description' => __( 'DO NOT CHANGE! The current ETH address derivation index.', 'wc-gateway-nimiq' ),
+    //     'default'     => -1,
+    //     'desc_tip'    => true,
+    // ],
 ];
