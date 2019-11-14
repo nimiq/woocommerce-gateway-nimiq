@@ -1,8 +1,8 @@
 <?php
 
-include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'hd-wallet-derive/vendor/autoload.php' );
+include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'nimiq-xpub/vendor/autoload.php' );
 
-use App as HDWalletDerive;
+use Nimiq\XPub;
 
 class Address_Deriver {
     public function __construct( $gateway ) {
@@ -111,29 +111,15 @@ class Address_Deriver {
             return null;
         }
 
-        $coin = $currency;
-        if ( $currency === 'btc' && $this->gateway->get_option( 'network_btc_eth' ) === 'test' ) {
-            $coin .= '-test';
+        // Path 'm/0' from account xpub to external address space (BIP-44 for both BTC and ETH)
+        $xpub_0 = XPub::fromString( $xpub )->derive( 0 );
+
+        $addresses = [];
+
+        for ($i = $startindex; $i < $startindex + $numderive; $i++) {
+            $addresses[] = $xpub_0->derive( $i )->toAddress( $currency );
         }
 
-        $path = 'm/0'; // Path from account xpub to external address (BIP-44 for both BTC and ETH)
-
-        $params = [
-            'path' => $path,
-            'startindex' => $startindex,
-            'numderive' => $numderive,
-            'coin' => $coin,
-
-            // Required defaults
-            'addr-type' => 'auto',
-            'includeroot' => false,
-        ];
-
-        $walletDerive = new HDWalletDerive\WalletDerive( $params );
-        $keys = $walletDerive->derive_keys( $xpub );
-
-        return array_map( function( $key ) {
-            return $key[ 'address' ];
-        }, $keys );
+        return $addresses;
     }
 }
