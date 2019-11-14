@@ -496,8 +496,8 @@ function wc_nimiq_gateway_init() {
 					<?php } ?>
 
 					<button type="submit" class="button" id="nim_pay_button">
-						<?php _e( 'Pay with Crypto', 'wc-gateway-nimiq' ) ?>
 						<?php echo $this->get_icon(); ?>
+						<span><?php _e( 'Pay with Crypto', 'wc-gateway-nimiq' ) ?></span>
 					</button>
 				</div>
 
