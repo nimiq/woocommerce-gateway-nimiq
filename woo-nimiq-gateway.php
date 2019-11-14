@@ -39,6 +39,31 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
 	return;
 }
 
+// Make sure the shop is running on PHP >= 7.1
+if ( !defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70100 ) {
+	function nq_show_insufficient_php_version() {
+		echo '<div class="notice notice-warning"><p>'. __( 'To use the <strong>Nimiq Checkout for WooCommerce</strong> extension, you need to use PHP >= 7.1.', 'wc-gateway-nimiq' ) .'</p></div>';
+	}
+	add_action( 'admin_notices', 'nq_show_insufficient_php_version' );
+	return;
+}
+
+$woo_nimiq_is_localhost = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false;
+$woo_nimiq_has_https    = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !== 'off') || $_SERVER[ 'SERVER_PORT' ] === 443;
+$woo_nimiq_has_fiat     = get_option( 'woocommerce_currency' ) !== 'NIM';
+
+// Include NIM currency
+include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
+
+// Make sure the shop is on HTTPS when using a FIAT currency
+if ( (!$woo_nimiq_is_localhost && !$woo_nimiq_has_https) && $woo_nimiq_has_fiat ) {
+	function nq_show_no_https_warning() {
+		echo '<div class="notice notice-warning"><p>'. __( 'To use the <strong>Nimiq Checkout for WooCommerce</strong> extension with a currency other than NIM, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this message is a mistake, contact us at %s.</em>', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</p></div>';
+	}
+	add_action( 'admin_notices', 'nq_show_no_https_warning' );
+	return;
+}
+
 // Un-hide Wordpress' regular Custom Fields
 // TODO: Integrate with ACF to display plugin data instead
 add_filter('acf/settings/remove_wp_meta_box', '__return_false');
@@ -685,7 +710,6 @@ function wc_nimiq_gateway_init() {
 } // end wc_nimiq_gateway_init()
 
 // Includes that register actions and filters and are thus self-calling
-include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/bulk_actions.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/validation_scheduler.php' );
 include_once( plugin_dir_path( __FILE__ ) . 'includes/webhook.php' );
