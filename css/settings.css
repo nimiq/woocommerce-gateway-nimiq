@@ -1,0 +1,81 @@
+.wc-settings-sub-title.section-nimiq,
+.wc-settings-sub-title.section-bitcoin,
+.wc-settings-sub-title.section-bitcoin-disabled,
+.wc-settings-sub-title.section-ethereum,
+.wc-settings-sub-title.section-ethereum-disabled,
+.wc-settings-sub-title.section-advanced {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: solid 1px rgba(35, 40, 45, 0.1);
+}
+
+.wc-settings-sub-title.section-nimiq::after,
+.wc-settings-sub-title.section-bitcoin::after,
+.wc-settings-sub-title.section-bitcoin-disabled::after,
+.wc-settings-sub-title.section-ethereum::after,
+.wc-settings-sub-title.section-ethereum-disabled::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 21px;
+    background-size: contain;
+    margin-left: 8px;
+    margin-bottom: -5px;
+    background-repeat: no-repeat;
+}
+
+.wc-settings-sub-title.section-nimiq::after {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="28" viewBox="0 0 26 28"><defs><radialGradient id="nimiq-radial-gradient" cx="-166.58" cy="275.96" r="1.06" gradientTransform="matrix(-24.62, 0, 0, 21.78, -4075.39, -5984.84)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="%23ec991c"/><stop offset="1" stop-color="%23e9b213"/></radialGradient></defs><path fill="url(%23nimiq-radial-gradient)" d="M25.71,12.92,20.29,3.58A2.16,2.16,0,0,0,18.42,2.5H7.58A2.15,2.15,0,0,0,5.71,3.58L.29,12.92a2.14,2.14,0,0,0,0,2.16l5.42,9.34A2.15,2.15,0,0,0,7.58,25.5H18.42a2.16,2.16,0,0,0,1.87-1.08l5.42-9.34A2.14,2.14,0,0,0,25.71,12.92Z"/></svg>');
+}
+
+.wc-settings-sub-title.section-bitcoin::after,
+.wc-settings-sub-title.section-bitcoin-disabled::after {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="28" viewBox="0 0 26 28"><path fill="%23f7931a" d="M25.61,17.15A13,13,0,1,1,16.14,1.39,13,13,0,0,1,25.61,17.15Z"/><path fill="%23fff" d="M18.73,12.15c.26-1.73-1.06-2.66-2.86-3.28l.59-2.35L15,6.17l-.57,2.28-1.14-.27.57-2.3-1.42-.35-.59,2.34L11,7.66h0L9,7.16,8.63,8.68s1,.24,1,.26a.77.77,0,0,1,.67.83l-.67,2.67s0,0,0,0l-.94,3.74a.52.52,0,0,1-.65.34s-1-.26-1-.26l-.7,1.63,1.85.46,1,.27L8.61,21l1.42.35L10.62,19l1.14.29-.59,2.34L12.6,22l.59-2.36c2.43.46,4.26.27,5-1.93a2.5,2.5,0,0,0-1.31-3.46A2.26,2.26,0,0,0,18.73,12.15Zm-3.26,4.57c-.44,1.77-3.42.81-4.39.57l.79-3.14C12.83,14.39,15.93,14.87,15.47,16.72Zm.44-4.6c-.4,1.61-2.88.79-3.69.59l.71-2.84C13.74,10.07,16.33,10.44,15.91,12.12Z"/></svg>');
+}
+
+.wc-settings-sub-title.section-ethereum::after,
+.wc-settings-sub-title.section-ethereum-disabled::after {
+    width: 14px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="28" viewBox="0 0 18 28"><path class="cls-1" d="M9,21v7l9-12.08Z"/><path d="M9,10.36v9l9-5.09Z"/><path fill="%232f3030" d="M9,0V10.37l9,3.9Z"/><path fill="%23828384" d="M9,21v7L0,15.92Z"/><path fill="%23343535" d="M9,10.36v9L0,14.27Z"/><path fill="%23828384" d="M9,0V10.37l-9,3.9Z"/></svg> ');
+}
+
+.wc-settings-sub-title.section-bitcoin-disabled + p + table,
+.wc-settings-sub-title.section-ethereum-disabled + p + table {
+    display: none;
+}
+
+.wc-settings-sub-title.section-advanced {
+    cursor: pointer;
+    margin-bottom: 0;
+    padding-bottom: 1em;
+}
+
+.wc-settings-sub-title.section-advanced::after {
+    content: 'toggle';
+    margin-left: 8px;
+    font-weight: normal;
+    text-decoration: underline;
+    opacity: 0.6;
+    font-size: 0.9em;
+}
+
+.wc-settings-sub-title.section-advanced + p {
+    margin-top: 0;
+}
+
+.wc-settings-sub-title.section-advanced + p + table {
+    display: none;
+}
+
+.required + span {
+    margin-left: 8px;
+    color: red;
+    vertical-align: top;
+}
+
+#nimiq_shop_logo_preview {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: -8px 0 -8px 16px;
+}

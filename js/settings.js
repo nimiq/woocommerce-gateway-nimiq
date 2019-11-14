@@ -5,7 +5,7 @@
      * @param {string} service_slug
      * @param {boolean} is_setup
      */
-    function on_price_service_change(service_slug, is_setup){
+    function on_price_service_change(service_slug, is_setup) {
         console.debug('Price service selected:', service_slug);
 
         // Disable all non-common conditional fields
@@ -102,4 +102,29 @@
     on_price_service_change(price_service, true);
     on_validation_service_change(validation_service, true);
     toggle_common_fields();
+
+    // Add click listener to toggle advanced section
+    $('#woocommerce_nimiq_gateway_section_advanced').click(function() {
+        console.log('boop')
+        $('#woocommerce_nimiq_gateway_section_advanced + p + table').toggle('fast');
+    });
+
+    // Add image preview to shop logo field
+    const $shop_logo_url = $('#woocommerce_nimiq_gateway_shop_logo_url');
+    function update_shop_logo_preview() {
+        const src = $shop_logo_url.val() || $shop_logo_url.data('site-icon');
+        console.log(src);
+        const $preview = $('#nimiq_shop_logo_preview');
+        if ($preview.length) {
+            $preview.attr('src', src);
+        } else {
+            $shop_logo_url.after('<img id="nimiq_shop_logo_preview" src="' + src + '">');
+        }
+    }
+    $shop_logo_url.on('input', update_shop_logo_preview);
+    update_shop_logo_preview();
+
+    // Add asterix to required fields
+    $('.required').after('<span>*</span>');
+
 })(jQuery);

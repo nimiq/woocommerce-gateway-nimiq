@@ -1,35 +1,31 @@
 <?php
 
-$redirect_behaviour_options = [
-    'popup' => 'Popup'
-];
+$woo_nimiq_has_site_icon = !empty( get_site_icon_url() );
+$woo_nimiq_has_https     = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !== 'off') || $_SERVER[ 'SERVER_PORT' ] === 443;
+$woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcmul');
 
-if ( array_key_exists( 'HTTPS', $_SERVER ) && $_SERVER[ 'HTTPS' ] === 'on' ) {
-    $redirect_behaviour_options['redirect'] = 'Redirect';
+$woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Checkout for WooCommerce</strong>.', 'wc-gateway-nimiq' );
+
+$woo_nimiq_redirect_behaviour_options = [ 'popup' => 'Popup' ];
+if ( $woo_nimiq_has_https ) {
+    $woo_nimiq_redirect_behaviour_options['redirect'] = 'Redirect';
 }
-
-
-
-// Check if the store NIM address is set and show admin notice otherwise
-// Custom function not required by the gateway
-// function do_php_extension_check() {
-//     if( $this->enabled === "yes" ) {
-//         if( !function_exists('\gmp_init') && !function_exists('\bcmul') ) {
-//             echo '<div class="error notice"><p>'. __( 'You must install & enable either the php-bcmath or php-gmp extension to use Nimiq Checkout for WooCommerce.', 'wc-gateway-nimiq' ) .'</p></div>';
-//         }
-//     }
-// }
 
 $woo_nimiq_checkout_settings = [
     'shop_logo_url' => [
         'title'       => __( 'Shop Logo URL', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'An image that should be displayed instead of the shop\'s identicon. ' .
+        'description' => __( 'An image that gets displayed during the Checkout. ' .
                              'The URL must be under the same domain as the webshop. ' .
                              'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
-        'default'     => '',
-        'placeholder' => 'Leave empty to use your WordPress\'s site icon.',
+        'placeholder' => $woo_nimiq_has_site_icon
+            ? __( 'Optional - Leave empty to use your WordPress\'s site icon.', 'wc-gateway-nimiq' )
+            : __( 'Enter your image URL', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
+        'class'       => $woo_nimiq_has_site_icon ? '' : 'required',
+        'custom_attributes' => [
+            'data-site-icon' => get_site_icon_url(),
+        ],
     ],
 
     'instructions' => [
@@ -43,17 +39,17 @@ $woo_nimiq_checkout_settings = [
     'section_nimiq' => [
         'title'       => 'Nimiq',
         'type'        => 'title',
-        'description' => 'All Nimiq-related settings',
-        'class'       => 'nimiq-section',
+        'description' => sprintf( __( 'All %s-related settings', 'wc-gateway-nimiq' ), 'Nimiq'),
+        'class'       => 'section-nimiq',
     ],
 
     'nimiq_address' => [
         'title'       => __( 'Wallet NIM Address', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'Your Nimiq address where orders are paid to.', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'placeholder' => 'NQ...',
         'desc_tip'    => true,
+        'class'       => 'required',
     ],
 
     'message' => [
@@ -85,13 +81,13 @@ $woo_nimiq_checkout_settings = [
         'default'     => 'http://localhost:8648',
         'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
+        'class'       => 'required',
     ],
 
     'jsonrpc_nimiq_username' => [
         'title'       => __( 'Nimiq JSON-RPC Username', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( '(Optional) Username for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'desc_tip'    => true,
     ],
 
@@ -99,7 +95,6 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Nimiq JSON-RPC Password', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( '(Optional) Password for the protected JSON-RPC service', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'desc_tip'    => true,
     ],
 
@@ -107,23 +102,24 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'NimiqX API Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'Token for accessing the NimiqX exchange rate and chain monitoring service.', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
+        'class'       => 'required',
     ],
 
     'section_bitcoin' => [
         'title'       => 'Bitcoin',
         'type'        => 'title',
-        'description' => 'All Bitcoin-related settings',
-        'class'       => 'bitcoin-section',
+        'description' => $woo_nimiq_has_extension
+            ? sprintf( __( 'All %s-related settings', 'wc-gateway-nimiq' ), 'Bitcoin')
+            : sprintf( $woo_nimiq_no_extension_error, 'Bitcoin' ),
+        'class'       => $woo_nimiq_has_extension ? 'section-bitcoin' : 'section-bitcoin-disabled',
     ],
 
     'bitcoin_xpub' => [
         'title'       => __( 'Wallet BTC xPublic Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'Your Bitcoin xpub/zpub/tpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'placeholder' => 'xpub...',
         'desc_tip'    => true,
     ],
@@ -143,25 +139,26 @@ $woo_nimiq_checkout_settings = [
     'section_ethereum' => [
         'title'       => 'Ethereum',
         'type'        => 'title',
-        'description' => 'All Ethereum-related settings',
-        'class'       => 'ethereum-section',
+        'description' => $woo_nimiq_has_extension
+            ? sprintf( __( 'All %s-related settings', 'wc-gateway-nimiq' ), 'Ethereum')
+            : sprintf( $woo_nimiq_no_extension_error, 'Ethereum' ),
+        'class'       => $woo_nimiq_has_extension ? 'section-ethereum' : 'section-ethereum-disabled',
     ],
 
     'ethereum_xpub' => [
         'title'       => __( 'Wallet ETH xPublic Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'Your Ethereum xpub from which recipient addresses are derived.', 'wc-gateway-nimiq' ),
-        'default'     => '',
-        'placeholder' => '0x...',
+        'placeholder' => 'xpub...',
         'desc_tip'    => true,
     ],
 
     'reuse_eth_addresses' => [
-        'title'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
-        'type'    => 'checkbox',
+        'title'       => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'type'        => 'checkbox',
         'description' => __( 'Re-using addresses reduces your shop\'s privacy.', 'wc-gateway-nimiq' ),
-        'label'   => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
-        'default' => 'no'
+        'label'       => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
+        'default'     => 'no'
     ],
 
     'validation_service_eth' => [
@@ -180,15 +177,16 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Etherscan.io API Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
         'description' => __( 'Token for accessing the Etherscan chain monitoring service.', 'wc-gateway-nimiq' ),
-        'default'     => '',
         'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
+        'class'       => 'required',
     ],
 
     'section_advanced' => [
-        'title' => 'Advanced',
-        'type' => 'title',
-        'description' => 'All Bitcoin-related settings',
+        'title'       => 'Advanced',
+        'type'        => 'title',
+        'description' => 'Settings for when you know what you are doing',
+        'class'       => 'section-advanced'
     ],
 
     'network' => [
@@ -214,12 +212,35 @@ $woo_nimiq_checkout_settings = [
         'desc_tip'    => true,
     ],
 
+    'fee_nim' => [
+        'title'       => __( 'NIM Fee per Byte', 'wc-gateway-nimiq' ),
+        'type'        => 'number',
+        'description' => __( 'Luna per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
+        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 1, 'luna' ),
+        'desc_tip'    => true,
+    ],
+
+    'fee_btc' => [
+        'title'       => __( 'BTC Fee per Byte', 'wc-gateway-nimiq' ),
+        'type'        => 'number',
+        'description' => __( 'Satoshi per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
+        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 40, 'satoshi' ),
+        'desc_tip'    => true,
+    ],
+
+    'fee_eth' => [
+        'title'       => __( 'ETH Gas Price (Gwei)', 'wc-gateway-nimiq' ),
+        'type'        => 'number',
+        'description' => __( 'Gas price in Gwei to be applied to transactions.', 'wc-gateway-nimiq' ),
+        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 8, 'gwei' ),
+        'desc_tip'    => true,
+    ],
+
     'margin' => [
         'title'       => __( 'Margin Percentage', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'A margin to apply to crypto payments, in percent. Can also be negative.', 'wc-gateway-nimiq' ),
-        'default'     => 0,
-        'placeholder' => '0',
+        'placeholder' => 'Optional - Default: 0%',
         'desc_tip'    => true,
     ],
 
@@ -227,8 +248,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Validation Interval', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'Interval to validate transactions, in minutes. If you change this, disable and enable this plugin to apply the new interval.', 'wc-gateway-nimiq' ),
-        'default'     => 5,
-        'placeholder' => '5 minutes',
+        'placeholder' => sprintf( __( 'Optional - Default: %d minutes', 'wc-gateway-nimiq' ), 5 ),
         'desc_tip'    => true,
     ],
 
@@ -237,31 +257,7 @@ $woo_nimiq_checkout_settings = [
         'type'        => 'select',
         'description' => __( 'How the user should visit the Nimiq Checkout.', 'wc-gateway-nimiq' ),
         'default'     => 'popup',
-        'options'     => $redirect_behaviour_options,
-        'desc_tip'    => true,
-    ],
-
-    'fee_nim' => [
-        'title'       => __( 'NIM Fee per Byte', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'description' => __( 'Luna per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'default'     => 1,
-        'desc_tip'    => true,
-    ],
-
-    'fee_btc' => [
-        'title'       => __( 'BTC Fee per Byte', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'description' => __( 'Satoshi per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'default'     => 40,
-        'desc_tip'    => true,
-    ],
-
-    'fee_eth' => [
-        'title'       => __( 'ETH Gas Price (Gwei)', 'wc-gateway-nimiq' ),
-        'type'        => 'number',
-        'description' => __( 'Gas price in Gwei to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'default'     => 8,
+        'options'     => $woo_nimiq_redirect_behaviour_options,
         'desc_tip'    => true,
     ],
 
@@ -269,7 +265,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Mempool Wait Limit', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'How many minutes to wait for a transaction to be found, before marking the order as failed.', 'wc-gateway-nimiq' ),
-        'default'     => 120, // 2 hours
+        'placeholder' => sprintf( __( 'Optional - Default: %d minutes', 'wc-gateway-nimiq' ), 120 ),
         'desc_tip'    => true,
     ],
 
@@ -277,7 +273,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Required NIM Confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Nimiq transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 10, // ~ 10 minutes
+        'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 10 ),
         'desc_tip'    => true,
     ],
 
@@ -285,7 +281,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Required BTC Confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Bitcoin transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 2, // ~ 20 minutes
+        'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 2 ),
         'desc_tip'    => true,
     ],
 
@@ -293,7 +289,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Required ETH Confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept an Ethereum transaction.', 'wc-gateway-nimiq' ),
-        'default'     => 45, // ~ 10 minutes
+        'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 45 ),
         'desc_tip'    => true,
     ],
 

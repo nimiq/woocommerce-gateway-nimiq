@@ -14,7 +14,7 @@ function wc_nimiq_start_validation_schedule() {
         wc_nimiq_gateway_init();
         $gateway = new WC_Gateway_Nimiq();
 
-        $interval_minutes = intval( $gateway->get_option( 'validation_interval' ) ) ?: 30;
+        $interval_minutes = intval( $gateway->get_setting( 'validation_interval' ) ) ?: 30;
         $interval = $interval_minutes * 60; // Convert to seconds
 
         as_schedule_recurring_action( $next_quarter_hour, $interval, 'wc_nimiq_scheduled_validation' );

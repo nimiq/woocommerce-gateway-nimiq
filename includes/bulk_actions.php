@@ -88,7 +88,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		if ( !$service->transaction_found() || $service->confirmations() === 0 ) {
 			// Check if order date is earlier than tx_wait_duration ago
 			$order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
-			$time_limit = strtotime( '-' . $gateway->get_option( 'tx_wait_duration' ) . ' minutes' );
+			$time_limit = strtotime( '-' . $gateway->get_setting( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
 				fail_order( $order, __( 'Transaction not found or mined within wait duration.', 'wc-gateway-nimiq' ) );
@@ -110,7 +110,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		// Note that in the regular case, when the Hub returns successfully, a valid transaction hash is already stored
 		// in the order and this case is not relevant.
 		$expires = $order->get_meta( 'crypto_rate_expires' );
-		$interval = $gateway->get_option( 'validation_interval' );
+		$interval = $gateway->get_setting( 'validation_interval' );
 		if ( $expires && empty( $transaction_hash ) && $expires < strtotime( '-' . $interval . ' minutes' ) ) {
 			fail_order( $order, __( 'Transaction only found after quote expired.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
@@ -153,13 +153,13 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		}
 
 		// Check if transaction is 'confirmed' yet according to confirmation setting
-		if ( $service->confirmations() < $gateway->get_option( 'confirmations_' . $currency ) ) {
+		if ( $service->confirmations() < $gateway->get_setting( 'confirmations_' . $currency ) ) {
 			// Transaction valid but not yet confirmed
 
 			if ( $order->get_status() === 'pending' ) {
 				// Set order to 'on-hold', if order expires (hold_stock) before next scheduled run
 				$order_expiry = Order_Utils::get_order_hold_expiry( $order );
-				$interval = $gateway->get_option( 'validation_interval' );
+				$interval = $gateway->get_setting( 'validation_interval' );
 				if ( $order_expiry && $order_expiry < strtotime( '+' . $interval . ' minutes' ) ) {
 					$order->update_status( 'on-hold', __( 'Valid transaction found, awaiting confirmation.', 'wc-gateway-nimiq' ) );
 				}

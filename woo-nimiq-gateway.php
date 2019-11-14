@@ -98,6 +98,18 @@ function wc_nimiq_gateway_init() {
 			$this->method_title       = 'Nimiq Crypto Checkout';
 			$this->method_description = __( 'Allows crypto payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
 
+			$this->DEFAULTS = [
+				'margin' => 0,
+				'validation_interval' => 5,
+				'fee_nim' => 1,
+				'fee_btc' => 40,
+				'fee_eth' => 8,
+				'tx_wait_duration' => 120, // 2 hours
+				'confirmations_nim' => 10, // ~ 10 minutes
+				'confirmations_btc' => 2,  // ~ 20 minutes
+				'confirmations_eth' => 45, // ~ 10 minutes
+			];
+
 			// Load the settings.
 			$this->init_form_fields();
 			$this->init_settings();
@@ -188,6 +200,10 @@ function wc_nimiq_gateway_init() {
 			return '<img src="' . $icon_src . '" alt="' . $alt . '">';
 		}
 
+		public function get_setting( $key ) {
+			return $this->get_option( $key, isset( $this->DEFAULTS[ $key ] ) ? $this->DEFAULTS[ $key ] : null );
+		}
+
 		public function get_currencies_for_description() {
 			$names = array_map( function( $iso ) {
 				return ucfirst( Crypto_Manager::iso_to_name( $iso ) )/* . ' (' . strtoupper( $iso ) . ')'*/;
@@ -275,7 +291,7 @@ function wc_nimiq_gateway_init() {
 					$accepted_cryptos = $this->crypto_manager->get_accepted_cryptos();
 
 					// Apply margin to order value
-					$margin = floatval( $this->get_option( 'margin', '0' ) ) / 100;
+					$margin = floatval( $this->get_setting( 'margin' ) ) / 100;
 					$effective_order_total = $order_total * ( 1 + $margin );
 
 					// Get pricing info from price service
@@ -660,6 +676,7 @@ function wc_nimiq_gateway_init() {
 		 */
 		public function enqueue_admin_settings_script( $hook ) {
 			if ( $hook !== 'woocommerce_page_wc-settings' ) return;
+			wp_enqueue_style( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'css/settings.css', [], $this->version());
 			wp_enqueue_script( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'js/settings.js', [ 'jquery' ], $this->version(), true );
 		}
 

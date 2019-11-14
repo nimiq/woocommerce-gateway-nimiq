@@ -100,9 +100,9 @@ class Crypto_Manager {
 
     public function get_fees_per_byte() {
         return [
-            'nim' => $this->gateway->get_option( 'fee_nim', 0 ),
-            'btc' => $this->gateway->get_option( 'fee_btc', 0 ),
-            'eth' => strval( $this->gateway->get_option( 'fee_eth', 0 ) * 1e9 ), // Option is in Gwei
+            'nim' => $this->gateway->get_setting( 'fee_nim' ),
+            'btc' => $this->gateway->get_setting( 'fee_btc' ),
+            'eth' => strval( $this->gateway->get_setting( 'fee_eth' ) * 1e9 ), // Option is in Gwei
         ];
     }
 
