@@ -3,6 +3,7 @@
 $woo_nimiq_has_site_icon = !empty( get_site_icon_url() );
 $woo_nimiq_has_https     = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !== 'off') || $_SERVER[ 'SERVER_PORT' ] === 443;
 $woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcmul');
+$woo_nimiq_has_fiat      = get_option( 'woocommerce_currency' ) !== 'NIM';
 
 $woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Checkout for WooCommerce</strong>.', 'wc-gateway-nimiq' );
 
@@ -15,14 +16,14 @@ $woo_nimiq_checkout_settings = [
     'shop_logo_url' => [
         'title'       => __( 'Shop Logo URL', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'An image that gets displayed during the Checkout. ' .
+        'description' => __( 'Your logo that gets displayed during the Checkout. ' .
                              'The URL must be under the same domain as the webshop. ' .
                              'Should be quadratic for best results.', 'wc-gateway-nimiq' ),
         'placeholder' => $woo_nimiq_has_site_icon
             ? __( 'Optional - Leave empty to use your WordPress\'s site icon.', 'wc-gateway-nimiq' )
-            : __( 'Enter your image URL', 'wc-gateway-nimiq' ),
+            : __( 'Enter your logo URL', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
-        'class'       => $woo_nimiq_has_site_icon ? '' : 'required',
+        'class'       => $woo_nimiq_has_site_icon || !$woo_nimiq_has_fiat ? '' : 'required',
         'custom_attributes' => [
             'data-site-icon' => get_site_icon_url(),
         ],
@@ -158,7 +159,8 @@ $woo_nimiq_checkout_settings = [
         'type'        => 'checkbox',
         'description' => __( 'Re-using addresses reduces your shop\'s privacy.', 'wc-gateway-nimiq' ),
         'label'       => __( 'Re-use ETH addresses', 'wc-gateway-nimiq' ),
-        'default'     => 'no'
+        'default'     => 'no',
+        'desc_tip'    => true,
     ],
 
     'validation_service_eth' => [
