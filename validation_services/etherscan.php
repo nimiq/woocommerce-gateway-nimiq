@@ -22,7 +22,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
             throw new Exception( __( 'API key not set.', 'wc-gateway-nimiq' ) );
         }
 
-        $this->api_url = $gateway->get_option( 'network_btc_eth' ) === 'main'
+        $this->api_url = $gateway->get_option( 'network' ) === 'main'
             ? 'https://api.etherscan.io/api'
             : 'https://api-ropsten.etherscan.io/api';
     }

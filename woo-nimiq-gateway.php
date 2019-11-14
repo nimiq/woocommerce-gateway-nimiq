@@ -645,7 +645,7 @@ function wc_nimiq_gateway_init() {
 		// Check if the store NIM address is set and show admin notice otherwise
 		// Custom function not required by the gateway
 		public function do_store_nim_address_check() {
-			if( $this->enabled == "yes" ) {
+			if( $this->enabled === "yes" ) {
 				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
 					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>', 'wc-gateway-nimiq' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
