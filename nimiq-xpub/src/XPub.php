@@ -32,6 +32,11 @@ class XPub {
     public static function fromString(string $xpub_base58): XPub {
         $xpub_bin = (new Base58())->decode($xpub_base58);
 
+        // Validate length
+        if (strlen($xpub_bin) !== 78 && strlen($xpub_bin) !== 82) {
+            throw new \Exception('Invalid length!');
+        }
+
         $version = substr($xpub_base58, 0, 4);
         $depth = self::bin2dec(substr($xpub_bin, 4, 1));
         $fpr_par = bin2hex(substr($xpub_bin, 5, 4));
@@ -44,7 +49,7 @@ class XPub {
         if (!empty($checksum)) {
             $base_xpub_hex = bin2hex(substr($xpub_bin, 0, 78));
             if (substr(self::doubleSha256($base_xpub_hex), 0, 8) !== bin2hex($checksum)) {
-                throw new \Exception('Checksum of xpub is invalid!');
+                throw new \Exception('Invalid checksum!');
             }
         }
 
