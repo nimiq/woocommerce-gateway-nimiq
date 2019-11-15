@@ -1,6 +1,6 @@
 <?php
 
-include_once( dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'nimiq-xpub/vendor/autoload.php' );
+include_once( dirname( dirname( __FILE__ ) ) . '/nimiq-xpub/vendor/autoload.php' );
 
 use Nimiq\XPub;
 

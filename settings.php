@@ -129,9 +129,9 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'bitcoin_xpub' => [
-        'title'       => __( 'Wallet Master/Account Public Key', 'wc-gateway-nimiq' ),
+        'title'       => __( 'Wallet Account Public Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Your Bitcoin xpub/zpub/tpub or "Master Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
+        'description' => __( 'Your Bitcoin xpub/zpub/tpub "Master Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
         'placeholder' => 'xpub...',
         'desc_tip'    => true,
     ],
@@ -160,7 +160,7 @@ $woo_nimiq_checkout_settings = [
     'ethereum_xpub' => [
         'title'       => __( 'Wallet Account Public Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Your Ethereum xpub or "Account Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
+        'description' => __( 'Your Ethereum xpub "Account Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
         'placeholder' => 'xpub...',
         'desc_tip'    => true,
     ],

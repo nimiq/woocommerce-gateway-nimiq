@@ -445,6 +445,10 @@ function wc_nimiq_gateway_init() {
 			exit;
 		}
 
+		/**
+		 * Defines the text displayed in the payment gateway box on
+		 * the payment method selection screen (checkout page).
+		 */
 		public function payment_fields() {
 			$description = $this->get_description();
 			if ( $description ) {
@@ -458,13 +462,15 @@ function wc_nimiq_gateway_init() {
 			$order_id = wc_get_order_id_by_order_key( $order_key );
 			$order = wc_get_order( $order_id );
 
+			// Don't show our button for payments with another method
 			if ( !$order || $order->get_payment_method() !== $this->id ) return;
 
 			$request = $this->get_option( 'rpc_behavior' ) === 'popup' ? $this->get_payment_request( $order_id ) : [];
 
 			if ( is_wp_error( $request ) ) {
-				// This type of error is handled by WooCommerce itself already
+				// The invalid state error is handled by WooCommerce itself already
 				if ( $request->get_error_code() === 'order_state_invalid' ) return;
+
 				wc_print_notice( $request->get_error_message(), 'error' );
 				return;
 			}
@@ -509,7 +515,7 @@ function wc_nimiq_gateway_init() {
 			<?php
 		}
 
-		protected function compute_order_hash( $order ) {
+		public function compute_order_hash( $order ) {
 			$order_data = $order->get_data();
 
 			$serialized_order_data = implode(',', [
@@ -534,7 +540,7 @@ function wc_nimiq_gateway_init() {
 			return substr( $long_hash, 0, 6 );
 		}
 
-		private function get_param( $key, $data = 'request' ) {
+		public function get_param( $key, $data = 'request' ) {
 			if ( is_string( $data ) ) {
 				switch ( $data ) {
 					case 'get': $data = $_GET; break;
@@ -691,6 +697,8 @@ function wc_nimiq_gateway_init() {
 					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>', 'wc-gateway-nimiq' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
 				}
 			}
+
+			$this->display_errors();
 		}
 
 		/**
@@ -703,6 +711,37 @@ function wc_nimiq_gateway_init() {
 			if ( $hook !== 'woocommerce_page_wc-settings' ) return;
 			wp_enqueue_style( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'css/settings.css', [], $this->version());
 			wp_enqueue_script( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'js/settings.js', [ 'jquery' ], $this->version(), true );
+		}
+
+		public function validate_bitcoin_xpub_field( $key, $value ) {
+			return $this->validate_xpub( $value, 'btc', 'Bitcoin' );
+		}
+
+		public function validate_ethereum_xpub_field( $key, $value ) {
+			return $this->validate_xpub( $value, 'eth', 'Ethereum' );
+		}
+
+		public function validate_xpub( $value, $currency_code, $currency_name ) {
+			// Skip validation & reset when value is empty or didn't change
+			if ( empty( $value ) ) return $value;
+
+			$old_value = $this->get_option( strtolower( $currency_name ) . '_xpub' );
+			if ( $value === $old_value ) return $old_value;
+
+			include_once( dirname( __FILE__ ) . '/nimiq-xpub/vendor/autoload.php' );
+
+			try {
+				Nimiq\XPub::fromString( $value );
+			} catch (Exception $error) {
+				/* translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name */
+				$this->add_error( sprintf( __( '<strong>%1$s %2$s</strong> was not saved:', 'wc-gateway-nimiq' ), $currency_name, __( 'Wallet Account Public Key', 'wc-gateway-nimiq' ) ) . ' ' . $error->getMessage() );
+				return $old_value;
+			}
+
+			// Reset address index
+			$this->update_option( 'current_address_index_' . $currency_code, -1 );
+
+			return $value;
 		}
 
 	} // end WC_Gateway_Nimiq class
