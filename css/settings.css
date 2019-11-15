@@ -51,10 +51,9 @@
 }
 
 .wc-settings-sub-title.section-advanced::after {
-    content: 'toggle';
+    content: '+';
     margin-left: 8px;
-    font-weight: normal;
-    text-decoration: underline;
+    font-weight: 900;
     opacity: 0.6;
     font-size: 0.9em;
 }

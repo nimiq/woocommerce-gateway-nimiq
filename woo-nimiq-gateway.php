@@ -121,7 +121,7 @@ function wc_nimiq_gateway_init() {
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
 			$this->method_title       = 'Nimiq Crypto Checkout';
-			$this->method_description = __( 'Allows crypto payments. Orders are marked as "on-hold" when received.', 'wc-gateway-nimiq' );
+			$this->method_description = __( 'Receive payments in Nimiq, Bitcoin and Ethereum. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
 
 			$this->DEFAULTS = [
 				'margin' => 0,
