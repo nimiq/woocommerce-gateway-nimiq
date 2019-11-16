@@ -653,7 +653,7 @@ function wc_nimiq_gateway_init() {
 					$returnUrl = get_site_url() . '/wc-api/WC_Gateway_Nimiq?id=' . $order_id;
 					$command = 'checkout';
 					$args = [ $this->get_payment_request( $order_id ) ];
-					$responseMethod = 'post';
+					$responseMethod = 'http-post';
 
 					include_once( plugin_dir_path( __FILE__ ) . 'nimiq-utils/RpcUtils.php' );
 
