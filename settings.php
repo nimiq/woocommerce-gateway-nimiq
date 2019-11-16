@@ -142,9 +142,9 @@ $woo_nimiq_checkout_settings = [
         'description' => __( 'The derivation type of the public key.', 'wc-gateway-nimiq' ),
         'default'     => 'bip-44',
         'options'     => [
-            'bip-44'  => 'Original (m/44\'/0\'/0\')',
-            // 'bip-49'  => 'SegWit Compat (m/49\'/0\'/0\')', // Not yet supported by nimiq/xpub
-            'bip-84'  => 'Native SegWit (m/84\'/0\'/0\')',
+            'bip-44'  => __('Legacy', 'wc-gateway-nimiq') . ' (m/44\'/0\'/0\')',
+            // 'bip-49'  => __('SegWit Compat', 'wc-gateway-nimiq') . ' (m/49\'/0\'/0\')', // Not yet supported by nimiq/xpub
+            'bip-84'  => __('Native SegWit', 'wc-gateway-nimiq') . ' (m/84\'/0\'/0\')',
         ],
         'desc_tip'    => true,
     ],
