@@ -84,7 +84,7 @@
         }
     }
 
-    // Set up event handlers
+    // Set up field toggle event handlers
     const $price_service_select = $('#woocommerce_nimiq_gateway_price_service');
     const $validation_service_select = $('#woocommerce_nimiq_gateway_validation_service_nim');
 
@@ -94,11 +94,9 @@
     $price_service_select.on('change', function(event) {
         on_price_service_change(event.target.value);
     });
-
     $validation_service_select.on('change', function(event) {
         on_validation_service_change(event.target.value);
     });
-
     on_price_service_change(price_service, true);
     on_validation_service_change(validation_service, true);
     toggle_common_fields();
@@ -123,6 +121,26 @@
     }
     $shop_logo_url.on('input', update_shop_logo_preview);
     update_shop_logo_preview();
+
+    // Add change listener for Bitcoin xpub
+    const $bitcoin_xpub = $('#woocommerce_nimiq_gateway_bitcoin_xpub');
+    $bitcoin_xpub.on('input', function() {
+        const xpub = $bitcoin_xpub.val();
+        if (!xpub) return;
+        let type;
+        switch (xpub.substr(0, 4)) {
+            case 'xpub':
+            case 'tpub':
+                type = 'bip-44';
+                break;
+            case 'zpub':
+            case 'vpub':
+                type = 'bip-84';
+                break;
+            default: break; // TODO Show error feedback to user
+        }
+        $('#woocommerce_nimiq_gateway_bitcoin_xpub_type').val(type);
+    });
 
     // Add asterix to required fields
     $('.required').after('<span>*</span>');

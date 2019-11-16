@@ -722,9 +722,10 @@ function wc_nimiq_gateway_init() {
 		}
 
 		public function validate_xpub( $value, $currency_code, $currency_name ) {
-			// Skip validation & reset when value is empty or didn't change
+			// Skip validation & reset when value is empty
 			if ( empty( $value ) ) return $value;
 
+			// Or when it didn't change
 			$old_value = $this->get_option( strtolower( $currency_name ) . '_xpub' );
 			if ( $value === $old_value ) return $old_value;
 

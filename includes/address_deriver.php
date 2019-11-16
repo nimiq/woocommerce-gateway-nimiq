@@ -107,12 +107,19 @@ class Address_Deriver {
 
         $xpub = $this->gateway->get_option( $qualified_currency_name . '_xpub' );
 
+        $xpub_type = $currency === 'btc' ? $this->gateway->get_option( $qualified_currency_name . '_xpub_type' ) : '';
+        $xpub_type = [
+            'bip-44' => XPub::BIP44,
+            'bip-84' => XPub::BIP84,
+            '' => '',
+        ][ $xpub_type ];
+
         if ( empty( $xpub ) ) {
             return null;
         }
 
         // Path 'm/0' from account xpub to external address space (BIP-44 for both BTC and ETH)
-        $xpub_0 = XPub::fromString( $xpub )->derive( 0 );
+        $xpub_0 = XPub::fromString( $xpub, $xpub_type )->derive( 0 );
 
         $addresses = [];
 

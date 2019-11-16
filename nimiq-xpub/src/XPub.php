@@ -9,6 +9,9 @@ use kornrunner\Keccak;
 use BitWasp\Bech32;
 
 class XPub {
+    public const BIP44 = 'bip-44';
+    public const BIP84 = 'bip-84';
+
     public const HEX_VERSION = [
         'xpub' => '0488b21e',
         'tpub' => '043587cf',
@@ -29,7 +32,13 @@ class XPub {
 
     public const SEGWIT_VERSION = 0;
 
-    public static function fromString(string $xpub_base58): XPub {
+    public static function fromString(string $xpub_base58, string $bip = ''): XPub {
+        $version = self::bip2version($bip, substr($xpub_base58, 0, 4));
+
+        if (!array_key_exists($version, self::HEX_VERSION)) {
+            throw new \Exception('Invalid version!');
+        }
+
         $xpub_bin = (new Base58())->decode($xpub_base58);
 
         // Validate length
@@ -37,7 +46,6 @@ class XPub {
             throw new \Exception('Invalid length!');
         }
 
-        $version = substr($xpub_base58, 0, 4);
         $depth = self::bin2dec(substr($xpub_bin, 4, 1));
         $fpr_par = bin2hex(substr($xpub_bin, 5, 4));
         $i = self::bin2dec(substr($xpub_bin, 9, 4));
@@ -73,6 +81,14 @@ class XPub {
 
     public static function doubleSha256(string $hex): string {
         return hash('sha256', hash('sha256', hex2bin($hex), TRUE));
+    }
+
+    private static function bip2version(string $bip, string $prefix): string {
+        switch($bip) {
+            case self::BIP44: return in_array($prefix, ['xpub', 'zpub']) ? 'xpub' : 'tpub';
+            case self::BIP84: return in_array($prefix, ['xpub', 'zpub']) ? 'zpub' : 'vpub';
+            default: return $bip ?: $prefix;
+        }
     }
 
     public function __construct(
@@ -142,7 +158,7 @@ class XPub {
         return (new Base58())->encode(hex2bin($xpub_hex));
     }
 
-    public function toAddress(string $coin = 'btc') {
+    public function toAddress(string $coin = 'btc'): string {
         switch ($coin) {
             case 'btc': return $this->toBTCAddress();
             case 'eth': return $this->toETHAddress();
@@ -185,7 +201,7 @@ class XPub {
         return '0x' . $this->encodeETHChecksum($base_address);
     }
 
-    private function encodeETHChecksum(string $base_address) {
+    private function encodeETHChecksum(string $base_address): string {
         $binary = $this->hex2binary(Keccak::hash($base_address, 256));
 
         $encoded = '';
@@ -199,7 +215,7 @@ class XPub {
         return $encoded;
     }
 
-    private function hex2binary($hex) {
+    private function hex2binary($hex): string {
         $binary = '';
         foreach (str_split($hex, 2) as $hexit) {
             $binary .= str_pad(decbin(hexdec($hexit)), 8, '0', STR_PAD_LEFT);

@@ -131,8 +131,21 @@ $woo_nimiq_checkout_settings = [
     'bitcoin_xpub' => [
         'title'       => __( 'Wallet Account Public Key', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Your Bitcoin xpub/zpub/tpub "Master Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
+        'description' => __( 'Your Bitcoin xpub/zpub/tpub/vpub "Master Public Key" from which payment addresses are derived.', 'wc-gateway-nimiq' ),
         'placeholder' => 'xpub...',
+        'desc_tip'    => true,
+    ],
+
+    'bitcoin_xpub_type' => [
+        'title'       => __( 'Public Key Type', 'wc-gateway-nimiq' ),
+        'type'        => 'select',
+        'description' => __( 'The derivation type of the public key.', 'wc-gateway-nimiq' ),
+        'default'     => 'bip-44',
+        'options'     => [
+            'bip-44'  => 'Original (m/44\'/0\'/0\')',
+            // 'bip-49'  => 'SegWit Compat (m/49\'/0\'/0\')', // Not yet supported by nimiq/xpub
+            'bip-84'  => 'Native SegWit (m/84\'/0\'/0\')',
+        ],
         'desc_tip'    => true,
     ],
 
