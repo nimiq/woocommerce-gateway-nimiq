@@ -39,8 +39,8 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
 
         $result = json_decode( $api_response[ 'body' ], true );
 
-        if ( $result->error ) {
-            return new WP_Error( 'service', $result->error );
+        if ( isset($result['error']) && $result['error'] ) {
+            return new WP_Error( 'service', $result['error'] );
         }
 
         $price = $result[ $currency ];

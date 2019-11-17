@@ -142,7 +142,7 @@ function wc_nimiq_gateway_init() {
 			];
 
 
-			if ( $_SERVER['HTTPS'] === 'on' ) {
+			if ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ) {
 				$redirect_behaviour_options['redirect'] = 'Redirect';
 			}
 
