@@ -401,7 +401,7 @@ function wc_nimiq_gateway_init() {
 
 			wp_register_script( 'NimiqCheckout', plugin_dir_url( __FILE__ ) . 'js/checkout.js', [ 'jquery', 'HubApi' ], $this->version(), true );
 			wp_localize_script( 'NimiqCheckout', 'CONFIG', array(
-				'SITE_TITLE'     => get_bloginfo( 'name' ),
+				'SITE_TITLE'     => get_bloginfo( 'name' ) ?: 'Shop',
 				'HUB_URL'        => $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com/' : 'https://hub.nimiq-testnet.com/',
 				'SHOP_LOGO_URL'  => $this->get_option( 'shop_logo_url' ),
 				'STORE_ADDRESS'  => $this->get_option( 'nimiq_address' ),
