@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.2
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.6
-Stable tag: v2.8.0
+Stable tag: v2.8.1
 Requires PHP: 5.2.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -44,6 +44,9 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
 == Changelog ==
+
+= 2.8.1 - 2019.11.17 =
+* Handle missing Site Title
 
 = 2.8.0 - 2019.11.04 =
 * Allow optionally setting custom transaction messages for products
