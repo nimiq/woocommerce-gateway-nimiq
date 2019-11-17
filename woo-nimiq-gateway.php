@@ -280,7 +280,7 @@ function wc_nimiq_gateway_init() {
 
 			// Collect common request properties used in both request types
 			$request = [
-				'appName' => get_bloginfo( 'name' ),
+				'appName' => get_bloginfo( 'name' ) ?: 'Shop',
 				'shopLogoUrl' => $this->get_option( 'shop_logo_url' ) ?: get_site_icon_url(),
 				'extraData' => $tx_message,
 			];
