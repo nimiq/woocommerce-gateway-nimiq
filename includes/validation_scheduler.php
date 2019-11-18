@@ -38,7 +38,8 @@ function wc_nimiq_validate_orders() {
         'meta_value' => '',
     ] );
 
-    $logger->info( sprintf( _n( 'Processing %s order', 'Processing %s orders', count( $posts ), 'wc-gateway-nimiq' ), count( $posts ) ), $log_context );
+    /* translators: %d: Number of orders to process */
+    $logger->info( sprintf( _n( 'Processing %d order', 'Processing %d orders', count( $posts ), 'wc-gateway-nimiq' ), count( $posts ) ), $log_context );
 
     if ( empty( $posts ) ) return;
 
@@ -59,6 +60,6 @@ function wc_nimiq_validate_orders() {
         // TODO: Send error email to admin?
     }
 
-    $count_orders_updated = $validation_results[ 'changed' ] ?: 0;
-    $logger->info( sprintf( _n( 'Updated %s order', 'Updated %s orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.', $log_context );
+    $count_orders_updated = intval( $validation_results[ 'changed' ] ?: 0 );
+    $logger->info( sprintf( _n( 'Updated %d order', 'Updated %d orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.', $log_context );
 }

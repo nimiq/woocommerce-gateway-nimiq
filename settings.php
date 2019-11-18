@@ -5,6 +5,7 @@ $woo_nimiq_has_https     = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !
 $woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcmul');
 $woo_nimiq_has_fiat      = get_option( 'woocommerce_currency' ) !== 'NIM';
 
+/* translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum' */
 $woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Checkout for WooCommerce</strong>.', 'wc-gateway-nimiq' );
 
 $woo_nimiq_redirect_behaviour_options = [ 'popup' => 'Popup' ];
@@ -51,6 +52,7 @@ $woo_nimiq_checkout_settings = [
     'section_nimiq' => [
         'title'       => 'Nimiq',
         'type'        => 'title',
+        /* translators: %s: Full crypo currency name, e.g. 'Nimiq', 'Bitcoin' or 'Ethereum' */
         'description' => sprintf( __( 'All %s-related settings', 'wc-gateway-nimiq' ), 'Nimiq'),
         'class'       => 'section-nimiq',
     ],
@@ -237,7 +239,8 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'NIM Fee per Byte [Luna]', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'Lunas per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 1, 'Luna' ),
+        /* translators: %1$d: Amount, %2$s: Unit of amount */
+        'placeholder' => sprintf( __( 'Optional - Default: %1$d %2$s', 'wc-gateway-nimiq' ), 1, 'Luna' ),
         'desc_tip'    => true,
     ],
 
@@ -245,7 +248,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'BTC Fee per Byte [Sat]', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'Satoshis per byte to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 40, 'Satoshi' ),
+        'placeholder' => sprintf( __( 'Optional - Default: %1$d %2$s', 'wc-gateway-nimiq' ), 40, 'Satoshi' ),
         'desc_tip'    => true,
     ],
 
@@ -253,7 +256,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'ETH Gas Price [Gwei]', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'Gas price in Gwei to be applied to transactions.', 'wc-gateway-nimiq' ),
-        'placeholder' => sprintf( __( 'Optional - Default: %d %s', 'wc-gateway-nimiq' ), 8, 'Gwei' ),
+        'placeholder' => sprintf( __( 'Optional - Default: %1$d %2$s', 'wc-gateway-nimiq' ), 8, 'Gwei' ),
         'desc_tip'    => true,
     ],
 
@@ -269,6 +272,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Validation Interval [minutes]', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'Interval to validate transactions, in minutes. If you change this, disable and enable this plugin to apply the new interval.', 'wc-gateway-nimiq' ),
+        /* translators: %d: Number of minutes */
         'placeholder' => sprintf( __( 'Optional - Default: %d minutes', 'wc-gateway-nimiq' ), 5 ),
         'desc_tip'    => true,
     ],
@@ -294,6 +298,7 @@ $woo_nimiq_checkout_settings = [
         'title'       => __( 'Required NIM confirmations', 'wc-gateway-nimiq' ),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Nimiq transaction. Each confirmation takes 1 minute on average.', 'wc-gateway-nimiq' ),
+        /* translators: %d: Number of blocks */
         'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 10 ),
         'desc_tip'    => true,
     ],

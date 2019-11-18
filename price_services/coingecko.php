@@ -59,6 +59,7 @@ class WC_Gateway_Nimiq_Price_Service_Coingecko implements WC_Gateway_Nimiq_Price
             $price = $price_object[ $fiat_currency ];
 
             if ( empty( $price ) ) {
+                /* translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD */
                 return new WP_Error( 'service', sprintf( __( 'The currency %s is not supported by Coingecko.', 'wc-gateway-nimiq' ), strtoupper( $fiat_currency ) ) );
             };
 

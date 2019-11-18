@@ -53,6 +53,7 @@ class WC_Gateway_Nimiq_Price_Service_Nimiqx implements WC_Gateway_Nimiq_Price_Se
         $price = $result[ $currency ];
 
         if ( empty( $price ) ) {
+            /* translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD */
             return new WP_Error( 'service', sprintf( __( 'The currency %s is not supported by NimiqX.', 'wc-gateway-nimiq' ), strtoupper( $currency ) ) );
         };
 

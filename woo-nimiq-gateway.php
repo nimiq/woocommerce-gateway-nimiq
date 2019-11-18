@@ -58,6 +58,7 @@ include_once( plugin_dir_path( __FILE__ ) . 'includes/nimiq_currency.php' );
 // Make sure the shop is on HTTPS when using a FIAT currency
 if ( (!$woo_nimiq_is_localhost && !$woo_nimiq_has_https) && $woo_nimiq_has_fiat ) {
 	function nq_show_no_https_warning() {
+		/* translators: %s: Email address */
 		echo '<div class="notice notice-warning"><p>'. __( 'To use the <strong>Nimiq Checkout for WooCommerce</strong> extension with a currency other than NIM, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this message is a mistake, contact us at %s.</em>', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</p></div>';
 	}
 	add_action( 'admin_notices', 'nq_show_no_https_warning' );
@@ -149,8 +150,10 @@ function wc_nimiq_gateway_init() {
 			$this->title       = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
 			$cfd = $this->get_currencies_for_description();
 			$this->description = count( $cfd ) === 1
+				/* translators: %s: Cryptocurrency name */
 				? sprintf( __( 'Pay with %s.', 'wc-gateway-nimiq' ), $cfd[ 0 ] )
-				: sprintf( __( 'Pay with %s or %s.', 'wc-gateway-nimiq' ), $cfd[ 0 ], $cfd[ 1 ] );
+				/* translators: %1$s: Two cryptocurrency names separated by comma, %2$s: Cryptocurrency name */
+				: sprintf( __( 'Pay with %1$s or %2$s.', 'wc-gateway-nimiq' ), $cfd[ 0 ], $cfd[ 1 ] );
 
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -694,7 +697,13 @@ function wc_nimiq_gateway_init() {
 		public function do_store_nim_address_check() {
 			if( $this->enabled === "yes" ) {
 				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
-					echo '<div class="error notice"><p>'. sprintf( __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM. <a href="%s">Set your Nimiq address here.</a>', 'wc-gateway-nimiq' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) ) .'</p></div>';
+					$plugin_settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' );
+					echo '<div class="error notice"><p>'
+						. __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM.', 'wc-gateway-nimiq' )
+						. ' <a href="' . $plugin_settings_url . '">'
+						. __( 'Set your Nimiq address here.', 'wc-gateway-nimiq' )
+						. '</a>'
+					. '</p></div>';
 				}
 			}
 

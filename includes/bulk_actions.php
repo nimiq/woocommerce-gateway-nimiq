@@ -204,7 +204,7 @@ function handle_bulk_admin_notices_after_redirect() {
 		return;
 	}
 
-	$count_orders_updated = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
+	$count_orders_updated = intval( isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0 );
 
 	$errors = isset( $_REQUEST['errors'] ) ? explode( '|', wc_clean( $_REQUEST['errors'] ) ) : [];
 	$errors = array_filter( $errors );
@@ -215,5 +215,6 @@ function handle_bulk_admin_notices_after_redirect() {
 		}
 	}
 
-	echo '<div class="updated notice"><p>' . sprintf( _n( 'Updated %s order', 'Updated %s orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.</p></div>';
+	/* translators: %d: Number of updated orders */
+	echo '<div class="updated notice"><p>' . sprintf( _n( 'Updated %d order', 'Updated %d orders', $count_orders_updated, 'wc-gateway-nimiq' ), $count_orders_updated ) . '.</p></div>';
 }
