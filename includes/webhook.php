@@ -5,6 +5,8 @@
 // error_reporting(E_ERROR);
 
 add_action( 'woocommerce_api_nimiq_checkout_callback', 'woo_nimiq_checkout_callback' );
+add_action( 'wp_ajax_nimiq_checkout_callback', 'woo_nimiq_checkout_callback' );
+add_action( 'wp_ajax_nopriv_nimiq_checkout_callback', 'woo_nimiq_checkout_callback' );
 
 function woo_nimiq_checkout_reply( $data, $status = 200 ) {
     wp_send_json( $data, $status );

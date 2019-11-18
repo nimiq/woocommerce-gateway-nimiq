@@ -379,7 +379,7 @@ function wc_nimiq_gateway_init() {
 					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
 
 					// Generate callback URL
-					$callback_url = get_site_url() . '/wc-api/nimiq_checkout_callback?id=' . $order_id;
+					$callback_url = $this->get_nimiq_callback_url( 'nimiq_checkout_callback', $order_id );
 
 					// Use MultiCurrencyCheckoutRequest (version 2)
 					$payment_options = [];
@@ -493,7 +493,7 @@ function wc_nimiq_gateway_init() {
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
 
-			$returnUrl = get_site_url() . '/wc-api/WC_Gateway_Nimiq?id=' . $order_id;
+			$returnUrl = $this->get_nimiq_hub_return_url( $order_id );
 			?>
 			<form id="pay_with_nimiq" method="POST" action="<?php echo $returnUrl; ?>">
 				<div id="nim_gateway_info_block">
@@ -657,7 +657,7 @@ function wc_nimiq_gateway_init() {
 
 					$target = $this->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : 'https://hub.nimiq-testnet.com';
 					$id = 42;
-					$returnUrl = get_site_url() . '/wc-api/WC_Gateway_Nimiq?id=' . $order_id;
+					$returnUrl = $this->get_nimiq_hub_return_url( $order_id );
 					$command = 'checkout';
 					$args = [ $this->get_payment_request( $order_id ) ];
 					$responseMethod = 'http-post';
@@ -758,7 +758,31 @@ function wc_nimiq_gateway_init() {
 			return $value;
 		}
 
+		private function get_nimiq_hub_return_url( $id ) {
+			return $this->get_nimiq_callback_url( 'WC_Gateway_Nimiq', $id );
+		}
+
+		private function get_nimiq_callback_url($action, $id) {
+			// Test if the REST API is available
+			$has_rest_api = count( rest_get_server()->get_routes() ) > 0;
+			// TODO: Test by sending a request to the REST API?
+
+			if ( $has_rest_api ) {
+				return get_site_url() . '\/wc-api/' . $action . '?id=' . $id;
+			}
+
+			return admin_url('admin-ajax.php') . '?action=' . strtolower( $action ) . '&id=' . $id;
+		}
+
 	} // end WC_Gateway_Nimiq class
+
+	// Handle admin-ajax.php return URLs
+	function woo_nimiq_handle_payment_response() {
+		$gateway = new WC_Gateway_Nimiq();
+		$gateway->handle_payment_response();
+	}
+	add_action( 'wp_ajax_wc_gateway_nimiq', 'woo_nimiq_handle_payment_response' );
+	add_action( 'wp_ajax_nopriv_wc_gateway_nimiq', 'woo_nimiq_handle_payment_response' );
 
 } // end wc_nimiq_gateway_init()
 
