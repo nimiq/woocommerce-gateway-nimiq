@@ -55,8 +55,6 @@ After an order is submitted and payment completed, the order is placed "on-hold"
 * Remove other payment options from payment page
 * Various smaller fixes
 
-== Upgrade Notice ==
-
 ### 3.0.0
 
 Nimiq Checkout for WooCommerce now supports taking payments in Bitcoin and Ethereum!
