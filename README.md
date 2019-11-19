@@ -34,7 +34,7 @@ This plugin can automatically convert from your store currency to NIM, BTC, and 
 * [NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420)
 * [Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
 
-= Order Status Updates =
+### Order Status Updates
 
 After an order is submitted and payment completed, the order is placed "on-hold". Transactions are validated automatically on a short interval, and can also be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page. When a transaction is validated, the order status changes to "processing".
 
