@@ -142,10 +142,8 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			$message = $service->message();
 			// Look for the last pair of round brackets in the tx message
 			preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
-			$tx_order_hash = end( $matches )[1];
-			$order_hash = $order->get_meta('order_hash');
-			$order_hash = strtoupper( $gateway->get_short_order_hash( $order_hash ) );
-			if ( $tx_order_hash !== $order_hash ) {
+			$tx_order_key = end( $matches )[1];
+			if ( $tx_order_key !== $gateway->get_short_order_key( $order->get_order_key() ) ) {
 				fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
 				$count_orders_updated++;
 				continue;

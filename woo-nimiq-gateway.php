@@ -270,16 +270,10 @@ function wc_nimiq_gateway_init() {
 			$order_total = floatval( $order->get_total() );
 			$order_currency = $order->get_currency();
 
-			$order_hash = $order->get_meta( 'order_hash' );
-			if ( empty( $order_hash ) ) {
-				$order_hash = $this->compute_order_hash( $order );
-				$order->update_meta_data( 'order_hash', $order_hash );
-			}
-
 			// To uniquely identify the payment transaction, we add a shortened hash of
 			// the order details to the transaction message.
 			$tx_message = ( !empty( $this->get_option( 'message' ) ) ? $this->get_option( 'message' ) . ' ' : '' )
-				. '(' . strtoupper( $this->get_short_order_hash( $order_hash ) ) . ')';
+				. '(' . $this->get_short_order_key( $order->get_order_key() ) . ')';
 
 			$tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
@@ -375,7 +369,7 @@ function wc_nimiq_gateway_init() {
 					$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 					// Generate CSRF token
-					$csrf_token = wp_create_nonce( 'nimiq_checkout_' . $order_hash );
+					$csrf_token = wp_create_nonce( 'nimiq_checkout_' . $order->get_id() );
 
 					// Generate callback URL
 					$callback_url = $this->get_nimiq_callback_url( 'nimiq_checkout_callback', $order_id );
@@ -521,29 +515,8 @@ function wc_nimiq_gateway_init() {
 			<?php
 		}
 
-		public function compute_order_hash( $order ) {
-			$order_data = $order->get_data();
-
-			$serialized_order_data = implode(',', [
-				$order->get_id(),
-				$order_data[ 'date_created' ]->getTimestamp(),
-				$order_data[ 'currency' ],
-				$order->get_total(),
-				$order_data['billing']['first_name'],
-				$order_data['billing']['last_name'],
-				$order_data['billing']['address_1'],
-				$order_data['billing']['city'],
-				$order_data['billing']['state'],
-				$order_data['billing']['postcode'],
-				$order_data['billing']['country'],
-				$order_data['billing']['email'],
-			]);
-
-			return sha1( $serialized_order_data );
-		}
-
-		public function get_short_order_hash( $long_hash ) {
-			return substr( $long_hash, 0, 6 );
+		public function get_short_order_key( $order_key ) {
+			return strtoupper( substr( $order_key, -6 ) );
 		}
 
 		public function get_param( $key, $data = 'request' ) {

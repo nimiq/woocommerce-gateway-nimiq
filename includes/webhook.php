@@ -57,8 +57,7 @@ function woo_nimiq_checkout_callback() {
     }
 
     // Validate CSRF token
-    $order_hash = $order->get_meta( 'order_hash' );
-    if ( !wp_verify_nonce( $request[ 'csrf' ], 'nimiq_checkout_' . $order_hash ) ) {
+    if ( !wp_verify_nonce( $request[ 'csrf' ], 'nimiq_checkout_' . $order->get_id() ) ) {
         return woo_nimiq_checkout_error( 'Invalid CSRF token', 403 );
     }
 
@@ -130,9 +129,8 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
     //     'recipient' => $address,
     // ];
 
-    // $order_hash = $order->get_meta( 'order_hash' );
     // $tx_message = ( !empty( $gateway->get_option( 'message' ) ) ? $gateway->get_option( 'message' ) . ' ' : '' )
-    //     . '(' . strtoupper( $gateway->get_short_order_hash( $order_hash ) ) . ')';
+    //     . '(' . $gateway->get_short_order_key( $order->get_order_key() ) . ')';
     // $tx_message_bytes = unpack('C*', $tx_message); // Convert to byte array
 
     // // Get fees from order meta
