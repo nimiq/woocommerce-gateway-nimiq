@@ -62,7 +62,7 @@ if ( $woo_nimiq_has_fiat ) {
 	if ( !( $woo_nimiq_has_https || $woo_nimiq_is_localhost ) ) {
 		function nq_show_no_https_error() {
 			/* translators: %s: Email address */
-			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Checkout for WooCommerce</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.</em>', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</p></div>';
+			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Checkout for WooCommerce</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</em></p></div>';
 		}
 		add_action( 'admin_notices', 'nq_show_no_https_error' );
 		return;
@@ -572,7 +572,7 @@ function wc_nimiq_gateway_init() {
 				}
 
 				if ( strlen( $transaction_hash) !== 64 ) {
-					wc_add_notice( __( 'Invalid transaction hash (' . $transaction_hash . '). Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
+					wc_add_notice( __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) . ' (' . $transaction_hash . '). ' . __( 'Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
 					return false;
 				}
 
