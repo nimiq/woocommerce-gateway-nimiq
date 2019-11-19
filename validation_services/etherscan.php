@@ -139,7 +139,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
      */
     public function error() {
         if ( empty( $this->transaction ) ) {
-            return __( 'Could not retrieve transaction information from Etherscan.', 'wc-gateway-nimiq' );
+            return sprintf( __( 'Could not retrieve transaction information from %s', 'wc-gateway-nimiq' ), 'Etherscan'),
         }
         return $this->transaction->error || false;
     }

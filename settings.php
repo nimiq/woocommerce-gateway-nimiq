@@ -295,7 +295,7 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'confirmations_nim' => [
-        'title'       => __( 'Required confirmations for Nimiq', 'wc-gateway-nimiq' ),
+        'title'       => sprintf( __( 'Required confirmations for %s', 'wc-gateway-nimiq' ), 'Nimiq'),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Nimiq transaction. Each confirmation takes 1 minute on average.', 'wc-gateway-nimiq' ),
         /* translators: %d: Number of blocks */
@@ -304,7 +304,7 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'confirmations_btc' => [
-        'title'       => __( 'Required confirmations for Bitcoin', 'wc-gateway-nimiq' ),
+        'title'       => sprintf( __( 'Required confirmations for %s', 'wc-gateway-nimiq' ), 'Bitcoin'),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Bitcoin transaction. Each confirmation takes 10 minutes on average.', 'wc-gateway-nimiq' ),
         'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 2 ),
@@ -312,7 +312,7 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'confirmations_eth' => [
-        'title'       => __( 'Required Confirmations for Ethereum', 'wc-gateway-nimiq' ),
+        'title'       => sprintf( __( 'Required confirmations for %s', 'wc-gateway-nimiq' ), 'Ethereum'),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept an Ethereum transaction. Each confirmation takes 15 seconds on average.', 'wc-gateway-nimiq' ),
         'placeholder' => sprintf( __( 'Optional - Default: %d blocks', 'wc-gateway-nimiq' ), 45 ),
