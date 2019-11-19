@@ -45,7 +45,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
         }
 
         if ( empty( $latest_block ) ) {
-            return new WP_Error( 'service', __( 'Could not get the current blockchain height from Blockstream.', 'wc-gateway-nimiq' ) );
+            return new WP_Error( 'service', sprintf( __( 'Could not get the current blockchain height from %s', 'wc-gateway-nimiq' ), 'Blockstream'),
         }
 
         $this->head_height = intval( $latest_block );
@@ -172,7 +172,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
      */
     public function error() {
         if ( empty( $this->transaction ) ) {
-            return __( 'Could not retrieve transaction information from Blockstream.', 'wc-gateway-nimiq' );
+            return sprintf( __( 'Could not retrieve transaction information from %s', 'wc-gateway-nimiq' ), 'Blockstream'),
         }
         return $this->transaction->error || false;
     }
