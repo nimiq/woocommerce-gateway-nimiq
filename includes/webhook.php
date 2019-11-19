@@ -37,23 +37,19 @@ function woo_nimiq_checkout_callback() {
         'currency' => woo_nimiq_checkout_get_param( 'currency', 'post' ),
     ];
 
-    $id = $request[ 'id' ];
-    $csrf_token = $request[ 'csrf' ];
-    $command = strtolower( $request[ 'command' ] );
+    $gateway = new WC_Gateway_Nimiq();
 
-    $order = wc_get_order( $id );
+    // Set headers
+    $cors_origin = $gateway->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : $_SERVER['HTTP_ORIGIN'];
+    header( 'Access-Control-Allow-Origin: ' . $cors_origin );
+    header( 'Access-Control-Allow-Credentials: true');
+
+    $order = wc_get_order( $request[ 'id' ] );
 
     // Validate that the order exists
     if ( !$order ) {
         return woo_nimiq_checkout_error( 'Invalid order ID', 404 );
     }
-
-    $gateway = new WC_Gateway_Nimiq();
-
-    // Set headers
-    $cors_origin = $gateway->get_option( 'network' ) === 'main' ? 'https://hub.nimiq.com' : '*';
-    header( 'Access-Control-Allow-Origin: ' . $cors_origin );
-    header( 'Content-Type: application/json' );
 
     // Validate that the order's payment method is this plugin and that the order is currently 'pending'
     if ( $order->get_payment_method() !== $gateway->id || $order->get_status() !== 'pending' ) {
@@ -61,14 +57,14 @@ function woo_nimiq_checkout_callback() {
     }
 
     // Validate CSRF token
-    $order_csrf_token = $order->get_meta( 'checkout_csrf_token' );
-    if ( empty( $order_csrf_token ) || $order_csrf_token !== $csrf_token ) {
+    $order_hash = $order->get_meta( 'order_hash' );
+    if ( !wp_verify_nonce( $request[ 'csrf' ], 'nimiq_checkout_' . $order_hash ) ) {
         return woo_nimiq_checkout_error( 'Invalid CSRF token', 403 );
     }
 
     try {
         // Call handler depending on command
-        switch ( $command ) {
+        switch ( strtolower( $request[ 'command' ] ) ) {
             case 'set_currency':
                 return woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway );
             case 'get_state':
@@ -196,10 +192,6 @@ function woo_nimiq_checkout_callback_get_state( $request, $order, $gateway ) {
     $payment_accepted = $service->transaction_found();
 
     $order->update_meta_data( 'nc_payment_state', $payment_state );
-    if ( $payment_accepted ) {
-        // Delete CSRF token when transaction found and payment accepted
-        $order->delete_meta_data( 'checkout_csrf_token' );
-    }
     $order->save();
 
     return woo_nimiq_checkout_reply( [

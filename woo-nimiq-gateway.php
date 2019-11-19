@@ -375,8 +375,7 @@ function wc_nimiq_gateway_init() {
 					$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 					// Generate CSRF token
-					$csrf_token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
-					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
+					$csrf_token = wp_create_nonce( 'nimiq_checkout_' . $order_hash );
 
 					// Generate callback URL
 					$callback_url = $this->get_nimiq_callback_url( 'nimiq_checkout_callback', $order_id );
@@ -606,7 +605,6 @@ function wc_nimiq_gateway_init() {
 
 				$order->update_meta_data( 'transaction_hash', $transaction_hash );
 				$order->update_meta_data( 'customer_nim_address', $customer_nim_address );
-				$order->delete_meta_data( 'checkout_csrf_token' );
 				$order->save();
 
 				return true;
