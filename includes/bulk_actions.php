@@ -91,7 +91,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 			$time_limit = strtotime( '-' . $gateway->get_setting( 'tx_wait_duration' ) . ' minutes' );
 			if ( $order_date < $time_limit ) {
 				// If order date is earlier, mark as failed
-				fail_order( $order, __( 'Transaction not found or mined within wait duration.', 'wc-gateway-nimiq' ) );
+				fail_order( $order, __( 'Transaction was not found.', 'wc-gateway-nimiq' ) );
 				$count_orders_updated++;
 			}
 
