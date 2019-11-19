@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Nimiq Checkout for WooCommerce
+ * Plugin Name: Nimiq Cryptocurrency Checkout for WooCommerce
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with Nimiq, Bitcoin and Ethereum
  * Author: Nimiq
