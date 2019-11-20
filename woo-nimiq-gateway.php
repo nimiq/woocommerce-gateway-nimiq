@@ -125,8 +125,8 @@ function wc_nimiq_gateway_init() {
 
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
-			$this->method_title       = 'Nimiq Crypto Checkout';
-			$this->method_description = __( 'Receive payments in Nimiq, Bitcoin and Ethereum. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
+			$this->method_title       = 'Nimiq Cryptocurrency Checkout';
+			$this->method_description = __( 'Receive payments in Nimiq, Bitcoin, and Ethereum. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
 
 			$this->DEFAULTS = [
 				'margin' => 0,
@@ -151,7 +151,7 @@ function wc_nimiq_gateway_init() {
 			$this->crypto_manager = new Crypto_Manager( $this );
 
 			// Define display texts
-			$this->title       = __( 'Nimiq Crypto Checkout', 'wc-gateway-nimiq' );
+			$this->title       = __( 'Nimiq Cryptocurrency Checkout', 'wc-gateway-nimiq' );
 			$cfd = $this->get_currencies_for_description();
 			$this->description = count( $cfd ) === 1
 				/* translators: %s: Cryptocurrency name */
@@ -346,7 +346,7 @@ function wc_nimiq_gateway_init() {
 						$order_totals_crypto = Crypto_Manager::format_quotes( $effective_order_total, $quotes );
 					}
 					else {
-						return new WP_Error( 'service', 'Price service did not return any pricing information.' );
+						return new WP_Error( 'service',  __( 'Cryptocurrency Checkout is temporarily not available. Please try reloading this page. (Issue: price service did not return any pricing information.)', 'wc-gateway-nimiq' ));
 					}
 
 					$fees = array_key_exists( 'fees', $pricing_info )
@@ -538,7 +538,7 @@ function wc_nimiq_gateway_init() {
 		public function validate_response( $order_id, $response = 'request' ) {
 			$status = $this->get_param( 'status', $response );
 			if ( $status !== 'OK' ) {
-				wc_add_notice( __( 'Hub response status is not "OK".', 'wc-gateway-nimiq' ), 'error' );
+				wc_add_notice( sprintf( __( 'Nimiq Payment failed. (%s).', 'wc-gateway-nimiq' ), __( 'Response code not "OK"', 'wc-gateway-nimiq' ) ), 'error' );
 				return false;
 			}
 
@@ -547,10 +547,10 @@ function wc_nimiq_gateway_init() {
 			try {
 				$result = json_decode( $result );
 			} catch (Exception $e) {
-				wc_add_notice( __( 'Could not decode Hub result:', 'wc-gateway-nimiq' ) . ' ' . $e->getMessage(), 'error' );
+				wc_add_notice( sprintf( __( 'Nimiq Payment failed. (%s).', 'wc-gateway-nimiq' ), __( 'Could not decode Hub result', 'wc-gateway-nimiq' ) ) . '[' . $e->getMessage(). ']', 'error' );
 			}
 			if ( empty( $result ) ) {
-				wc_add_notice( __( 'Hub result is empty.', 'wc-gateway-nimiq' ), 'error' );
+				wc_add_notice( sprintf( __( 'Nimiq Payment failed. (%s).', 'wc-gateway-nimiq' ), __( 'Hub result is empty', 'wc-gateway-nimiq' ) ), 'error' );
 				return false;
 			}
 
@@ -563,7 +563,7 @@ function wc_nimiq_gateway_init() {
 				$customer_nim_address = $result->raw->sender;
 
 				if ( !$transaction_hash ) {
-					wc_add_notice( __( 'You must submit the Nimiq transaction first.', 'wc-gateway-nimiq' ), 'error' );
+					wc_add_notice( __( 'You need to confirm the Nimiq payment first.', 'wc-gateway-nimiq' ), 'error' );
 					return false;
 				}
 
@@ -654,7 +654,7 @@ function wc_nimiq_gateway_init() {
 			}
 
 			// Mark as on-hold (we're awaiting transaction validation)
-			$order->update_status( 'on-hold', __( 'Awaiting transaction validation.', 'wc-gateway-nimiq' ) );
+			$order->update_status( 'on-hold', __( 'Waiting for transaction to be validated.', 'wc-gateway-nimiq' ) );
 
 			// Return thank-you redirect
 			return array(
@@ -670,7 +670,7 @@ function wc_nimiq_gateway_init() {
 				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
 					$plugin_settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' );
 					echo '<div class="error notice"><p>'
-						. __( 'You must fill in your store\'s Nimiq address to be able to take payments in NIM.', 'wc-gateway-nimiq' )
+						. __( 'You must fill in your store\'s Nimiq address to be able to accept payments in NIM.', 'wc-gateway-nimiq' )
 						. ' <a href="' . $plugin_settings_url . '">'
 						. __( 'Set your Nimiq address here.', 'wc-gateway-nimiq' )
 						. '</a>'
