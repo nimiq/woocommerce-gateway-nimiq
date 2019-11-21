@@ -310,7 +310,7 @@ function wc_nimiq_gateway_init() {
 					// The 'time' property is not updated on purpose, so that the Hub displays a run-down timer instead of a full timer
 				} else {
 					$price_service = $this->get_option( 'price_service' );
-					include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'price_services' . DIRECTORY_SEPARATOR . $price_service . '.php' );
+					include_once( dirname( __FILE__ ) . '/price_services/' . $price_service . '.php' );
 					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
 					$price_service = new $class( $this );
 
@@ -358,10 +358,6 @@ function wc_nimiq_gateway_init() {
 						: $this->crypto_manager->get_fees_per_byte();
 
 					foreach ( $accepted_cryptos as $crypto ) {
-						// $order->update_meta_data( 'crypto_fee_' . $crypto, $crypto === 'eth'
-						// 	? $fees[ $crypto ][ 'gas_price' ]
-						// 	: $fees[ $crypto ]
-						// );
 						$order->update_meta_data( 'order_total_' . $crypto, $order_totals_crypto[ $crypto ] );
 					}
 
