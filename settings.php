@@ -20,7 +20,7 @@ $woo_nimiq_price_services = [
 ];
 $woo_nimiq_price_service_default = 'coingecko';
 if ( in_array( get_option( 'woocommerce_currency' ), [ 'EUR', 'USD' ] ) ) {
-    $woo_nimiq_price_services['fastspot'] = 'Fastspot' . ' ' . __( '(also estimates fees)', 'wc-gateway-nimiq' );
+    $woo_nimiq_price_services['fastspot'] = 'Fastspot (' . __( 'also estimates fees', 'wc-gateway-nimiq' ) . ')';
     $woo_nimiq_price_service_default = 'fastspot';
 }
 
@@ -82,7 +82,7 @@ $woo_nimiq_checkout_settings = [
         'options'     => [
             // List available validation services here. The option value must match the file name.
             'nimiq_watch'  => 'NIMIQ.WATCH (Testnet & Mainnet)',
-            'json_rpc_nim' => 'Nimiq JSON-RPC API (Network depends on Nimiq node)',
+            'json_rpc_nim' => 'Nimiq JSON-RPC API (Network configured by Nimiq node)',
             'nimiqx'       => 'NimiqX (Mainnet)',
         ],
         'desc_tip'    => true,
