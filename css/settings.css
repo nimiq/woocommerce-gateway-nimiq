@@ -51,7 +51,7 @@
 }
 
 .wc-settings-sub-title.section-advanced::after {
-    content: '+';
+    content: '▼';
     margin-left: 8px;
     font-weight: 900;
     opacity: 0.6;

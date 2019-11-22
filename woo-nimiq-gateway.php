@@ -310,7 +310,7 @@ function wc_nimiq_gateway_init() {
 					// The 'time' property is not updated on purpose, so that the Hub displays a run-down timer instead of a full timer
 				} else {
 					$price_service = $this->get_option( 'price_service' );
-					include_once( dirname( __FILE__ ) . '\/price_services/' . $price_service . '.php' );
+					include_once( dirname( __FILE__ ) . '/price_services/' . $price_service . '.php' );
 					$class = 'WC_Gateway_Nimiq_Price_Service_' . ucfirst( $price_service );
 					$price_service = new $class( $this );
 
