@@ -1,21 +1,21 @@
 # Nimiq Cryptocurrency Checkout for WooCommerce
 
 Contributors: nimiq
-Tags: woocommerce, payment gateway, checkout, gateway, nimiq, nim, btc, bitcoin, eth, ethereum, crypto, cryptocurrency
+Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth,
 Requires at least: 4.9
-Tested up to: 5.2
+Tested up to: 5.3
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.8
 Stable tag: v2.7.4
-Requires PHP: 7.0.0
+Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
+A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
 
 ## Description
 
-A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
+A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
 
 Features include:
 
@@ -25,18 +25,6 @@ Features include:
 * Configurable confirmation times with reasonable defaults
 
 [Check this in-depth tutorial for support on setting up the Nimiq Cryptocurrency Checkout](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
-
-
-### Automatic Currency Conversion
-
-This plugin can automatically convert from your store currency to NIM, BTC, and ETH during checkout. Here is a list of supported currencies for the included conversion services:
-
-* [NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420)
-* [Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
-
-### Order Status Updates
-
-After an order is submitted and payment completed, the order is placed "on-hold". Transactions are validated automatically on a short interval, and can also be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page. When a transaction is validated, the order status changes to "processing".
 
 ## Installation
 
@@ -49,15 +37,7 @@ After an order is submitted and payment completed, the order is placed "on-hold"
 
 ## Changelog
 
-### 3.0.0 - 2019.11.xx
-
-* Add support for Bitcoin and Ethereum payments
-* Remove other payment options from payment page
-* Various smaller fixes
-
-### 3.0.0
-
-Nimiq Checkout for WooCommerce now supports taking payments in Bitcoin and Ethereum!
+Please see the Changelog section in [readme.txt](readme.txt).
 
 ## Development
 

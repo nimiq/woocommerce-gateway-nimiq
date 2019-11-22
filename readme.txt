@@ -1,13 +1,13 @@
-=== Nimiq Checkout for WooCommerce ===
+=== Nimiq Cryptocurrency Checkout ===
 
 Contributors: nimiq
 Tags: woocommerce, payment gateway, checkout, gateway, nimiq, crypto, cryptocurrency
 Requires at least: 4.9
-Tested up to: 5.2
+Tested up to: 5.3
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.8
 Stable tag: v2.7.4
-Requires PHP: 7.0.0
+Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -55,7 +55,7 @@ After an order is submitted using the Nimiq payment method, the order is placed 
 
 = 3.0.0 =
 
-Nimiq Checkout for WooCommerce now supports taking payments in Bitcoin and Ethereum!
+Nimiq Cryptocurrency Checkout now supports taking payments in Bitcoin and Ethereum!
 
 == Development ==
 

@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Nimiq Cryptocurrency Checkout for WooCommerce
+ * Plugin Name: Nimiq Cryptocurrency Checkout
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
- * Description: Let customers pay with Nimiq, Bitcoin and Ethereum
+ * Description: Let customers pay with Bitcoin, Ethereum and Nimiq
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 3.0.0-beta.3
+ * Version: 3.0.0-rc.3
  * Text Domain: wc-gateway-nimiq
- * Domain Path: /i18n/languages/
+ * Domain Path: /languages/
  * Requires at least: 4.9
- * Tested up to: 5.2
+ * Tested up to: 5.3
  * WC requires at least: 3.5
  * WC tested up to: 3.8
  *
