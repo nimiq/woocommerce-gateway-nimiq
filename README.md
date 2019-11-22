@@ -1,3 +1,5 @@
+![Nimiq Cryptocurrency Checkout](https://github.com/nimiq/woocommerce-gateway-nimiq/blob/master/assets/banner-1544x500.png?raw=true)
+
 # Nimiq Cryptocurrency Checkout for WooCommerce
 
 A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
@@ -11,8 +13,6 @@ A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoi
 * Configurable conversion and validation service providers
 * Configurable confirmation times with sensible defaults
 
-[Check this in-depth tutorial for support on setting up the Nimiq Cryptocurrency Checkout](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
-
 ## Installation
 
 1. Be sure you're running WooCommerce 3.5 or higher in your shop.
@@ -20,7 +20,7 @@ A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoi
 3. Activate the plugin through the **Plugins** menu in WordPress.
 4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
-[Check this in-depth tutorial for details.](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
+[Check this in-depth tutorial for support.](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
 
 ## Changelog
 
