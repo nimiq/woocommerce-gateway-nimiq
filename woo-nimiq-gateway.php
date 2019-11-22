@@ -301,7 +301,9 @@ function wc_nimiq_gateway_init() {
 			// Collect common request properties used in both request types
 			$request = [
 				'appName' => get_bloginfo( 'name' ) ?: 'Shop',
-				'shopLogoUrl' => $this->get_option( 'shop_logo_url' ) ?: get_site_icon_url(),
+				'shopLogoUrl' => $this->get_option( 'shop_logo_url' )
+					?: get_site_icon_url()
+					?: get_site_url() . '/wp-content/plugins/woocommerce-gateway-nimiq/assets/icon.svg',
 				'extraData' => $tx_message,
 			];
 
@@ -715,15 +717,48 @@ function wc_nimiq_gateway_init() {
 			wp_enqueue_script( 'NimiqSettings', plugin_dir_url( __FILE__ ) . 'js/settings.js', [ 'jquery' ], $this->version(), true );
 		}
 
+		public function validate_shop_logo_url_field( $key, $value ) {
+			// Skip validation & reset when value is empty
+			if ( empty( $value ) ) return $value;
+
+			$parsed_shop_url = parse_url( get_site_url() );
+			$parsed_logo_url = parse_url( $value );
+
+			if ( !isset( $parsed_shop_url[ 'scheme' ] ) || !isset( $parsed_shop_url[ 'host' ] ) ) {
+				// Comparison impossible
+				$this->add_error( 'Cannot validate Shop Logo URL because your Wordpress Site URL is not set or invalid.', 'wc-gateway-nimiq' );
+				return $value;
+			}
+
+			if ( !isset( $parsed_logo_url[ 'scheme' ] ) || !isset( $parsed_logo_url[ 'host' ] ) ) {
+				$this->add_error( 'Invalid Shop Logo URL.', 'wc-gateway-nimiq' );
+				return;
+			}
+
+			$shop_origin = $parsed_shop_url[ 'scheme' ] . '://'
+				. $parsed_shop_url[ 'host' ]
+				. ( isset($parsed_shop_url[ 'port' ]) ? ':' . $parsed_shop_url[ 'port' ] : '' );
+			$logo_origin = $parsed_logo_url[ 'scheme' ] . '://'
+				. $parsed_logo_url[ 'host' ]
+				. ( isset($parsed_logo_url[ 'port' ]) ? ':' . $parsed_logo_url[ 'port' ] : '' );
+
+			if ( $shop_origin !== $logo_origin ) {
+				$this->add_error( 'The Shop Logo must be hosted on the same domain as the shop.', 'wc-gateway-nimiq' );
+				return;
+			}
+
+			return $value;
+		}
+
 		public function validate_bitcoin_xpub_field( $key, $value ) {
-			return $this->validate_xpub( $value, 'btc', 'Bitcoin' );
+			return $this->parse_xpub( $value, 'btc', 'Bitcoin' );
 		}
 
 		public function validate_ethereum_xpub_field( $key, $value ) {
-			return $this->validate_xpub( $value, 'eth', 'Ethereum' );
+			return $this->parse_xpub( $value, 'eth', 'Ethereum' );
 		}
 
-		public function validate_xpub( $value, $currency_code, $currency_name ) {
+		public function parse_xpub( $value, $currency_code, $currency_name ) {
 			// Skip validation & reset when value is empty
 			if ( empty( $value ) ) return $value;
 

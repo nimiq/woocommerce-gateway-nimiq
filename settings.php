@@ -3,7 +3,6 @@
 $woo_nimiq_has_site_icon = !empty( get_site_icon_url() );
 $woo_nimiq_has_https     = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !== 'off') || $_SERVER[ 'SERVER_PORT' ] === 443;
 $woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcmul');
-$woo_nimiq_has_fiat      = get_option( 'woocommerce_currency' ) !== 'NIM';
 
 /* translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum' */
 $woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency Checkout</strong>.', 'wc-gateway-nimiq' );
@@ -33,11 +32,10 @@ $woo_nimiq_checkout_settings = [
                              'The image should be quadratic for best results.', 'wc-gateway-nimiq' ),
         'placeholder' => $woo_nimiq_has_site_icon
             ? __( 'Enter URL or leave empty to use your WordPress\'s site icon.', 'wc-gateway-nimiq' )
-            : __( 'Enter URL to display your logo during checkout', 'wc-gateway-nimiq' ),
+            : __( 'Enter URL to display your logo during checkout.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
-        'class'       => $woo_nimiq_has_site_icon || !$woo_nimiq_has_fiat ? '' : 'required',
         'custom_attributes' => [
-            'data-site-icon' => get_site_icon_url(),
+            'data-site-icon' => get_site_icon_url() ?: get_site_url() . '/wp-content/plugins/woocommerce-gateway-nimiq/assets/icon.svg',
         ],
     ],
 
