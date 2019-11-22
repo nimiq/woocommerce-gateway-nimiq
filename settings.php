@@ -6,7 +6,7 @@ $woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcm
 $woo_nimiq_has_fiat      = get_option( 'woocommerce_currency' ) !== 'NIM';
 
 /* translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum' */
-$woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency Checkout for WooCommerce</strong>.', 'wc-gateway-nimiq' );
+$woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency Checkout</strong>.', 'wc-gateway-nimiq' );
 
 $woo_nimiq_redirect_behaviour_options = [ 'popup' => 'Popup' ];
 if ( $woo_nimiq_has_https ) {
@@ -28,7 +28,7 @@ $woo_nimiq_checkout_settings = [
     'shop_logo_url' => [
         'title'       => __( 'Shop Logo', 'wc-gateway-nimiq' ),
         'type'        => 'text',
-        'description' => __( 'Display your logo during Nimiq Checkout by entering a URL to an image file here. ' .
+        'description' => __( 'Display your logo in Nimiq Checkout by entering a URL to an image file here. ' .
                              'The file must be on the same domain as your webshop. ' .
                              'The image should be quadratic for best results.', 'wc-gateway-nimiq' ),
         'placeholder' => $woo_nimiq_has_site_icon
@@ -93,7 +93,7 @@ $woo_nimiq_checkout_settings = [
         'type'        => 'text',
         'description' => __( 'Full URL (including port) of the Nimiq JSON-RPC server used to monitor the Nimiq blockchain.', 'wc-gateway-nimiq' ),
         'default'     => 'http://localhost:8648',
-        'placeholder' => __( 'This field is required.', 'wc-gateway-nimiq' ),
+        'placeholder' => __( 'This field is required when accepting Ethereum.', 'wc-gateway-nimiq' ),
         'desc_tip'    => true,
         'class'       => 'required',
     ],
@@ -280,7 +280,7 @@ $woo_nimiq_checkout_settings = [
     'rpc_behavior' => [
         'title'       => __( 'Checkout Behavior', 'wc-gateway-nimiq' ),
         'type'        => 'select',
-        'description' => __( 'How should the user be forwarded to the Nimiq Checkout to finalize the payment process, as a popup or by being redirected?', 'wc-gateway-nimiq' ),
+        'description' => __( 'How should the user be forwarded to Nimiq Checkout to finalize the payment process, as a popup or by being redirected?', 'wc-gateway-nimiq' ),
         'default'     => 'popup',
         'options'     => $woo_nimiq_redirect_behaviour_options,
         'desc_tip'    => true,

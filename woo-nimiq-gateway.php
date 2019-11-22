@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) or exit;
 // Make sure WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	function nq_show_no_woocommerce_warning() {
-		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Checkout for WooCommerce</strong>, you must have the WooCommerce plugin installed!', 'wc-gateway-nimiq' ) .'</p></div>';
+		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have WooCommerce installed!', 'wc-gateway-nimiq' ) .'</p></div>';
 	}
 	add_action( 'admin_notices', 'nq_show_no_woocommerce_error' );
 	return;
@@ -42,7 +42,7 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
 // Make sure the shop is running on PHP >= 7.1
 if ( !defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70100 ) {
 	function nq_show_insufficient_php_version_error() {
-		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Checkout for WooCommerce</strong>, you need to use PHP >= 7.1.', 'wc-gateway-nimiq' ) .'</p></div>';
+		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP >= 7.1.', 'wc-gateway-nimiq' ) .'</p></div>';
 	}
 	add_action( 'admin_notices', 'nq_show_insufficient_php_version_error' );
 	return;
@@ -62,7 +62,7 @@ if ( $woo_nimiq_has_fiat ) {
 	if ( !( $woo_nimiq_has_https || $woo_nimiq_is_localhost ) ) {
 		function nq_show_no_https_error() {
 			/* translators: %s: Email address */
-			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Checkout for WooCommerce</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</em></p></div>';
+			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</em></p></div>';
 		}
 		add_action( 'admin_notices', 'nq_show_no_https_error' );
 		return;
@@ -125,8 +125,8 @@ function wc_nimiq_gateway_init() {
 
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
-			$this->method_title       = 'Nimiq Cryptocurrency Checkout';
-			$this->method_description = __( 'Receive payments in Nimiq, Bitcoin, and Ethereum. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
+			$this->method_title       = __( 'Nimiq Cryptocurrency Checkout', 'wc-gateway-nimiq' );
+			$this->method_description = __( 'Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
 
 			$this->DEFAULTS = [
 				'margin' => 0,
@@ -489,7 +489,7 @@ function wc_nimiq_gateway_init() {
 					<?php if ( $this->get_option( 'rpc_behavior' ) === 'popup' ) { ?>
 						<noscript>
 							<strong>
-								<?php _e( 'Javascript is required to use Nimiq Checkout. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
+								<?php _e( 'Javascript is required to pay with cryptocurrency. Please activate Javascript to continue.', 'wc-gateway-nimiq' ); ?>
 							</strong>
 						</noscript>
 
@@ -670,11 +670,11 @@ function wc_nimiq_gateway_init() {
 				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
 					$plugin_settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' );
 					echo '<div class="error notice"><p>'
-						. __( 'You must fill in your store\'s Nimiq address to be able to accept payments in NIM.', 'wc-gateway-nimiq' )
-						. ' <a href="' . $plugin_settings_url . '">'
-						. __( 'Set your Nimiq address here.', 'wc-gateway-nimiq' )
-						. '</a>'
-					. '</p></div>';
+					. __( 'You must fill in your store\'s Nimiq address to be able to accept payments in NIM.', 'wc-gateway-nimiq' )
+					. ' <a href="' . $plugin_settings_url . '">'
+					. __( 'Set your Nimiq address here.', 'wc-gateway-nimiq' )
+					. '</a>'
+				. '</p></div>';
 				}
 			}
 
