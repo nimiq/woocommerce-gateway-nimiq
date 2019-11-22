@@ -5,9 +5,9 @@
  * Description: Let customers pay with Bitcoin, Ethereum and Nimiq
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 3.0.0-rc.3
+ * Version: 3.0.0
  * Text Domain: wc-gateway-nimiq
- * Domain Path: /languages/
+ * Domain Path: /languages
  * Requires at least: 4.9
  * Tested up to: 5.3
  * WC requires at least: 3.5
@@ -559,6 +559,7 @@ function wc_nimiq_gateway_init() {
 		public function validate_response( $order_id, $response = 'request' ) {
 			$status = $this->get_param( 'status', $response );
 			if ( $status !== 'OK' ) {
+				/* translators: %s: Error message */
 				wc_add_notice( sprintf( __( 'Nimiq Payment failed. (%s).', 'wc-gateway-nimiq' ), __( 'Response code not "OK"', 'wc-gateway-nimiq' ) ), 'error' );
 				return false;
 			}

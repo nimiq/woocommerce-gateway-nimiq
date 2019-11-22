@@ -36,7 +36,7 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
         }
 
         if ( empty( $latest_block ) ) {
-            return new WP_Error( 'service', sprintf( __( 'Could not get the current blockchain height from %s.', 'wc-gateway-nimiq' ), 'NIMIQ.WATCH'),
+            return new WP_Error( 'service', sprintf( __( 'Could not get the current blockchain height from %s.', 'wc-gateway-nimiq' ), 'NIMIQ.WATCH') );
         }
 
         $this->head_height = $latest_block[ 0 ]->height;

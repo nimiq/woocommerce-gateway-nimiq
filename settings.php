@@ -293,6 +293,7 @@ $woo_nimiq_checkout_settings = [
     ],
 
     'confirmations_nim' => [
+        /* translators: %s: Cryptocurrency name */
         'title'       => sprintf( __( 'Required confirmations for %s', 'wc-gateway-nimiq' ), 'Nimiq'),
         'type'        => 'number',
         'description' => __( 'The number of confirmations required to accept a Nimiq transaction. Each confirmation takes 1 minute on average.', 'wc-gateway-nimiq' ),
