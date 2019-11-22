@@ -67,6 +67,16 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 With this Checkout Plugin, we want to provide a tool for everyone interested in crypto.
 By providing BTC and ETH payments together with NIM, we wish to support cryptocurrencies in general while illustrating just how much more easy and convenient Nimiq is.
 
+== Screenshots ==
+
+1. Easy to set up and maintain
+2. Clean and straight forward payment settings
+3. Seamlessly add cryptocurrency to your payment options
+4. Payment Step 1: Chose your preferred currency
+5. Payment Step 2: Get all relevant info at a glance
+6. Payment Step 3: Pay using an app, QR code or manual inputs
+7. Receive the payments straight to your wallet
+
 == Changelog ==
 
 = 3.0.0 - 2019.11.22 =
