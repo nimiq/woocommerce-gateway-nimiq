@@ -20,7 +20,7 @@ $woo_nimiq_price_services = [
 ];
 $woo_nimiq_price_service_default = 'coingecko';
 if ( in_array( get_option( 'woocommerce_currency' ), [ 'EUR', 'USD' ] ) ) {
-    $woo_nimiq_price_services['fastspot'] = __( 'Fastspot (also estimates fees)', 'wc-gateway-nimiq' );
+    $woo_nimiq_price_services['fastspot'] = 'Fastspot' . ' ' . __( '(also estimates fees)', 'wc-gateway-nimiq' );
     $woo_nimiq_price_service_default = 'fastspot';
 }
 
