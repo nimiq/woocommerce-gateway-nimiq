@@ -67,6 +67,25 @@ if ( $woo_nimiq_has_fiat ) {
 		add_action( 'admin_notices', 'nq_show_no_https_error' );
 		return;
 	}
+
+	// Make sure the shop is using a supported currency
+	// $fastspot_currencies = [ 'usd', 'eur' ]; // Already contained in Coingecko array
+	// https://api.coingecko.com/api/v3/simple/supported_vs_currencies + 'nim'
+	$supported_exchange_currencies = [ 'btc', 'eth', 'ltc', 'bch', 'bnb', 'eos', 'xrp', 'xlm', 'usd', 'aed', 'ars', 'aud', 'bdt', 'bhd', 'bmd', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur', 'gbp', 'hkd', 'huf', 'idr', 'ils', 'inr', 'jpy', 'krw', 'kwd', 'lkr', 'mmk', 'mxn', 'myr', 'nok', 'nzd', 'php', 'pkr', 'pln', 'rub', 'sar', 'sek', 'sgd', 'thb', 'try', 'twd', 'uah', 'vef', 'vnd', 'zar', 'xdr', 'xag', 'xau' ];
+
+	$supported_exchange_currencies[] = 'nim';
+
+	if ( !in_array( strtolower( get_option( 'woocommerce_currency' ) ), $supported_exchange_currencies ) ) {;
+		function nq_show_currency_not_supported_error() {
+			echo '<div class="notice notice-error"><p>'
+				. __( 'Your store uses a currency that is currently not supported by the <strong>Nimiq Cryptocurrency Checkout</strong>.', 'wc-gateway-nimiq' )
+				. ' <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">'
+				. __( 'Find out which currencies are supported.', 'wc-gateway-nimiq' )
+				. '</a></p></div>';
+		}
+		add_action( 'admin_notices', 'nq_show_currency_not_supported_error' );
+		return;
+	}
 }
 
 // Un-hide Wordpress' regular Custom Fields
@@ -164,7 +183,7 @@ function wc_nimiq_gateway_init() {
 			add_action( 'before_woocommerce_pay', array ($this, 'add_payment_button'));
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'add_instructions' ) );
 			add_action( 'woocommerce_api_wc_gateway_nimiq', array( $this, 'handle_payment_response' ) );
-			add_action( 'admin_notices', array( $this, 'do_store_nim_address_check' ) );
+			add_action( 'admin_notices', array( $this, 'do_settings_check' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_settings_script' ) );
 
 			// Customer Emails
@@ -663,22 +682,25 @@ function wc_nimiq_gateway_init() {
 			);
 		}
 
-		// Check if the store NIM address is set and show admin notice otherwise
-		// Custom function not required by the gateway
-		public function do_store_nim_address_check() {
+		public function do_settings_check() {
 			if( $this->enabled === "yes" ) {
-				if( empty( $this->get_option( 'nimiq_address' ) ) ) {
-					$plugin_settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' );
-					echo '<div class="error notice"><p>'
+				$this->do_store_nim_address_check();
+			}
+
+			$this->display_errors();
+		}
+
+		// Check if the store NIM address is set and show admin notice otherwise
+		public function do_store_nim_address_check() {
+			if( empty( $this->get_option( 'nimiq_address' ) ) ) {
+				$plugin_settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' );
+				echo '<div class="error notice"><p>'
 					. __( 'You must fill in your store\'s Nimiq address to be able to accept payments in NIM.', 'wc-gateway-nimiq' )
 					. ' <a href="' . $plugin_settings_url . '">'
 					. __( 'Set your Nimiq address here.', 'wc-gateway-nimiq' )
 					. '</a>'
 				. '</p></div>';
-				}
 			}
-
-			$this->display_errors();
 		}
 
 		/**
