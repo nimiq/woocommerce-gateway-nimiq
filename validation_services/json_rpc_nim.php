@@ -41,7 +41,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
         }
 
         if ( empty( $block_number ) ) {
-            return new WP_Error( 'service', __( 'Could not get the current blockchain height from JSON-RPC.', 'wc-gateway-nimiq' ) . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+            return new WP_Error( 'service', sprintf( __( 'Could not get the current blockchain height from %s.', 'wc-gateway-nimiq' ), 'JSON-RPC server') . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
         }
 
         $this->head_height = $block_number->result;
@@ -98,7 +98,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
         }
 
         if ( empty( $response ) ) {
-            return new WP_Error( 'service', __( 'Could not retrieve transaction information from JSON-RPC.', 'wc-gateway-nimiq' ) . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
+            return new WP_Error( 'service', sprintf( __( 'Could not retrieve transaction information from %s.', 'wc-gateway-nimiq' ), 'JSON-RPC server') . ' (' . $api_response[ 'response' ][ 'code' ] . ': ' . $api_response[ 'response' ][ 'message' ] . ')' );
         }
 
         $this->transaction = $response->result;

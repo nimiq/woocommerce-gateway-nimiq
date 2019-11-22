@@ -112,20 +112,20 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$expires = $order->get_meta( 'crypto_rate_expires' );
 		$interval = $gateway->get_setting( 'validation_interval' );
 		if ( $expires && empty( $transaction_hash ) && $expires < strtotime( '-' . $interval . ' minutes' ) ) {
-			fail_order( $order, __( 'Transaction only found after quote expired.', 'wc-gateway-nimiq' ) );
+			fail_order( $order, __( 'Transaction arrived too late. (Quote expired)', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
 		$order_sender_address = Order_Utils::get_order_sender_address( $order );
 		if ( !empty( $order_sender_address ) && $service->sender_address() !== $order_sender_address ) {
-			fail_order( $order, __( 'Transaction sender does not match.', 'wc-gateway-nimiq' ) );
+			fail_order( $order, __( 'Sender of transaction does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
 
 		if ( $service->recipient_address() !== Order_Utils::get_order_recipient_address( $order, $gateway ) ) {
-			fail_order( $order, __( 'Transaction recipient does not match.', 'wc-gateway-nimiq' ) );
+			fail_order( $order, __( 'Recipient of transaction does not match.', 'wc-gateway-nimiq' ) );
 			$count_orders_updated++;
 			continue;
 		}
