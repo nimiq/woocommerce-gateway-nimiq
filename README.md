@@ -1,39 +1,26 @@
 # Nimiq Cryptocurrency Checkout for WooCommerce
 
-Contributors: nimiq
-Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
-Requires at least: 4.9
-Tested up to: 5.3
-Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 3.8
-Stable tag: v2.7.4
-Requires PHP: 7.1.0
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
-
 A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
 
-## Description
+**Features Include:**
 
-A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
-
-Features include:
-
-* Automatic currency conversion from supported store currencies to NIM, BTC, and ETH during checkout
-* Automatic transaction validation and WooCommerce order status updates
+* Bitcoin, Ethereum and Nimiq support
+* Automatic conversion from supported store currencies like USD or EUR to crypto at latest market prices
+* Full order status feedback in your WooCommerce panel
+* Decentralized and non-proprietary
 * Configurable conversion and validation service providers
-* Configurable confirmation times with reasonable defaults
+* Configurable confirmation times with sensible defaults
 
 [Check this in-depth tutorial for support on setting up the Nimiq Cryptocurrency Checkout](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
 
 ## Installation
 
 1. Be sure you're running WooCommerce 3.5 or higher in your shop.
-2. Upload the [latest release .zip file](https://github.com/nimiq/woocommerce-gateway-nimiq/releases) with the plugin files under **Plugins &gt; Add New &gt; Upload**.
+2. Search for "nimiq" in your Wordpress plugin section
 3. Activate the plugin through the **Plugins** menu in WordPress.
 4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
 
-[Check this in-depth tutorial for details and help](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
+[Check this in-depth tutorial for details.](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation)
 
 ## Changelog
 
