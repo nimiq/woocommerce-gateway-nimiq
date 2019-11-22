@@ -1,7 +1,7 @@
-=== Nimiq Cryptocurrency Checkout ===
+=== Cryptocurrency Checkout - Accept Bitcoin, Ethereum and Nimiq ===
 
 Contributors: nimiq
-Tags: woocommerce, payment gateway, checkout, gateway, nimiq, crypto, cryptocurrency
+Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
 Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5
@@ -11,58 +11,75 @@ Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
+Receive crypto directly from your customers + easy integration + beautiful interface + no middleman + no fees.
 
 == Description ==
 
-A plugin for Wordpress WooCommerce to handle payments in the Nimiq (NIM) cryptocurrency.
+Seamlessly integrate Bitcoin, Ethereum and Nimiq payments into your webshop.
+Receive the equivalent of your regular price in crypto directly in your wallet.
+Easy to integrate and free of charge. Beautifully designed and easy to use.
+Open source and decentralized.
 
-Features include:
+**Features Include:**
 
-* Automatic currency conversion from supported store currencies to NIM during checkout
-* Automatic transaction validation and WooCommerce order status updates
+* Bitcoin, Ethereum and Nimiq support
+* Automatic conversion from supported store currencies like USD or EUR to crypto at latest market prices
+* Full order status feedback in your WooCommerce panel
+* Decentralized and non-proprietary
 * Configurable conversion and validation service providers
-* Configurable confirmation times with sane defaults
-* Includes the NIM currency for WooCommerce
+* Configurable confirmation times with sensible defaults
 
-= Automatic Currency Conversion =
+_This Plugin is just getting started. Additional features such as instant and decentralized Crypto-to-Euro swaps are being currently developed._
 
-This plugin can automatically convert from your store currency to NIM during checkout. Here is a list of supported currencies for the included conversion services:
+= How Does It Work? =
 
-* [NimiqX](https://api.nimiqx.com/price?api_key=210b34d0df702dd157d31f118ae00420)
-* [Coingecko](https://api.coingecko.com/api/v3/simple/supported_vs_currencies)
+1. The customer selects “Cryptocurrency Checkout” and is sent to the Nimiq Checkout page.
+2. Nimiq Cryptocurrency Checkout offers to take payments in Bitcoin, Ethereum or Nimiq.
+3. The customer selects a cryptocurrency and pays. An order is created in the WooCommerce panel and set to 'on-hold' by the plugin.
+4. As soon as the transaction is confirmed on the blockchain, the plugin automatically updates the order status.
 
-= Order Status Updates =
+= How To Integrate It? =
 
-After an order is submitted using the Nimiq payment method, the order is placed "on-hold". Transactions are validated automatically on a short interval, and can also be validated manually with a *Validate Transactions* bulk action from the *Orders* admin page. When a transaction is validated, the order status changes to "processing".
+1. Install and activate the plugin
+2. Find the **Nimiq Cryptocurrency Checkout** in your list of plugins and click 'Settings'
+3. Enter addresses and public keys of the currencies you want to accept
+4. Tell your customers about your new payment option!
 
-== Installation ==
+Check out the documentation, with a more in-depth [tutorial](https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation).
 
-1. Be sure you're running WooCommerce 3.5 or higher in your shop.
-2. Upload the [latest release .zip file](https://github.com/nimiq/woocommerce-gateway-nimiq/releases) with the plugin files under **Plugins &gt; Add New &gt; Upload**.
-3. Activate the plugin through the **Plugins** menu in WordPress.
-4. Go to **WooCommerce &gt; Settings &gt; Payments** and select the "Nimiq" method to configure this plugin.
+= Where Does The Crypto Go? =
+
+You provide your wallet addresses in the WooCommerce admin panel and receive the crypto directly from your customer.
+
+If you are new to crypto, you can create a Bitcoin and Ethereum wallet with Jaxx (a third-party application).
+For Nimiq, you don’t need to rely on third-parties and can create an address in just seconds and without the need to provide personal data, at nimiq.com.
+
+= What Is Nimiq? =
+
+Nimiq is a blockchain project, NIM is its cryptocurrency, designed for ease-of-use.
+Sending, receiving and storing NIM is as easy as using Facebook. Creating an account is even easier.
+
+Give it a try: [nimiq.com](https://nimiq.com)
+
+= Why Is This Plugin For Free? =
+
+We believe that cryptocurrencies are the future and will provide a better, more democratic and more open form of money.
+With this Checkout Plugin, we want to provide a tool for everyone interested in crypto.
+By providing BTC and ETH payments together with NIM, we wish to support cryptocurrencies in general while illustrating just how much more easy and convenient Nimiq is.
 
 == Changelog ==
 
-= 3.0.0 - 2019.11.xx =
+= 3.0.0 - 2019.11.22 =
 
-* Add support for Bitcoin and Ethereum payments
-* Remove other payment options from payment page
-* Various smaller fixes
+* Now accepting Bitcoin, Ethereum and Nimiq payments!
+* Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
 
 = 3.0.0 =
 
-Nimiq Cryptocurrency Checkout now supports taking payments in Bitcoin and Ethereum!
-
-== Development ==
-
-= Adding A New Validation Service =
-
-Validation services are defined under [`./validation_services/`](./validation_services/). Each service class must implement the `WC_Gateway_Nimiq_Validation_Service_Interface`, defined in [`./validation_services/interface.php`](./validation_services/interface.php). The easiest way to start is to take an existing service (e.g. [`nimiq_watch.php`](./validation_services/nimiq_watch.php)) and rename and adapt it to the new service. The new service then also needs to be registered in the respective `validation_service_<currency>` setting. The value of the setting must match the file name (without the `.php` extension) of the service definition. If the new service requires additional setting fields, [`settings.js`](./js/settings.js) also needs to be adapted to show/hide those fields conditionally.
+Nimiq Cryptocurrency Checkout now also supports accepting payments in Bitcoin and Ethereum! Update your settings to enable the new currencies.
 
 == Acknowledgement ==
 
-This Nimiq gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline), which in turn forks the WooCommerce core "Cheque" payment gateway.
+This Nimiq payment gateway is based on skyverge's [WooCommerce Offline Gateway](https://github.com/bekarice/woocommerce-gateway-offline), which in turn forks the WooCommerce core "Cheque" payment gateway.

@@ -1,7 +1,7 @@
 # Nimiq Cryptocurrency Checkout for WooCommerce
 
 Contributors: nimiq
-Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth,
+Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
 Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5

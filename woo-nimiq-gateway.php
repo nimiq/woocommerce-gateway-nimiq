@@ -117,7 +117,7 @@ add_filter( 'woocommerce_payment_gateways', 'wc_nimiq_add_to_gateways' );
 function wc_nimiq_gateway_plugin_links( $links ) {
 
 	$plugin_links = array(
-		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) . '">' . __( 'Configure', 'wc-gateway-nimiq' ) . '</a>'
+		'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nimiq_gateway' ) . '">' . __( 'Settings', 'wc-gateway-nimiq' ) . '</a>'
 	);
 
 	return array_merge( $plugin_links, $links );
@@ -145,7 +145,7 @@ function wc_nimiq_gateway_init() {
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
 			$this->method_title       = __( 'Nimiq Cryptocurrency Checkout', 'wc-gateway-nimiq' );
-			$this->method_description = __( 'Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation.html">this tutorial.</a>', 'wc-gateway-nimiq' );
+			$this->method_description = __( 'Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation">this tutorial.</a>', 'wc-gateway-nimiq' );
 
 			$this->DEFAULTS = [
 				'margin' => 0,
