@@ -15,10 +15,7 @@ Receive crypto directly from your customers + easy integration + beautiful inter
 
 == Description ==
 
-Seamlessly integrate Bitcoin, Ethereum and Nimiq payments into your webshop.
-Receive the equivalent of your regular price in crypto directly in your wallet.
-Easy to integrate and free of charge. Beautifully designed and easy to use.
-Open source and decentralized.
+Seamlessly integrate Bitcoin, Ethereum and Nimiq payments into your webshop. Receive the equivalent of your regular price in crypto directly in your wallet. Easy to integrate and free of charge. Beautifully designed and easy to use. Open source and decentralized.
 
 **Features Include:**
 
@@ -51,21 +48,17 @@ Check out the documentation, with a more in-depth [tutorial](https://nimiq.githu
 
 You provide your wallet addresses in the WooCommerce admin panel and receive the crypto directly from your customer.
 
-If you are new to crypto, you can create a Bitcoin and Ethereum wallet with Jaxx (a third-party application).
-For Nimiq, you don’t need to rely on third-parties and can create an address in just seconds and without the need to provide personal data, at nimiq.com.
+If you are new to crypto, you can create a Bitcoin and Ethereum wallet with [Jaxx](https://jaxx.io) (a third-party application). For Nimiq, you don’t need to rely on third-parties and can create an address in just seconds and without the need to provide personal data, at [safe.nimiq.com](https://safe.nimiq.com).
 
 = What Is Nimiq? =
 
-Nimiq is a blockchain project, NIM is its cryptocurrency, designed for ease-of-use.
-Sending, receiving and storing NIM is as easy as using Facebook. Creating an account is even easier.
+Nimiq is a blockchain project, NIM is its cryptocurrency, designed for ease-of-use. Sending, receiving and storing NIM is as easy as using Facebook. Creating an account is even easier.
 
 Give it a try: [nimiq.com](https://nimiq.com)
 
 = Why Is This Plugin For Free? =
 
-We believe that cryptocurrencies are the future and will provide a better, more democratic and more open form of money.
-With this Checkout Plugin, we want to provide a tool for everyone interested in crypto.
-By providing BTC and ETH payments together with NIM, we wish to support cryptocurrencies in general while illustrating just how much more easy and convenient Nimiq is.
+We believe that cryptocurrencies are the future and will provide a better, more democratic and more open form of money. With this Checkout Plugin, we want to provide a tool for everyone interested in crypto. By providing BTC and ETH payments together with NIM, we wish to support cryptocurrencies in general while illustrating just how much more easy and convenient Nimiq is.
 
 == Screenshots ==
 
