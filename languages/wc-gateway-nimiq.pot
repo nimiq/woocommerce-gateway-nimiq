@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-11-22T21:26:57+00:00\n"
+"POT-Creation-Date: 2019-11-26T16:53:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: wc-gateway-nimiq\n"
@@ -226,7 +226,7 @@ msgstr ""
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
 #: settings.php:132
 #: settings.php:174
-#: woo-nimiq-gateway.php:776
+#: woo-nimiq-gateway.php:828
 msgid "Wallet Account Public Key"
 msgstr ""
 
@@ -401,7 +401,7 @@ msgstr ""
 #: validation_services/json_rpc_nim.php:65
 #: validation_services/nimiqx.php:66
 #: validation_services/nimiq_watch.php:60
-#: woo-nimiq-gateway.php:593
+#: woo-nimiq-gateway.php:645
 msgid "Invalid transaction hash."
 msgstr ""
 
@@ -472,67 +472,68 @@ msgstr ""
 msgid "Pay with %1$s or %2$s."
 msgstr ""
 
-#: woo-nimiq-gateway.php:370
+#: woo-nimiq-gateway.php:419
 msgid "Cryptocurrency Checkout is temporarily not available. Please try reloading this page. (Issue: price service did not return any pricing information.)"
 msgstr ""
 
-#: woo-nimiq-gateway.php:473
+#: woo-nimiq-gateway.php:522
 msgid "What is Nimiq?"
 msgstr ""
 
-#: woo-nimiq-gateway.php:513
+#: woo-nimiq-gateway.php:562
 msgid "Javascript is required to pay with cryptocurrency. Please activate Javascript to continue."
 msgstr ""
 
-#: woo-nimiq-gateway.php:523
-msgid "Pay with Crypto"
+#. translators: Used on the payment button: "PAY WITH <crypto icons>"
+#: woo-nimiq-gateway.php:573
+msgid "PAY WITH"
 msgstr ""
 
-#: woo-nimiq-gateway.php:529
+#: woo-nimiq-gateway.php:581
 msgid "Payment received"
 msgstr ""
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:563
-#: woo-nimiq-gateway.php:572
-#: woo-nimiq-gateway.php:575
+#: woo-nimiq-gateway.php:615
+#: woo-nimiq-gateway.php:624
+#: woo-nimiq-gateway.php:627
 msgid "Nimiq Payment failed. (%s)."
 msgstr ""
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:563
+#: woo-nimiq-gateway.php:615
 msgid "Response code not \"OK\""
 msgstr ""
 
-#: woo-nimiq-gateway.php:572
+#: woo-nimiq-gateway.php:624
 msgid "Could not decode Hub result"
 msgstr ""
 
-#: woo-nimiq-gateway.php:575
+#: woo-nimiq-gateway.php:627
 msgid "Hub result is empty"
 msgstr ""
 
-#: woo-nimiq-gateway.php:588
+#: woo-nimiq-gateway.php:640
 msgid "You need to confirm the Nimiq payment first."
 msgstr ""
 
-#: woo-nimiq-gateway.php:593
+#: woo-nimiq-gateway.php:645
 msgid "Please contact support with this error message."
 msgstr ""
 
-#: woo-nimiq-gateway.php:679
+#: woo-nimiq-gateway.php:731
 msgid "Waiting for transaction to be validated."
 msgstr ""
 
-#: woo-nimiq-gateway.php:701
+#: woo-nimiq-gateway.php:753
 msgid "You must fill in your store's Nimiq address to be able to accept payments in NIM."
 msgstr ""
 
-#: woo-nimiq-gateway.php:703
+#: woo-nimiq-gateway.php:755
 msgid "Set your Nimiq address here."
 msgstr ""
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: woo-nimiq-gateway.php:776
+#: woo-nimiq-gateway.php:828
 msgid "<strong>%1$s %2$s</strong> was not saved:"
 msgstr ""
