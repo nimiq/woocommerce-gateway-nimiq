@@ -1,5 +1,5 @@
 #nim_pay_button {
-	margin: auto;
+	margin: 0 auto 32px;
 	background: #0582CA;
 	background-image: radial-gradient(ellipse at bottom right, #265DD7, #0582CA);
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -10,7 +10,7 @@
 	flex-direction: row;
 	align-items: center;
 	border-radius: 500px;
-	padding: 14px 16px 14px 24px;
+	padding: 20px 36px;
 	outline: none;
 	position: relative;
 	transition: transform 450ms cubic-bezier(0.25, 0, 0, 1), box-shadow 450ms cubic-bezier(0.25, 0, 0, 1);
@@ -23,15 +23,13 @@
 }
 
 #nim_pay_button span {
-	background: white;
-	color: #0582CA;
-	padding: 10px 16px;
-	border-radius: 500px;
-	/* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	flex-shrink: 0;
 }
 
 #nim_pay_button img {
-	margin-right: 16px;
+	margin-left: 16px;
 }
 
 #nim_pay_button:focus::before {
@@ -68,15 +66,12 @@
 
 @media (max-width: 768px) {
 	#nim_pay_button {
+		margin: 16px auto 24px;
 		font-size: 18px;
-		padding: 10px 11px 10px 20px
+		padding: 18px 32px;
 	}
 
 	#nim_pay_button img {
-		margin-right: 12px;
-	}
-
-	#nim_pay_button span {
-		padding: 8px 12px;
+		margin-left: 14px;
 	}
 }

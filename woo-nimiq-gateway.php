@@ -251,6 +251,55 @@ function wc_nimiq_gateway_init() {
 			return '<img src="' . $icon_src . '" alt="' . $alt . '">';
 		}
 
+		public function get_mono_icon() {
+			$currencies = $this->crypto_manager->get_accepted_cryptos();
+
+			// Widths of the source icons
+			$WIDTHS = [
+				'nim' => 25,
+				'btc' => 24,
+				'eth' => 15,
+			];
+
+			$SPACING = 12;
+
+			$image_width = array_reduce( array_map( function( $crypto ) use ( $WIDTHS ) {
+				return $WIDTHS[ $crypto ];
+			}, $currencies ), function( $acc, $width ) {
+				return $acc + $width;
+			}, 0 ) + $SPACING * ( count( $currencies ) - 1 );
+
+			$offsets = [
+				'nim' => 0,
+				'btc' => $WIDTHS[ 'nim' ] + $SPACING,
+				'eth' => in_array( 'btc', $currencies )
+					? $WIDTHS[ 'nim' ] + $WIDTHS[ 'btc' ] + $SPACING * 2
+					: $WIDTHS[ 'nim' ] + $SPACING,
+			];
+
+			$alt = implode( ', ', array_map( function( $crypto ) {
+				return ucfirst( Crypto_Manager::iso_to_name( $crypto ) );
+			}, $currencies ) );
+
+			/**
+			 * Data URLs need to be escaped like this:
+			 * - all # must be %23
+			 * - all double quotes (") must be single quotes (')
+			 * - :// must be %3A%2F%2F
+			 * - all slashes in attributes (/) must be %2F
+			 */
+
+			$logo_nimiq = "<path transform='translate(0 1)' d='M24.71,10,19.51,1a2.09,2.09,0,0,0-1.8-1H7.29a2.09,2.09,0,0,0-1.8,1L.29,10A2,2,0,0,0,.29,12L5.49,21a2.09,2.09,0,0,0,1.8,1H17.71a2.09,2.09,0,0,0,1.8-1L24.71,12A2,2,0,0,0,24.71,10Z'/>";
+
+			$logo_bitcoin = in_array( 'btc', $currencies ) ? "<path transform='translate(" . $offsets[ 'btc' ] . " 0)' d='M9.1,23.64A12,12,0,1,0,.36,9.1,12,12,0,0,0,9.1,23.64ZM14.65,7.27c1.67.57,2.88,1.43,2.64,3h0a2.09,2.09,0,0,1-1.68,1.93,2.31,2.31,0,0,1,1.21,3.19c-.71,2-2.4,2.2-4.64,1.78l-.55,2.18-1.31-.32.53-2.16-1-.27-.54,2.16L8,18.47l.54-2.19-2.65-.67L6.5,14.1s1,.26,1,.24A.49.49,0,0,0,8.06,14L9.53,8.1a.7.7,0,0,0-.61-.77S8,7.1,8,7.1l.36-1.41L11,6.35l.54-2.16,1.31.32L12.3,6.63l1,.25.53-2.1,1.31.32Zm-4.16,7.84c1.07.28,3.42.9,3.8-.6h0c.38-1.53-1.9-2-3-2.29L11,12.14,10.23,15Zm1-4.24c.9.24,2.85.77,3.19-.6h0c.35-1.39-1.55-1.81-2.48-2l-.27-.06-.65,2.63Z'/>" : "";
+
+			$logo_ethereum = in_array( 'eth', $currencies ) ? "<g transform='translate(" . $offsets[ 'eth' ] . " 0)'><path opacity='.7' d='M7.24.18v15.39l6.8-4.04L7.25.18z'/><path opacity='.5' d='M7.23.18L.43 11.53l6.8 4.04V.18z'/><path opacity='.7' d='M7.24 16.87v5.6l6.81-9.64-6.81 4.04z'/><path opacity='.5' d='M7.23 22.46v-5.6l-6.8-4.03 6.8 9.63z'/><path d='M7.24 15.57l6.8-4.05-6.8-3.1v7.15z'/><path opacity='.6' d='M.43 11.52l6.8 4.05V8.42l-6.8 3.1z'/></g>" : "";
+
+			$icon_src = "data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' fill='%23fff' width='" . $image_width . "' height='24' viewBox='0 0 " . $image_width . " 24'>" . $logo_nimiq . $logo_bitcoin . $logo_ethereum . "</svg>";
+
+			return '<img src="' . $icon_src . '" alt="' . $alt . '">';
+		}
+
 		public function get_setting( $key ) {
 			return $this->get_option( $key, isset( $this->DEFAULTS[ $key ] ) ? $this->DEFAULTS[ $key ] : null );
 		}
@@ -519,8 +568,11 @@ function wc_nimiq_gateway_init() {
 					<?php } ?>
 
 					<button type="submit" class="button" id="nim_pay_button">
-						<?php echo $this->get_icon(); ?>
-						<span><?php _e( 'Pay with Crypto', 'wc-gateway-nimiq' ) ?></span>
+						<span><?php
+							/* translators: Used on the payment button: "PAY WITH <crypto icons>" */
+							_e( 'PAY WITH', 'wc-gateway-nimiq' );
+						?></span>
+						<?php echo $this->get_mono_icon( $monocolor = true ); ?>
 					</button>
 				</div>
 
