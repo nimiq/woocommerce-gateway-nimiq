@@ -1,0 +1,646 @@
+# Copyright (C) 2019 Nimiq
+# This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
+# Translators:
+# Talleyrand <baptistekugener@wanadoo.fr>, 2019
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
+"POT-Creation-Date: 2019-11-26T16:53:27+00:00\n"
+"PO-Revision-Date: 2019-11-19 15:53+0000\n"
+"Last-Translator: Talleyrand <baptistekugener@wanadoo.fr>, 2019\n"
+"Language-Team: French (https://www.transifex.com/nimiq-foundation/teams/104965/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: wc-gateway-nimiq\n"
+"X-Generator: WP-CLI 2.4.0\n"
+
+#. Plugin Name of the plugin
+#: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
+msgid "Nimiq Cryptocurrency Checkout"
+msgstr "Nimiq Cryptocurrency Checkout"
+
+#. Plugin URI of the plugin
+msgid "https://github.com/nimiq/woocommerce-gateway-nimiq"
+msgstr "https://github.com/nimiq/woocommerce-gateway-nimiq"
+
+#. Description of the plugin
+msgid "Let customers pay with Bitcoin, Ethereum and Nimiq"
+msgstr "Permettre aux clients de payer en Bitcoin, Ethereum et Nimiq."
+
+#. Author of the plugin
+msgid "Nimiq"
+msgstr "Nimiq"
+
+#. Author URI of the plugin
+msgid "https://nimiq.com"
+msgstr "https://nimiq.com"
+
+#: includes/bulk_actions.php:20
+msgid "Validate Transactions"
+msgstr "Valider les transactions."
+
+#: includes/bulk_actions.php:94
+msgid "Transaction was not found."
+msgstr "La transaction n'a pas été trouvée."
+
+#: includes/bulk_actions.php:115
+msgid "Transaction arrived too late. (Quote expired)"
+msgstr "La transaction est arrivée trop tard. (Citation expirée)."
+
+#: includes/bulk_actions.php:122
+msgid "Sender of transaction does not match."
+msgstr "L'émetteur de la transaction ne correspond pas."
+
+#: includes/bulk_actions.php:128
+msgid "Recipient of transaction does not match."
+msgstr "Le destinataire de la transaction ne correspond pas. "
+
+#: includes/bulk_actions.php:135
+msgid "Transaction value is too small."
+msgstr "Valeur de transaction trop faible."
+
+#: includes/bulk_actions.php:147
+msgid "Transaction order hash does not match."
+msgstr "Le hash de la transaction ne correspond pas."
+
+#: includes/bulk_actions.php:162
+msgid "Valid transaction found, awaiting confirmation."
+msgstr "Transaction valide détectée, en attente de confirmation."
+
+#: includes/bulk_actions.php:170
+msgid "Transaction validated and confirmed."
+msgstr "Transaction validée et confirmée."
+
+#. translators: %d: Number of updated orders
+#: includes/bulk_actions.php:217 includes/validation_scheduler.php:64
+msgid "Updated %d order"
+msgid_plural "Updated %d orders"
+msgstr[0] "Mise à jour de %d commande"
+msgstr[1] "Mise à jour de %d commandes"
+
+#. translators: %d: Number of orders to process
+#: includes/validation_scheduler.php:42
+msgid "Processing %d order"
+msgid_plural "Processing %d orders"
+msgstr[0] "Traitement de %d commande"
+msgstr[1] "Traitement de %dcommandes"
+
+#. translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD
+#: price_services/coingecko.php:63
+msgid "The currency %s is not supported by Coingecko."
+msgstr "La devise %s n'est pas supportée par Coingecko."
+
+#: price_services/nimiqx.php:21 validation_services/etherscan.php:22
+#: validation_services/nimiqx.php:20
+msgid "API key not set."
+msgstr "Clé API non définie."
+
+#: price_services/nimiqx.php:24 validation_services/nimiqx.php:23
+msgid "Invalid API key."
+msgstr "Clé API invalide."
+
+#. translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD
+#: price_services/nimiqx.php:57
+msgid "The currency %s is not supported by NimiqX."
+msgstr "La devise %s n'est pas supportée par NimiqX."
+
+#. translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum'
+#: settings.php:8
+msgid ""
+"You must install & enable either the <code>php-bcmath</code> or <code>php-"
+"gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency "
+"Checkout</strong>."
+msgstr ""
+"Vous devez installer et activer soit l'extension <code>php-bcmath</code> ou "
+"<code>php-gmp</code>pour accepter %savec <strong>Nimiq Cryptocurrency "
+"Checkout </strong>"
+
+#: settings.php:22
+msgid "also estimates fees"
+msgstr "frais estimés"
+
+#: settings.php:28
+msgid "Shop Logo"
+msgstr "Logo de la boutique"
+
+#: settings.php:30
+msgid ""
+"Display your logo in Nimiq Checkout by entering a URL to an image file here."
+" The file must be on the same domain as your webshop. The image should be "
+"quadratic for best results."
+msgstr ""
+"Afficher votre logo dans Nimiq Checkout en entrant un URL menant à un "
+"fichier image. Le fichier doit être hébergé sur le même domaine que votre "
+"boutique. L'image doit être quadratique pour un meilleur résultat."
+
+#: settings.php:34
+msgid "Enter URL or leave empty to use your WordPress's site icon."
+msgstr ""
+"Entrez un URL ou laissez vide pour utiliser l'icône Wordpress de votre site."
+
+#: settings.php:35
+msgid "Enter URL to display your logo during checkout."
+msgstr "Entrez un URL pour afficher votre logo durant le paiement."
+
+#: settings.php:43
+msgid "Email Instructions"
+msgstr "Instructions par email."
+
+#: settings.php:45
+msgid "Instructions that will be added to the thank-you page and emails."
+msgstr "Instructions ajoutées à la page de remerciement et aux emails."
+
+#: settings.php:46
+msgid ""
+"You will receive email updates after your payment has been confirmed and "
+"when your order has been shipped."
+msgstr ""
+"Vous recevrez des mises-à-jours par email après que votre paiement ait été "
+"confirmé et lorsque votre commande aura été expédiée."
+
+#. translators: %s: Full crypo currency name, e.g. 'Nimiq', 'Bitcoin' or
+#. 'Ethereum'
+#: settings.php:54 settings.php:126 settings.php:168
+msgid "All %s-related settings"
+msgstr "Tous les réglages relatifs à/au %s"
+
+#: settings.php:59
+msgid "Wallet Address"
+msgstr "Adresse du portefeuille."
+
+#: settings.php:61
+msgid "The Nimiq address that your customers will pay to."
+msgstr "L'adresse Nimiq à laquelle vos clients vont payer."
+
+#: settings.php:68
+msgid "Transaction Message"
+msgstr "Message de transaction."
+
+#: settings.php:70
+msgid ""
+"Enter a message that should be included in every transaction. 50 characters "
+"maximum."
+msgstr ""
+"Entrer un message devant être inclus dans chaque transaction. 50 caractères "
+"maximum."
+
+#: settings.php:71
+msgid "Thank you for shopping with us!"
+msgstr "Merci d'avoir fait vos achats avec nous !"
+
+#: settings.php:76 settings.php:153 settings.php:191
+msgid "Chain Monitoring Service"
+msgstr "Service de surveillance de la chaîne."
+
+#: settings.php:78
+msgid "Which service should be used for monitoring the Nimiq blockchain."
+msgstr "Service devant être utilisé pour surveiller la blockchain Nimiq."
+
+#: settings.php:90
+msgid "JSON-RPC URL"
+msgstr "URL JSON-RPC"
+
+#: settings.php:92
+msgid ""
+"Full URL (including port) of the Nimiq JSON-RPC server used to monitor the "
+"Nimiq blockchain."
+msgstr ""
+"URL complète (port inclus) du serveur JSON-RPC Nimiq utilisé pour surveiller"
+" la blockchain Nimiq."
+
+#: settings.php:94
+msgid "This field is required when accepting Ethereum."
+msgstr "Ce champs est requis si Ethereum est accepté."
+
+#: settings.php:100
+msgid "JSON-RPC Username"
+msgstr "Nom d'utilisateur JSON-RPC"
+
+#: settings.php:102
+msgid "Username for the protected JSON-RPC service. (Optional)"
+msgstr "Nom d'utilisateur pour le service JSON-RPC protégé. (Optionnel)"
+
+#: settings.php:107
+msgid "JSON-RPC Password"
+msgstr "Mot de passe JSON-RPC"
+
+#: settings.php:109
+msgid "Password for the protected JSON-RPC service. (Optional)"
+msgstr "Mot de passe pour le service JSON-RPC protégé. (Optionnel)"
+
+#: settings.php:114
+msgid "NimiqX API Key"
+msgstr "Clé API NimiqX"
+
+#: settings.php:116
+msgid ""
+"Key for accessing the NimiqX exchange rate and chain monitoring service. "
+"Visit nimiqx.com to sign up for a key."
+msgstr ""
+"Clé d'accès au service de surveillance NimiqX des taux de change et de la "
+"chaine. Visitez nimiqx.com pour obtenir une clé."
+
+#: settings.php:117 settings.php:206
+msgid "This field is required."
+msgstr "Ce champs est requis."
+
+#. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
+#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:828
+msgid "Wallet Account Public Key"
+msgstr "Clé publique du portefeuille"
+
+#: settings.php:134
+msgid ""
+"Your Bitcoin xpub/zpub/tpub/vpub \"Master Public Key\" from which payment "
+"addresses are derived."
+msgstr ""
+"Votre \"Master Public Key\" Bitcoin xpub/zpub/tpub/vpub depuis laquelle les "
+"adresses de paiement sont dérivées."
+
+#: settings.php:140
+msgid "Public Key Type"
+msgstr "Type de clé publique"
+
+#: settings.php:142
+msgid ""
+"The derivation type of the public key. Usually, you do not have to change "
+"this. But there are wallets such as Coinomi that will show a field called "
+"\"Derivation\" or \"BIP32\" that looks similar to the values in the select "
+"box, in that case, pick the value that matches the one shown in your wallet."
+msgstr ""
+"Type de dérivation de la clé publique. Habituellement, vous n'avez pas à "
+"changer cela. Néanmoins il existe des portefeuilles tels que Coinomi qui "
+"afficheront un champ appelé \"Derivation\" ou \"BIP32\" qui ressemble aux "
+"valeurs dans la boîte de sélection, dans ce cas, choisissez la valeur qui "
+"correspond à celle affichée dans votre portefeuille."
+
+#: settings.php:145
+msgid "Legacy"
+msgstr "Legacy"
+
+#: settings.php:147
+msgid "Native SegWit"
+msgstr "Native SegWit"
+
+#: settings.php:155
+msgid "Which service should be used for monitoring the Bitcoin blockchain."
+msgstr "Service devant être utilisé pour surveiller la blockchain Bitcoin."
+
+#: settings.php:176
+msgid ""
+"Your Ethereum xpub \"Account Public Key\" from which payment addresses are "
+"derived."
+msgstr ""
+"Votre \"Account Public Key\" Ethereum depuis laquelle les adresses de "
+"paiement sont dérivées."
+
+#: settings.php:184
+msgid ""
+"Re-using addresses reduces your shop's privacy but gives you the comfort of "
+"having payments distributed over less addresses."
+msgstr ""
+"La réutilisation d'adresses réduit la confidentialité de votre boutique, "
+"mais vous offre le confort d'avoir des paiements répartis sur moins "
+"d'adresses."
+
+#: settings.php:185
+msgid "Re-use Addresses"
+msgstr "Réutiliser les adresses."
+
+#: settings.php:193
+msgid "Which service should be used for monitoring the Ethereum blockchain."
+msgstr "Service devant être utilisé pour surveiller la blockchain Ethereum."
+
+#: settings.php:203
+msgid "Etherscan.io API Key"
+msgstr "Clé API Etherscan.io"
+
+#: settings.php:205
+msgid "Token for accessing the Etherscan chain monitoring service."
+msgstr "Token pour accéder au service Etherscan de surveillance de chaîne."
+
+#: settings.php:219
+msgid "Network Mode"
+msgstr "Mode de réseau"
+
+#: settings.php:221
+msgid ""
+"Which network to use: Testnet for testing, Mainnet when the shop is running "
+"live."
+msgstr ""
+"Quel réseau utiliser : Testnet pour tester, Mainnet lorsque la boutique est "
+"opérationnelle."
+
+#: settings.php:228
+msgid "Exchange Rate service"
+msgstr "Service de taux de change."
+
+#: settings.php:230
+msgid ""
+"Which service to use for fetching price information for currency conversion."
+msgstr ""
+"Service à utiliser pour récupérer les prix lors de la conversion en devises."
+
+#: settings.php:237
+msgid "NIM Fee per Byte [Luna]"
+msgstr "Frais en NIM par Byte [Luna]"
+
+#: settings.php:239
+msgid "Lunas per byte to be applied to transactions."
+msgstr "Lunas par byte appliqués aux transactions."
+
+#. translators: %1$d: Amount, %2$s: Unit of amount
+#: settings.php:241 settings.php:249 settings.php:257
+msgid "Optional - Default: %1$d %2$s"
+msgstr "Optionnel - par défaut : %1$d%2$s"
+
+#: settings.php:246
+msgid "BTC Fee per Byte [Sat]"
+msgstr "Frais en BTC par Byte [Sat]"
+
+#: settings.php:248
+msgid "Satoshis per byte to be applied to transactions."
+msgstr "Satoshis par byte appliqués aux transactions."
+
+#: settings.php:254
+msgid "ETH Gas Price [Gwei]"
+msgstr "Prix du Gas ETH [Gwei]"
+
+#: settings.php:256
+msgid "Gas price in Gwei to be applied to transactions."
+msgstr "Prix du Gas en Gwei appliqué aux transactions."
+
+#: settings.php:262
+msgid "Margin Percentage"
+msgstr "Pourcentage de marge."
+
+#: settings.php:264
+msgid ""
+"A margin to apply to crypto payments, in percent. Can also be negative."
+msgstr ""
+"Une marge à appliquer aux paiements cryptos, en pourcentage. Peut aussi être"
+" négatif."
+
+#: settings.php:270
+msgid "Validation Interval [minutes]"
+msgstr "Intervalle de validation [minutes]"
+
+#: settings.php:272
+msgid ""
+"Interval between validating transactions, in minutes. If you change this, "
+"disable and enable this plugin to apply the new interval."
+msgstr ""
+"Intervalle entre la validation des transactions, en minutes. Si vous changez"
+" cela, désactivez et réactivez le plugin pour appliquer le nouvel interval."
+
+#. translators: %d: Number of minutes
+#: settings.php:274 settings.php:291
+msgid "Optional - Default: %d minutes"
+msgstr "Optionnel - par défaut : %d minutes"
+
+#: settings.php:279
+msgid "Checkout Behavior"
+msgstr "Comportement du Checkout"
+
+#: settings.php:281
+msgid ""
+"How should the user be forwarded to Nimiq Checkout to finalize the payment "
+"process, as a popup or by being redirected?"
+msgstr ""
+"Comment l'utilisateur doit-il être amené vers Nimiq Checkout pour finaliser "
+"le processus de paiement, sous forme de popup ou en étant redirigé ?"
+
+#: settings.php:288
+msgid "Payment Timeout"
+msgstr "Délai de paiement dépassé"
+
+#: settings.php:290
+msgid ""
+"How many minutes to wait for a payment transaction before considering the "
+"order to have failed."
+msgstr ""
+"Nombre de minutes d'attente pour une transaction de paiement avant de "
+"considérer la commande comme échouée."
+
+#. translators: %s: Cryptocurrency name
+#: settings.php:297 settings.php:306 settings.php:314
+msgid "Required confirmations for %s"
+msgstr "Confirmation requise pour %s"
+
+#: settings.php:299
+msgid ""
+"The number of confirmations required to accept a Nimiq transaction. Each "
+"confirmation takes 1 minute on average."
+msgstr ""
+"Nombre de confirmations requises pour accepter une transaction Nimiq. Chaque"
+" confirmation prend 1 minute en moyenne."
+
+#. translators: %d: Number of blocks
+#: settings.php:301 settings.php:309 settings.php:317
+msgid "Optional - Default: %d blocks"
+msgstr "Optionnel - par défaut : %dblocks"
+
+#: settings.php:308
+msgid ""
+"The number of confirmations required to accept a Bitcoin transaction. Each "
+"confirmation takes 10 minutes on average."
+msgstr ""
+"Le nombre de confirmations nécessaires pour accepter une transaction "
+"Bitcoin. Chaque confirmation dure en moyenne 10 minutes."
+
+#: settings.php:316
+msgid ""
+"The number of confirmations required to accept an Ethereum transaction. Each"
+" confirmation takes 15 seconds on average."
+msgstr ""
+"Le nombre de confirmations nécessaires pour accepter une transaction "
+"Ethereum. Chaque confirmation dure en moyenne 15 secondes."
+
+#. translators: %s: Blockchain monitoring service
+#: validation_services/blockstream.php:49
+#: validation_services/json_rpc_nim.php:44
+#: validation_services/nimiq_watch.php:39
+msgid "Could not get the current blockchain height from %s."
+msgstr "Impossible d'obtenir la hauteur de la blockchain depuis %s."
+
+#: validation_services/blockstream.php:72 validation_services/etherscan.php:45
+#: validation_services/json_rpc_nim.php:65 validation_services/nimiqx.php:66
+#: validation_services/nimiq_watch.php:60 woo-nimiq-gateway.php:645
+msgid "Invalid transaction hash."
+msgstr "Hash de transaction invalide."
+
+#. translators: %s: Blockchain monitoring service
+#: validation_services/blockstream.php:177
+#: validation_services/etherscan.php:142
+#: validation_services/json_rpc_nim.php:101
+msgid "Could not retrieve transaction information from %s."
+msgstr "Impossible de récupérer les infos de transaction depuis %s."
+
+#: validation_services/etherscan.php:51
+msgid "Invalid merchant address."
+msgstr "Adresse du marchand invalide."
+
+#: validation_services/json_rpc_nim.php:16
+msgid "API URL not set."
+msgstr "URL de l'API non défini."
+
+#: validation_services/json_rpc_nim.php:40
+msgid "JSON-RPC replied:"
+msgstr "JSON-RPC a répondu :"
+
+#: validation_services/nimiqx.php:15
+msgid "NimiqX can only be used for mainnet."
+msgstr "NimiqX ne peut être utilisé que sur le mainnet."
+
+#: woo-nimiq-gateway.php:36
+msgid ""
+"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have "
+"WooCommerce installed!"
+msgstr ""
+"Pour utiliser <strong>Nimiq Cryptocurrency Checkout</strong>, Woocommerce "
+"doit être installé !"
+
+#: woo-nimiq-gateway.php:45
+msgid ""
+"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP "
+">= 7.1."
+msgstr ""
+"Pour utliser<strong>Nimiq Cryptocurrency Checkout</strong>, vous devez "
+"utiliser PHP>=7.1."
+
+#. translators: %s: Email address
+#: woo-nimiq-gateway.php:65
+msgid ""
+"To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run "
+"under HTTPS (SSL encrypted)."
+msgstr ""
+"Pour utiliser <strong>Nimiq Cryptocurrency Checkout</strong>, votre boutique"
+" doit fonctionner sous HTTPS (encrypté en SSL)."
+
+#. translators: %s: Email address
+#: woo-nimiq-gateway.php:65
+msgid "If you believe this error is a mistake, contact us at %s."
+msgstr ""
+"Si vous pensez que cette erreur est inappropriée, contactez-nous à %s."
+
+#: woo-nimiq-gateway.php:81
+msgid ""
+"Your store uses a currency that is currently not supported by the "
+"<strong>Nimiq Cryptocurrency Checkout</strong>."
+msgstr ""
+"Votre boutique utilise une devise non supportée par <strong>Nimiq "
+"Cryptocurrency Checkout</strong> pour le moment."
+
+#: woo-nimiq-gateway.php:83
+msgid "Find out which currencies are supported."
+msgstr "Découvrez quelles devises sont prises en charge."
+
+#: woo-nimiq-gateway.php:120
+msgid "Settings"
+msgstr "Réglages"
+
+#: woo-nimiq-gateway.php:148
+msgid ""
+"Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be "
+"guided through the setup process, follow <a "
+"href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
+"installation\">this tutorial.</a>"
+msgstr ""
+"Recevez des paiements en Bitcoin, Ethereum et Nimiq. Si vous désirez être "
+"guidé durant le processus de configuration, suivez <a "
+"href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
+"installation\">ce tutoriel.</a>"
+
+#. translators: %s: Cryptocurrency name
+#: woo-nimiq-gateway.php:177
+msgid "Pay with %s."
+msgstr "Payer avec %s."
+
+#. translators: %1$s: Two cryptocurrency names separated by comma, %2$s:
+#. Cryptocurrency name
+#: woo-nimiq-gateway.php:179
+msgid "Pay with %1$s or %2$s."
+msgstr "Payer avec %1$s ou %2$s."
+
+#: woo-nimiq-gateway.php:419
+msgid ""
+"Cryptocurrency Checkout is temporarily not available. Please try reloading "
+"this page. (Issue: price service did not return any pricing information.)"
+msgstr ""
+"Cryptocurrency Checkout est temporairement indisponible. Essayez de "
+"rafraichir la page s'il vous plaît. (Issue: price service did not return any"
+" pricing information.)"
+
+#: woo-nimiq-gateway.php:522
+msgid "What is Nimiq?"
+msgstr "Qu'est-ce que Nimiq ?"
+
+#: woo-nimiq-gateway.php:562
+msgid ""
+"Javascript is required to pay with cryptocurrency. Please activate "
+"Javascript to continue."
+msgstr ""
+"Javascript est requis pour payer en cryptomonnaies. Activez Javascript pour "
+"continuer."
+
+#. translators: Used on the payment button: "PAY WITH <crypto icons>"
+#: woo-nimiq-gateway.php:573
+msgid "PAY WITH"
+msgstr "PAYER AVEC"
+
+#: woo-nimiq-gateway.php:581
+msgid "Payment received"
+msgstr "Paiement reçu"
+
+#. translators: %s: Error message
+#: woo-nimiq-gateway.php:615 woo-nimiq-gateway.php:624
+#: woo-nimiq-gateway.php:627
+msgid "Nimiq Payment failed. (%s)."
+msgstr "Échec du Paiement Nimiq. (%s)."
+
+#. translators: %s: Error message
+#: woo-nimiq-gateway.php:615
+msgid "Response code not \"OK\""
+msgstr "Response code not \"OK\""
+
+#: woo-nimiq-gateway.php:624
+msgid "Could not decode Hub result"
+msgstr "Could not decode Hub result"
+
+#: woo-nimiq-gateway.php:627
+msgid "Hub result is empty"
+msgstr "Hub result is empty"
+
+#: woo-nimiq-gateway.php:640
+msgid "You need to confirm the Nimiq payment first."
+msgstr "Vous devez confirmer le paiement en Nimiq d'abord."
+
+#: woo-nimiq-gateway.php:645
+msgid "Please contact support with this error message."
+msgstr "Contactez le support avec ce message d'erreur."
+
+#: woo-nimiq-gateway.php:731
+msgid "Waiting for transaction to be validated."
+msgstr "En attente de validation de la transaction."
+
+#: woo-nimiq-gateway.php:753
+msgid ""
+"You must fill in your store's Nimiq address to be able to accept payments in"
+" NIM."
+msgstr ""
+"Vous devez entrez l'adresse Nimiq de votre boutique pour accepter des "
+"paiements en NIM."
+
+#: woo-nimiq-gateway.php:755
+msgid "Set your Nimiq address here."
+msgstr "Entrez votre adresse Nimiq ici."
+
+#. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
+#: woo-nimiq-gateway.php:828
+msgid "<strong>%1$s %2$s</strong> was not saved:"
+msgstr "<strong>%1$s%2$s</strong> n'a pas été sauvegardé. "
