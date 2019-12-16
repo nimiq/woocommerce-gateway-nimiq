@@ -552,9 +552,9 @@ function wc_nimiq_gateway_init() {
 			) );
 			wp_enqueue_script( 'NimiqCheckout' );
 
-			$returnUrl = $this->get_nimiq_hub_return_url( $order_id );
+			$submitUrl = $this->get_option( 'rpc_behavior' ) === 'popup' ? $this->get_nimiq_hub_return_url( $order_id ) : '';
 			?>
-			<form id="pay_with_nimiq" method="POST" action="<?php echo $returnUrl; ?>">
+			<form id="pay_with_nimiq" method="POST" action="<?php echo $submitUrl; ?>">
 				<div id="nim_gateway_info_block">
 					<?php if ( $this->get_option( 'rpc_behavior' ) === 'popup' ) { ?>
 						<noscript>
@@ -565,6 +565,17 @@ function wc_nimiq_gateway_init() {
 
 						<input type="hidden" name="status" id="status" value="">
 						<input type="hidden" name="result" id="result" value="">
+					<?php } ?>
+
+					<?php if ( $this->get_option( 'rpc_behavior' ) === 'redirect' ) { ?>
+						<?php // https://github.com/woocommerce/woocommerce/blob/master/templates/checkout/payment-method.php#L23 ?>
+						<input type="hidden" name="payment_method" value="<?php echo $this->id; ?>">
+
+						<?php // https://github.com/woocommerce/woocommerce/blob/master/templates/checkout/form-pay.php#L85 ?>
+						<input type="hidden" name="woocommerce_pay" value="1">
+
+						<?php // https://github.com/woocommerce/woocommerce/blob/master/templates/checkout/form-pay.php#L95 ?>
+						<?php wp_nonce_field( 'woocommerce-pay', 'woocommerce-pay-nonce' ); ?>
 					<?php } ?>
 
 					<button type="submit" class="button" id="nim_pay_button">
