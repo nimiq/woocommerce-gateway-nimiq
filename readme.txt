@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.8
-Stable tag: v3.1.0
+Stable tag: v3.1.1
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,11 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.1.1 - 2019.12.16 =
+
+* Fix popup overlay positioning on scrollable pages
+* Fix endless loop for redirect payments from payment page
+
 = 3.1.0 - 2019.12.07 =
 
 * Add French translations
@@ -83,6 +88,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.1 =
+
+Fixed popup overlay positioning and endless redirect payment loop.
 
 = 3.1.0 =
 
