@@ -18,10 +18,6 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         $this->last_api_call_time = null;
 
         $this->api_key = $gateway->get_option( 'etherscan_api_key' );
-        if ( empty( $this->api_key ) ) {
-            throw new Exception( __( 'API key not set.', 'wc-gateway-nimiq' ) );
-        }
-
         $this->api_url = $gateway->get_option( 'network' ) === 'main'
             ? 'https://api.etherscan.io/api'
             : 'https://api-ropsten.etherscan.io/api';
@@ -237,6 +233,10 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
     }
 
     private function makeUrl( $query ) {
+        if ( empty( $this->api_key ) ) {
+            throw new Exception( __( 'Etherscan API key not set.', 'wc-gateway-nimiq' ) );
+        }
+
         return $this->api_url . $query . '&apikey=' . $this->api_key;
     }
 }
