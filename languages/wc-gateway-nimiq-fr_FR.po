@@ -2,6 +2,8 @@
 # This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
 # Translators:
 # Talleyrand <baptistekugener@wanadoo.fr>, 2019
+# Matheo <matheo@nimiq.com>, 2020
+# Sören Schwert <hello@soerenschwert.de>, 2020
 # 
 msgid ""
 msgstr ""
@@ -9,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2019-11-26T16:53:27+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
-"Last-Translator: Talleyrand <baptistekugener@wanadoo.fr>, 2019\n"
+"Last-Translator: Sören Schwert <hello@soerenschwert.de>, 2020\n"
 "Language-Team: French (https://www.transifex.com/nimiq-foundation/teams/104965/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,7 +52,7 @@ msgstr "La transaction n'a pas été trouvée."
 
 #: includes/bulk_actions.php:115
 msgid "Transaction arrived too late. (Quote expired)"
-msgstr "La transaction est arrivée trop tard. (Citation expirée)."
+msgstr "La transaction est arrivée trop tard. (Quote expired)."
 
 #: includes/bulk_actions.php:122
 msgid "Sender of transaction does not match."
@@ -122,7 +124,7 @@ msgstr ""
 
 #: settings.php:22
 msgid "also estimates fees"
-msgstr "frais estimés"
+msgstr "estime aussi les frais"
 
 #: settings.php:28
 msgid "Shop Logo"
@@ -141,15 +143,16 @@ msgstr ""
 #: settings.php:34
 msgid "Enter URL or leave empty to use your WordPress's site icon."
 msgstr ""
-"Entrez un URL ou laissez vide pour utiliser l'icône Wordpress de votre site."
+"Entrez une URL ou laissez vide pour utiliser l'icône Wordpress de votre "
+"site."
 
 #: settings.php:35
 msgid "Enter URL to display your logo during checkout."
-msgstr "Entrez un URL pour afficher votre logo durant le paiement."
+msgstr "Entrez une URL pour afficher votre logo durant le paiement."
 
 #: settings.php:43
 msgid "Email Instructions"
-msgstr "Instructions par email."
+msgstr "Instructions pour les clients"
 
 #: settings.php:45
 msgid "Instructions that will be added to the thank-you page and emails."
@@ -296,7 +299,7 @@ msgid ""
 "Your Ethereum xpub \"Account Public Key\" from which payment addresses are "
 "derived."
 msgstr ""
-"Votre \"Account Public Key\" Ethereum depuis laquelle les adresses de "
+"Votre xpub Ethereum \"Account Public Key\" depuis laquelle les adresses de "
 "paiement sont dérivées."
 
 #: settings.php:184
@@ -344,15 +347,16 @@ msgstr "Service de taux de change."
 msgid ""
 "Which service to use for fetching price information for currency conversion."
 msgstr ""
-"Service à utiliser pour récupérer les prix lors de la conversion en devises."
+"Service à utiliser pour récupérer les informations de prix pour la "
+"conversion en devises."
 
 #: settings.php:237
 msgid "NIM Fee per Byte [Luna]"
-msgstr "Frais en NIM par Byte [Luna]"
+msgstr "Frais en NIM par Octet [Luna]"
 
 #: settings.php:239
 msgid "Lunas per byte to be applied to transactions."
-msgstr "Lunas par byte appliqués aux transactions."
+msgstr "Lunas par octet appliqués aux transactions."
 
 #. translators: %1$d: Amount, %2$s: Unit of amount
 #: settings.php:241 settings.php:249 settings.php:257
@@ -361,11 +365,11 @@ msgstr "Optionnel - par défaut : %1$d%2$s"
 
 #: settings.php:246
 msgid "BTC Fee per Byte [Sat]"
-msgstr "Frais en BTC par Byte [Sat]"
+msgstr "Frais en BTC par Octet [Sat]"
 
 #: settings.php:248
 msgid "Satoshis per byte to be applied to transactions."
-msgstr "Satoshis par byte appliqués aux transactions."
+msgstr "Satoshis par octet appliqués aux transactions."
 
 #: settings.php:254
 msgid "ETH Gas Price [Gwei]"
@@ -377,7 +381,7 @@ msgstr "Prix du Gas en Gwei appliqué aux transactions."
 
 #: settings.php:262
 msgid "Margin Percentage"
-msgstr "Pourcentage de marge."
+msgstr "Pourcentage de marge"
 
 #: settings.php:264
 msgid ""
@@ -424,13 +428,13 @@ msgid ""
 "How many minutes to wait for a payment transaction before considering the "
 "order to have failed."
 msgstr ""
-"Nombre de minutes d'attente pour une transaction de paiement avant de "
-"considérer la commande comme échouée."
+"Nombre de minutes à attendre une transaction de paiement avant de considérer"
+" la commande comme échouée."
 
 #. translators: %s: Cryptocurrency name
 #: settings.php:297 settings.php:306 settings.php:314
 msgid "Required confirmations for %s"
-msgstr "Confirmation requise pour %s"
+msgstr "Confirmations requise pour %s"
 
 #: settings.php:299
 msgid ""
@@ -438,12 +442,12 @@ msgid ""
 "confirmation takes 1 minute on average."
 msgstr ""
 "Nombre de confirmations requises pour accepter une transaction Nimiq. Chaque"
-" confirmation prend 1 minute en moyenne."
+" confirmation prend en moyenne 1 minute."
 
 #. translators: %d: Number of blocks
 #: settings.php:301 settings.php:309 settings.php:317
 msgid "Optional - Default: %d blocks"
-msgstr "Optionnel - par défaut : %dblocks"
+msgstr "Optionnel - par défaut : %d blocks"
 
 #: settings.php:308
 msgid ""
@@ -451,7 +455,7 @@ msgid ""
 "confirmation takes 10 minutes on average."
 msgstr ""
 "Le nombre de confirmations nécessaires pour accepter une transaction "
-"Bitcoin. Chaque confirmation dure en moyenne 10 minutes."
+"Bitcoin. Chaque confirmation prend en moyenne 10 minutes."
 
 #: settings.php:316
 msgid ""
@@ -459,7 +463,7 @@ msgid ""
 " confirmation takes 15 seconds on average."
 msgstr ""
 "Le nombre de confirmations nécessaires pour accepter une transaction "
-"Ethereum. Chaque confirmation dure en moyenne 15 secondes."
+"Ethereum. Chaque confirmation prend en moyenne 15 secondes."
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:49
@@ -511,7 +515,7 @@ msgid ""
 ">= 7.1."
 msgstr ""
 "Pour utliser<strong>Nimiq Cryptocurrency Checkout</strong>, vous devez "
-"utiliser PHP>=7.1."
+"utiliser PHP >= 7.1."
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
@@ -533,8 +537,8 @@ msgid ""
 "Your store uses a currency that is currently not supported by the "
 "<strong>Nimiq Cryptocurrency Checkout</strong>."
 msgstr ""
-"Votre boutique utilise une devise non supportée par <strong>Nimiq "
-"Cryptocurrency Checkout</strong> pour le moment."
+"Votre boutique utilise une devise actuellement non supportée par "
+"<strong>Nimiq Cryptocurrency Checkout</strong>."
 
 #: woo-nimiq-gateway.php:83
 msgid "Find out which currencies are supported."
@@ -574,7 +578,7 @@ msgid ""
 msgstr ""
 "Cryptocurrency Checkout est temporairement indisponible. Essayez de "
 "rafraichir la page s'il vous plaît. (Issue: price service did not return any"
-" pricing information.)"
+" pricing information)"
 
 #: woo-nimiq-gateway.php:522
 msgid "What is Nimiq?"
@@ -622,7 +626,7 @@ msgstr "Vous devez confirmer le paiement en Nimiq d'abord."
 
 #: woo-nimiq-gateway.php:645
 msgid "Please contact support with this error message."
-msgstr "Contactez le support avec ce message d'erreur."
+msgstr "Merci de contactez le support avec ce message d'erreur."
 
 #: woo-nimiq-gateway.php:731
 msgid "Waiting for transaction to be validated."
