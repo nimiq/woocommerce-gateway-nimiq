@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 3.8
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.1.3 - 2020.02.01 =
+
+* Improve French translations
+
 = 3.1.2 - 2020.01.17 =
 
 * Fix transaction validation not working when no Etherscan API key was set
@@ -92,6 +96,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.3 =
+
+Improved French translations.
 
 = 3.1.2 =
 
