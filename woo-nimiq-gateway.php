@@ -435,7 +435,16 @@ function wc_nimiq_gateway_init() {
 					$order_totals_unit = Crypto_Manager::coins_to_units( $order_totals_crypto );
 
 					// Generate CSRF token
-					$csrf_token = wp_create_nonce( 'nimiq_checkout_' . $order->get_id() );
+					function generateRandomString( $length ) {
+						$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+						$randomString = '';
+						for ( $i = 0; $i < $length; $i++ ) {
+							$randomString .= $characters[ rand( 0, strlen ($characters ) - 1 ) ];
+						}
+						return $randomString;
+					}
+					$csrf_token = generateRandomString( 32 );
+					$order->update_meta_data( 'checkout_csrf_token', $csrf_token );
 
 					// Generate callback URL
 					$callback_url = $this->get_nimiq_callback_url( 'nimiq_checkout_callback', $order_id );

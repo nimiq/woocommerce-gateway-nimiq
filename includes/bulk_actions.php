@@ -168,6 +168,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 
 		// Mark payment as complete when confirmed
 		$order->add_order_note( __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ) );
+		$order->delete_meta_data( 'checkout_csrf_token' );
 		$order->payment_complete();
 		$count_orders_updated++;
 
@@ -178,6 +179,7 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 } // end _do_bulk_validate_transactions()
 
 function fail_order($order, $reason) {
+	$order->delete_meta_data( 'checkout_csrf_token' );
 	if ( $order->get_status() === 'on-hold' || $order->get_meta( 'nc_payment_state' ) === 'UNDERPAID' || !empty( $order->get_meta( 'transaction_hash' ) ) ) {
 		$order->update_status( 'failed', $reason );
 	} else {

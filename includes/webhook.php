@@ -57,7 +57,8 @@ function woo_nimiq_checkout_callback() {
     }
 
     // Validate CSRF token
-    if ( !wp_verify_nonce( $request[ 'csrf' ], 'nimiq_checkout_' . $order->get_id() ) ) {
+    $order_csrf_token = $order->get_meta( 'checkout_csrf_token' );
+    if ( empty( $request[ 'csrf' ] ) || $order_csrf_token !== $request[ 'csrf' ] ) {
         return woo_nimiq_checkout_error( 'Invalid CSRF token', 403 );
     }
 
