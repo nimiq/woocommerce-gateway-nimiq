@@ -856,7 +856,7 @@ function wc_nimiq_gateway_init() {
 			// TODO: Test by sending a request to the REST API?
 
 			if ( $has_rest_api ) {
-				return get_site_url() . '\/wc-api/' . $action . '?id=' . $id;
+				return get_site_url() . '/' . 'wc-api/' . $action . '?id=' . $id;
 			}
 
 			return admin_url('admin-ajax.php') . '?action=' . strtolower( $action ) . '&id=' . $id;
