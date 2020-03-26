@@ -1,4 +1,4 @@
-![Nimiq Cryptocurrency Checkout](https://github.com/nimiq/woocommerce-gateway-nimiq/blob/master/assets/banner-1544x500.png?raw=true)
+![Nimiq Cryptocurrency Checkout](https://raw.githubusercontent.com/nimiq/woocommerce-gateway-nimiq/master/.wordpress-org/banner-1544x500.png)
 
 # Nimiq Cryptocurrency Checkout for WooCommerce
 
