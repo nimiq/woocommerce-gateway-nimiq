@@ -11,7 +11,7 @@
  * Requires at least: 4.9
  * Tested up to: 5.3
  * WC requires at least: 3.5
- * WC tested up to: 3.8
+ * WC tested up to: 4.0
  *
  * Copyright: (c) 2018-2019 Nimiq Network Ltd., 2015-2016 SkyVerge, Inc. and WooCommerce
  *

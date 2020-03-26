@@ -5,7 +5,7 @@ Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoi
 Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 3.8
+Tested WooCommerce up to: 4.0
 Stable tag: 3.1.3
 Requires PHP: 7.1.0
 License: GPLv3
