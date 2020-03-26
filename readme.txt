@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.3
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 4.0
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,12 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.1.4 - 2020.03.26 =
+
+* Change to custom CSRF token generation, as WP nonces sometimes have problems validating
+* Update HubApi to v1.2.1
+* Tested with WooCommerce 4.0
+
 = 3.1.3 - 2020.02.01 =
 
 * Improve French translations
@@ -96,6 +102,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.1.4 =
+
+Fix a problem that sometimes prevented Nimiq Checkout from opening correctly.
 
 = 3.1.3 =
 
