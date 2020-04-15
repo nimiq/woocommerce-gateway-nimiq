@@ -353,7 +353,6 @@ function wc_nimiq_gateway_init() {
 				'shopLogoUrl' => $this->get_option( 'shop_logo_url' )
 					?: get_site_icon_url()
 					?: get_site_url() . '/wp-content/plugins/woocommerce-gateway-nimiq/assets/icon.svg',
-				'extraData' => $tx_message,
 			];
 
 			if ( $order_currency === 'NIM') {
@@ -366,6 +365,7 @@ function wc_nimiq_gateway_init() {
 					'recipient' => Order_Utils::get_order_recipient_address( $order, $this ),
 					'value' => intval( Order_Utils::get_order_total_crypto( $order ) ),
 					'fee' => $fees[ 'nim' ],
+					'extraData' => $tx_message,
 				] );
 			} else {
 				// Check if the order already has a payment or an unexpired quote
@@ -465,6 +465,7 @@ function wc_nimiq_gateway_init() {
 						];
 
 						if ( $crypto === 'nim' ) {
+							$protocolSpecific[ 'extraData' ] = $tx_message;
 							$protocolSpecific[ 'recipient' ] = Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ];
 						}
 
