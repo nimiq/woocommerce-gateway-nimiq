@@ -474,6 +474,7 @@ function wc_nimiq_gateway_init() {
 							'currency' => $crypto,
 							'expires' => $expires,
 							'amount' => $amount,
+							'vendorMarkup' => $margin,
 							'protocolSpecific' => $protocolSpecific,
 						];
 					};
