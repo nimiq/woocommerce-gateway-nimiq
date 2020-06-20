@@ -264,6 +264,9 @@ $woo_nimiq_checkout_settings = [
         'description' => __( 'A margin to apply to crypto payments, in percent. Can also be negative.', 'wc-gateway-nimiq' ),
         'placeholder' => 'Optional - Default: 0%',
         'desc_tip'    => true,
+        'custom_attributes' => [
+            'step'=> 0.1,
+        ],
     ],
 
     'validation_interval' => [
