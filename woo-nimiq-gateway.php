@@ -469,14 +469,19 @@ function wc_nimiq_gateway_init() {
 							$protocolSpecific[ 'recipient' ] = Order_Utils::get_order_recipient_addresses( $order, $this )[ 'nim' ];
 						}
 
-						$payment_options[] = [
+						$payment_option = [
 							'type' => 0, // 0 = DIRECT
 							'currency' => $crypto,
 							'expires' => $expires,
 							'amount' => $amount,
-							'vendorMarkup' => $margin,
 							'protocolSpecific' => $protocolSpecific,
 						];
+
+						if ( $margin !== 0.0 ) { // $margin is typed as a float, so need to compare to a float
+							$payment_option[ 'vendorMarkup' ] = $margin;
+						}
+
+						$payment_options[] = $payment_option;
 					};
 
 					$request = array_merge( $request, [
