@@ -3,10 +3,10 @@
 Contributors: nimiq
 Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
 Requires at least: 4.9
-Tested up to: 5.3
+Tested up to: 5.4
 Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 4.0
-Stable tag: 3.1.4
+Tested WooCommerce up to: 4.2
+Stable tag: 3.2.0
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,12 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.2.0 - 2020.06.22 =
+
+* Display vendor markup (margin) in Checkout price tooltip for transparency
+* Accept one decimal number for the margin setting
+* Nimiq Hub compatibility update
+
 = 3.1.4 - 2020.03.26 =
 
 * Change to custom CSRF token generation, as WP nonces sometimes have problems validating
@@ -102,6 +108,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.2.0 =
+
+Display vendor markup (margin) in Checkout price tooltip for transparency.
 
 = 3.1.4 =
 

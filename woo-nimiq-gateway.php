@@ -5,13 +5,13 @@
  * Description: Let customers pay with Bitcoin, Ethereum and Nimiq
  * Author: Nimiq
  * Author URI: https://nimiq.com
- * Version: 3.1.4
+ * Version: 3.2.0
  * Text Domain: wc-gateway-nimiq
  * Domain Path: /languages
  * Requires at least: 4.9
- * Tested up to: 5.3
+ * Tested up to: 5.4
  * WC requires at least: 3.5
- * WC tested up to: 4.0
+ * WC tested up to: 4.2
  *
  * Copyright: (c) 2018-2019 Nimiq Network Ltd., 2015-2016 SkyVerge, Inc. and WooCommerce
  *
