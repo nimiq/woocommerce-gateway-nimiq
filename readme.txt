@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.4
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 4.2
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.2.2 - 2020.08.11 =
+
+* Add Spanish translations
+
 = 3.2.1 - 2020.07.06 =
 
 * Add Chinese translations
@@ -113,6 +117,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.2.2 =
+
+Added Spanish translations.
 
 = 3.2.1 =
 
