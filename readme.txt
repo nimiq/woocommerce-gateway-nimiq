@@ -3,9 +3,9 @@
 Contributors: nimiq
 Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
 Requires at least: 4.9
-Tested up to: 5.4
+Tested up to: 5.6
 Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 4.2
+Tested WooCommerce up to: 4.9
 Stable tag: 3.2.2
 Requires PHP: 7.1.0
 License: GPLv3
@@ -72,6 +72,11 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.3.0 - 2021.01.25 =
+
+* Update Fastspot price service to new API
+* Add Dutch translations
+
 = 3.2.2 - 2020.08.11 =
 
 * Add Spanish translations
@@ -117,6 +122,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.3.0 =
+
+Update Fastspot price service to new API (old API will soon be shut off). Update NOW if you are using Fastspot as your price service! Also added Dutch translations.
 
 = 3.2.2 =
 
