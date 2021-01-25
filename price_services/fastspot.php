@@ -3,7 +3,7 @@ include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
 class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_Service_Interface {
 
-    private $api_endpoint = 'https://api-v0.fastspot.io';
+    private $api_endpoint = 'https://api.estimate.fastspot.io/fast/v1';
     private $api_key = false;
 
     /**
@@ -36,6 +36,7 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
             'to' => [
                 $fiat_currency => $order_amount,
             ],
+            'includedFees' => 'none',
         ];
 
         $api_response = wp_remote_post( $this->api_endpoint . '/estimates', [
@@ -59,13 +60,18 @@ class WC_Gateway_Nimiq_Price_Service_Fastspot implements WC_Gateway_Nimiq_Price_
         $quotes = [];
         $fees = [];
         $feesPerByte = [];
-        foreach ( $result[ 'from' ] as $price_object ) {
+        foreach ( $result as $estimate ) {
+            $price_object = $estimate[ 'from' ][ 0 ];
             $currency_iso = strtolower( $price_object[ 'symbol' ] );
 
             $quotes[ $currency_iso ] = $price_object[ 'amount' ];
 
-            $fee = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'fee' ] ] )[ $currency_iso ];
-            $feePerByte = Crypto_Manager::coins_to_units( [ $currency_iso => $price_object[ 'perFee' ] ] )[ $currency_iso ];
+            $fee = Crypto_Manager::coins_to_units( [
+                $currency_iso => $price_object[ 'fundingNetworkFee' ][ 'total' ],
+            ] )[ $currency_iso ];
+            $feePerByte = Crypto_Manager::coins_to_units( [
+                $currency_iso => $price_object[ 'fundingNetworkFee' ][ 'perUnit' ],
+            ] )[ $currency_iso ];
 
             // Round ETH $feePerByte to its first three significant digits
             if ( $currency_iso === 'eth' ) {
