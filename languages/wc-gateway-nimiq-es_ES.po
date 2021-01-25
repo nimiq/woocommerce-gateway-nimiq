@@ -1,16 +1,16 @@
-# Copyright (C) 2019 Nimiq
+# Copyright (C) 2021 Nimiq
 # This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
 # Translators:
 # Ricardo Barquero Carranza <richy@nimiq.com>, 2020
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.0.0\n"
+"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
-"POT-Creation-Date: 2019-11-26T16:53:27+00:00\n"
+"POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
 "Last-Translator: Ricardo Barquero Carranza <richy@nimiq.com>, 2020\n"
-"Language-Team: Spanish (https://www.transifex.com/nimiq-foundation/teams/104965/es/)\n"
+"Language-Team: Spanish (https://www.transifex.com/nimiq-foundation/teams/110181/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -77,7 +77,7 @@ msgid "Transaction validated and confirmed."
 msgstr "Transacción validada y confirmada."
 
 #. translators: %d: Number of updated orders
-#: includes/bulk_actions.php:217 includes/validation_scheduler.php:64
+#: includes/bulk_actions.php:219 includes/validation_scheduler.php:64
 msgid "Updated %d order"
 msgid_plural "Updated %d orders"
 msgstr[0] " %d orden actualizada"
@@ -95,8 +95,7 @@ msgstr[1] " %d ordenes procesándose"
 msgid "The currency %s is not supported by Coingecko."
 msgstr "La criptomoneda %s no esta soportada por Coingecko."
 
-#: price_services/nimiqx.php:21 validation_services/etherscan.php:22
-#: validation_services/nimiqx.php:20
+#: price_services/nimiqx.php:21 validation_services/nimiqx.php:20
 msgid "API key not set."
 msgstr "Llave API no configurada."
 
@@ -253,7 +252,7 @@ msgid "This field is required."
 msgstr "Este campo es requerido."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:828
+#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:855
 msgid "Wallet Account Public Key"
 msgstr "Llave Publica de la Cuenta de la Billetera"
 
@@ -391,11 +390,11 @@ msgstr ""
 "Un margen, en porcentaje, puede aplicarse a pagos cripto. También puede ser "
 "negativo."
 
-#: settings.php:270
+#: settings.php:273
 msgid "Validation Interval [minutes]"
 msgstr "Intervalo de Validación [minutes]"
 
-#: settings.php:272
+#: settings.php:275
 msgid ""
 "Interval between validating transactions, in minutes. If you change this, "
 "disable and enable this plugin to apply the new interval."
@@ -404,15 +403,15 @@ msgstr ""
 "deshabilite y habilite este plugin para aplicar el nuevo intervalo."
 
 #. translators: %d: Number of minutes
-#: settings.php:274 settings.php:291
+#: settings.php:277 settings.php:294
 msgid "Optional - Default: %d minutes"
 msgstr "Opcional - Defecto: %d minutos"
 
-#: settings.php:279
+#: settings.php:282
 msgid "Checkout Behavior"
 msgstr "Comportamiento del Proceso de Pago"
 
-#: settings.php:281
+#: settings.php:284
 msgid ""
 "How should the user be forwarded to Nimiq Checkout to finalize the payment "
 "process, as a popup or by being redirected?"
@@ -420,11 +419,11 @@ msgstr ""
 "Como se debería enviar el usuario al Proceso de Pago Nimiq para que finalice"
 " el pago, ¿como una ventana emergente o una redirección?"
 
-#: settings.php:288
+#: settings.php:291
 msgid "Payment Timeout"
 msgstr "Tiempo de Espera del Pago Agotado"
 
-#: settings.php:290
+#: settings.php:293
 msgid ""
 "How many minutes to wait for a payment transaction before considering the "
 "order to have failed."
@@ -433,11 +432,11 @@ msgstr ""
 "considere que la orden ha fallado."
 
 #. translators: %s: Cryptocurrency name
-#: settings.php:297 settings.php:306 settings.php:314
+#: settings.php:300 settings.php:309 settings.php:317
 msgid "Required confirmations for %s"
 msgstr "Confirmaciones requeridas para %s"
 
-#: settings.php:299
+#: settings.php:302
 msgid ""
 "The number of confirmations required to accept a Nimiq transaction. Each "
 "confirmation takes 1 minute on average."
@@ -446,11 +445,11 @@ msgstr ""
 " Cada confirmación toma 1 minuto en promedio."
 
 #. translators: %d: Number of blocks
-#: settings.php:301 settings.php:309 settings.php:317
+#: settings.php:304 settings.php:312 settings.php:320
 msgid "Optional - Default: %d blocks"
 msgstr "Opcional - Defecto: %d bloques"
 
-#: settings.php:308
+#: settings.php:311
 msgid ""
 "The number of confirmations required to accept a Bitcoin transaction. Each "
 "confirmation takes 10 minutes on average."
@@ -458,7 +457,7 @@ msgstr ""
 "El número de confirmaciones requerido para aceptar una transacción de "
 "Bitcoin. Cada confirmación toma 10 minutos en promedio."
 
-#: settings.php:316
+#: settings.php:319
 msgid ""
 "The number of confirmations required to accept an Ethereum transaction. Each"
 " confirmation takes 15 seconds on average."
@@ -473,22 +472,26 @@ msgstr ""
 msgid "Could not get the current blockchain height from %s."
 msgstr "No se pudo obtener el número de bloque desde %s."
 
-#: validation_services/blockstream.php:72 validation_services/etherscan.php:45
+#: validation_services/blockstream.php:72 validation_services/etherscan.php:41
 #: validation_services/json_rpc_nim.php:65 validation_services/nimiqx.php:66
-#: validation_services/nimiq_watch.php:60 woo-nimiq-gateway.php:645
+#: validation_services/nimiq_watch.php:60 woo-nimiq-gateway.php:672
 msgid "Invalid transaction hash."
 msgstr "Hash de transacción inválido."
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:177
-#: validation_services/etherscan.php:142
+#: validation_services/etherscan.php:138
 #: validation_services/json_rpc_nim.php:101
 msgid "Could not retrieve transaction information from %s."
 msgstr "No se pudo obtener información de transacción de %s."
 
-#: validation_services/etherscan.php:51
+#: validation_services/etherscan.php:47
 msgid "Invalid merchant address."
 msgstr "Dirección del vendedor inválida."
+
+#: validation_services/etherscan.php:237
+msgid "Etherscan API key not set."
+msgstr ""
 
 #: validation_services/json_rpc_nim.php:16
 msgid "API URL not set."
@@ -579,11 +582,11 @@ msgstr ""
 "favor intente recargando esta página. (Problema: el servicio de precios no "
 "retorno ninguna información de precios.)"
 
-#: woo-nimiq-gateway.php:522
+#: woo-nimiq-gateway.php:538
 msgid "What is Nimiq?"
 msgstr "¿Qué es Nimiq?"
 
-#: woo-nimiq-gateway.php:562
+#: woo-nimiq-gateway.php:578
 msgid ""
 "Javascript is required to pay with cryptocurrency. Please activate "
 "Javascript to continue."
@@ -592,46 +595,46 @@ msgstr ""
 "Javascript para continuar."
 
 #. translators: Used on the payment button: "PAY WITH <crypto icons>"
-#: woo-nimiq-gateway.php:573
+#: woo-nimiq-gateway.php:600
 msgid "PAY WITH"
 msgstr "PAGAR CON"
 
-#: woo-nimiq-gateway.php:581
+#: woo-nimiq-gateway.php:608
 msgid "Payment received"
 msgstr "Pago recibido"
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:615 woo-nimiq-gateway.php:624
-#: woo-nimiq-gateway.php:627
+#: woo-nimiq-gateway.php:642 woo-nimiq-gateway.php:651
+#: woo-nimiq-gateway.php:654
 msgid "Nimiq Payment failed. (%s)."
 msgstr "Pago Nimiq fallido. (%s)."
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:615
+#: woo-nimiq-gateway.php:642
 msgid "Response code not \"OK\""
 msgstr "Código de respuesta no es \"OK\""
 
-#: woo-nimiq-gateway.php:624
+#: woo-nimiq-gateway.php:651
 msgid "Could not decode Hub result"
 msgstr "No pudo decodificar el resultado del Hub"
 
-#: woo-nimiq-gateway.php:627
+#: woo-nimiq-gateway.php:654
 msgid "Hub result is empty"
 msgstr "El resultado del Hub esta vacío"
 
-#: woo-nimiq-gateway.php:640
+#: woo-nimiq-gateway.php:667
 msgid "You need to confirm the Nimiq payment first."
 msgstr "Tiene que confirmar el pago Nimiq primero."
 
-#: woo-nimiq-gateway.php:645
+#: woo-nimiq-gateway.php:672
 msgid "Please contact support with this error message."
 msgstr "Por favor contacte soporte con este mensaje de error."
 
-#: woo-nimiq-gateway.php:731
+#: woo-nimiq-gateway.php:758
 msgid "Waiting for transaction to be validated."
 msgstr "Esperando a que la transacción se validada."
 
-#: woo-nimiq-gateway.php:753
+#: woo-nimiq-gateway.php:780
 msgid ""
 "You must fill in your store's Nimiq address to be able to accept payments in"
 " NIM."
@@ -639,11 +642,11 @@ msgstr ""
 "Tiene que ingresar la dirección Nimiq de su tienda para poder aceptar pagos "
 "en NIM."
 
-#: woo-nimiq-gateway.php:755
+#: woo-nimiq-gateway.php:782
 msgid "Set your Nimiq address here."
 msgstr "Configure su dirección Nimiq aquí."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: woo-nimiq-gateway.php:828
+#: woo-nimiq-gateway.php:855
 msgid "<strong>%1$s %2$s</strong> was not saved:"
 msgstr "<strong>%1$s %2$s</strong> no fue guardado:"
