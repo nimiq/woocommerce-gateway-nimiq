@@ -1,8 +1,8 @@
 # Copyright (C) 2021 Nimiq
 # This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
 # Translators:
-# Sven <sven@nimiq.com>, 2020
 # Miao Yu <miaoyu319@gmail.com>, 2020
+# Sven <sven@nimiq.com>, 2021
 # 
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
-"Last-Translator: Miao Yu <miaoyu319@gmail.com>, 2020\n"
+"Last-Translator: Sven <sven@nimiq.com>, 2021\n"
 "Language-Team: Chinese (https://www.transifex.com/nimiq-foundation/teams/110181/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -446,7 +446,7 @@ msgstr "无效的商家地址"
 
 #: validation_services/etherscan.php:237
 msgid "Etherscan API key not set."
-msgstr ""
+msgstr "未设置Etherscan API密钥"
 
 #: validation_services/json_rpc_nim.php:16
 msgid "API URL not set."
