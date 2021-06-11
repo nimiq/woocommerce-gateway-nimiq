@@ -37,8 +37,10 @@ class Crypto_Manager {
             $integers = $split[0];
             $decimals = count( $split ) > 1 ? $split[1] : '';
 
-            // 3. Extend decimals with 0s until number of crypto-specific decimals is reached
+            // 3.1. Extend decimals with 0s until number of crypto-specific decimals is reached
             $decimals = str_pad( $decimals, $pad_length, '0', STR_PAD_RIGHT );
+            // 3.2. Ensure decimals are not too long
+            $decimals = substr( $decimals, 0, $pad_length );
 
             // 4. Join integers with decimals to create value string
             $unit = implode( '', [ $integers, $decimals ] );
