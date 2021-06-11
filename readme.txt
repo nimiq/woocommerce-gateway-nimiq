@@ -6,7 +6,7 @@ Requires at least: 4.9
 Tested up to: 5.6
 Requires WooCommerce at least: 3.5
 Tested WooCommerce up to: 4.9
-Stable tag: 3.2.2
+Stable tag: 3.3.1
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,6 +72,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 
 == Changelog ==
 
+= 3.3.1 - 2021.06.11 =
+
+* Fix bug where fee suggestions were sometimes converted wrongly from coins to units
+
 = 3.3.0 - 2021.01.25 =
 
 * Update Fastspot price service to new API
@@ -122,6 +126,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 * Huge usability improvements over previous versions.
 
 == Upgrade Notice ==
+
+= 3.3.1 =
+
+Fix bug in calculation of fee suggestions that could sometimes show a too high fee suggestion.
 
 = 3.3.0 =
 
