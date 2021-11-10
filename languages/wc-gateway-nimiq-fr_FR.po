@@ -1,13 +1,13 @@
 # Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
+# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
 # Translators:
 # Talleyrand <baptistekugener@wanadoo.fr>, 2019
 # Sören Schwert <hello@soerenschwert.de>, 2020
 # Matheo <matheo@nimiq.com>, 2020
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.3.0\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
@@ -23,8 +23,8 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
-msgid "Nimiq Cryptocurrency Checkout"
-msgstr "Nimiq Cryptocurrency Checkout"
+msgid "Cryptocurrency Checkout by Nimiq"
+msgstr "Cryptocurrency Checkout by Nimiq"
 
 #. Plugin URI of the plugin
 msgid "https://github.com/nimiq/woocommerce-gateway-nimiq"
@@ -506,27 +506,27 @@ msgstr "NimiqX ne peut être utilisé que sur le mainnet."
 
 #: woo-nimiq-gateway.php:36
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
 msgstr ""
-"Pour utiliser <strong>Nimiq Cryptocurrency Checkout</strong>, Woocommerce "
+"Pour utiliser <strong>Cryptocurrency Checkout by Nimiq</strong>, Woocommerce "
 "doit être installé !"
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
 ">= 7.1."
 msgstr ""
-"Pour utliser<strong>Nimiq Cryptocurrency Checkout</strong>, vous devez "
+"Pour utliser<strong>Cryptocurrency Checkout by Nimiq</strong>, vous devez "
 "utiliser PHP >= 7.1."
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
 "under HTTPS (SSL encrypted)."
 msgstr ""
-"Pour utiliser <strong>Nimiq Cryptocurrency Checkout</strong>, votre boutique"
+"Pour utiliser <strong>Cryptocurrency Checkout by Nimiq</strong>, votre boutique"
 " doit fonctionner sous HTTPS (encrypté en SSL)."
 
 #. translators: %s: Email address
@@ -538,10 +538,10 @@ msgstr ""
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 msgstr ""
 "Votre boutique utilise une devise actuellement non supportée par "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 
 #: woo-nimiq-gateway.php:83
 msgid "Find out which currencies are supported."

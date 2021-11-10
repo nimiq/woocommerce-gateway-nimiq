@@ -1,11 +1,11 @@
 # Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
+# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
 # Translators:
 # Ricardo Barquero Carranza <richy@nimiq.com>, 2020
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.3.0\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
-msgid "Nimiq Cryptocurrency Checkout"
+msgid "Cryptocurrency Checkout by Nimiq"
 msgstr "Pago de Criptomonedas Nimiq"
 
 #. Plugin URI of the plugin
@@ -507,7 +507,7 @@ msgstr "NimiqX solo puede ser usado en mainnet."
 
 #: woo-nimiq-gateway.php:36
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
 msgstr ""
 "¡Para usar el <strong>Método de Pago de Criptomonedas Nimiq</strong>, tiene "
@@ -515,7 +515,7 @@ msgstr ""
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
 ">= 7.1."
 msgstr ""
 "Para usar el <strong>Método de Pago de Criptomonedas Nimiq</strong>, "
@@ -524,7 +524,7 @@ msgstr ""
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
 "under HTTPS (SSL encrypted)."
 msgstr ""
 "Para usar el <strong>Método de Pago de Criptomonedas Nimiq</strong>, su "
@@ -538,7 +538,7 @@ msgstr "Si usted cree que este error no esta bien, contáctenos a %s."
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 msgstr ""
 "Su tienda utiliza una moneda que no esta soporta actualmente en el "
 "<strong>Método de Pago de Criptomonedas Nimiq</strong>."

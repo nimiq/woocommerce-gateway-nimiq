@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Nimiq Cryptocurrency Checkout
+ * Plugin Name: Cryptocurrency Checkout by Nimiq
  * Plugin URI: https://github.com/nimiq/woocommerce-gateway-nimiq
  * Description: Let customers pay with Bitcoin, Ethereum and Nimiq
  * Author: Nimiq
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) or exit;
 // Make sure WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	function nq_show_no_woocommerce_warning() {
-		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have WooCommerce installed!', 'wc-gateway-nimiq' ) .'</p></div>';
+		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have WooCommerce installed!', 'wc-gateway-nimiq' ) .'</p></div>';
 	}
 	add_action( 'admin_notices', 'nq_show_no_woocommerce_error' );
 	return;
@@ -42,7 +42,7 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
 // Make sure the shop is running on PHP >= 7.1
 if ( !defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70100 ) {
 	function nq_show_insufficient_php_version_error() {
-		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP >= 7.1.', 'wc-gateway-nimiq' ) .'</p></div>';
+		echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP >= 7.1.', 'wc-gateway-nimiq' ) .'</p></div>';
 	}
 	add_action( 'admin_notices', 'nq_show_insufficient_php_version_error' );
 	return;
@@ -62,7 +62,7 @@ if ( $woo_nimiq_has_fiat ) {
 	if ( !( $woo_nimiq_has_https || $woo_nimiq_is_localhost ) ) {
 		function nq_show_no_https_error() {
 			/* translators: %s: Email address */
-			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</em></p></div>';
+			echo '<div class="notice notice-error"><p>'. __( 'To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run under HTTPS (SSL encrypted).', 'wc-gateway-nimiq' ) . '</p><em>' . sprintf( __( 'If you believe this error is a mistake, contact us at %s.', 'wc-gateway-nimiq' ), '<a href="mailto:info@nimiq.com">info@nimiq.com</a>' ) .'</em></p></div>';
 		}
 		add_action( 'admin_notices', 'nq_show_no_https_error' );
 		return;
@@ -78,7 +78,7 @@ if ( $woo_nimiq_has_fiat ) {
 	if ( !in_array( strtolower( get_option( 'woocommerce_currency' ) ), $supported_exchange_currencies ) ) {;
 		function nq_show_currency_not_supported_error() {
 			echo '<div class="notice notice-error"><p>'
-				. __( 'Your store uses a currency that is currently not supported by the <strong>Nimiq Cryptocurrency Checkout</strong>.', 'wc-gateway-nimiq' )
+				. __( 'Your store uses a currency that is currently not supported by the <strong>Cryptocurrency Checkout by Nimiq</strong>.', 'wc-gateway-nimiq' )
 				. ' <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">'
 				. __( 'Find out which currencies are supported.', 'wc-gateway-nimiq' )
 				. '</a></p></div>';
@@ -144,7 +144,7 @@ function wc_nimiq_gateway_init() {
 
 			$this->id                 = 'nimiq_gateway';
 			$this->has_fields         = true;
-			$this->method_title       = __( 'Nimiq Cryptocurrency Checkout', 'wc-gateway-nimiq' );
+			$this->method_title       = __( 'Cryptocurrency Checkout by Nimiq', 'wc-gateway-nimiq' );
 			$this->method_description = __( 'Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be guided through the setup process, follow <a href="https://nimiq.github.io/tutorials/wordpress-payment-plugin-installation">this tutorial.</a>', 'wc-gateway-nimiq' );
 
 			$this->DEFAULTS = [
@@ -170,7 +170,7 @@ function wc_nimiq_gateway_init() {
 			$this->crypto_manager = new Crypto_Manager( $this );
 
 			// Define display texts
-			$this->title       = __( 'Nimiq Cryptocurrency Checkout', 'wc-gateway-nimiq' );
+			$this->title       = __( 'Cryptocurrency Checkout by Nimiq', 'wc-gateway-nimiq' );
 			$cfd = $this->get_currencies_for_description();
 			$this->description = count( $cfd ) === 1
 				/* translators: %s: Cryptocurrency name */

@@ -1,12 +1,12 @@
 # Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
+# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
 # Translators:
 # Miao Yu <miaoyu319@gmail.com>, 2020
 # Sven <sven@nimiq.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.3.0\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
-msgid "Nimiq Cryptocurrency Checkout"
+msgid "Cryptocurrency Checkout by Nimiq"
 msgstr "Nimiq 加密货币结账组件"
 
 #. Plugin URI of the plugin
@@ -462,20 +462,20 @@ msgstr "NimiqX仅可用于主网"
 
 #: woo-nimiq-gateway.php:36
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
 msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您必须安装WooCommerce！"
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
 ">= 7.1."
 msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您需要使用PHP> = 7.1"
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
 "under HTTPS (SSL encrypted)."
 msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您的商店必须在HTTPS（SSL加密）下运行"
 
@@ -487,7 +487,7 @@ msgstr "如果您认为此错误信息有误，请通过%s与我们联系"
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 msgstr "您的商店使用了<strong>Nimiq 加密货币结账组件</strong> 当前不支持的货币"
 
 #: woo-nimiq-gateway.php:83

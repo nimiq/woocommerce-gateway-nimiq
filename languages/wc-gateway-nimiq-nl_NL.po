@@ -1,14 +1,14 @@
 # Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Nimiq Cryptocurrency Checkout plugin.
+# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
 # Translators:
 # Jim <jimvendrig10@gmail.com>, 2020
 # Fons <Fonsdesigns@hotmail.com>, 2020
 # BlockchainShay <Shaylish@live.nl>, 2020
 # Stefan, 2020
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Nimiq Cryptocurrency Checkout 3.3.0\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
 "POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
@@ -24,8 +24,8 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
-msgid "Nimiq Cryptocurrency Checkout"
-msgstr "Nimiq Cryptocurrency Checkout"
+msgid "Cryptocurrency Checkout by Nimiq"
+msgstr "Cryptocurrency Checkout by Nimiq"
 
 #. Plugin URI of the plugin
 msgid "https://github.com/nimiq/woocommerce-gateway-nimiq"
@@ -118,7 +118,7 @@ msgid ""
 "gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency "
 "Checkout</strong>."
 msgstr ""
-"Om %s te accepteren met de <strong>Nimiq Cryptocurrency Checkout</strong> "
+"Om %s te accepteren met de <strong>Cryptocurrency Checkout by Nimiq</strong> "
 "Moet je de volgende extensies installeren of aanzetten <code>php-bcmath "
 "</code>of <code>php-gmp</code>"
 
@@ -512,27 +512,27 @@ msgstr "NimiqX kan alleen gebruikt worden voor het mainnet"
 
 #: woo-nimiq-gateway.php:36
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you must have "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
 msgstr ""
-"Om <strong>Nimiq Cryptocurrency Checkout</strong> te gebruiken, moet je "
+"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je "
 "WooCommerce hebben geïnstaleerd."
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, you need to use PHP "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
 ">= 7.1."
 msgstr ""
-"Om <strong>Nimiq Cryptocurrency Checkout</strong> te gebruiken, moet je PHP "
+"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je PHP "
 ">=7.1 gebruiken."
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Nimiq Cryptocurrency Checkout</strong>, your store must run "
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
 "under HTTPS (SSL encrypted)."
 msgstr ""
-"Om <strong>Nimiq Cryptocurrency Checkout</strong> te gebruiken, moet je "
+"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je "
 "winkel onder HTTPS draaien (SSL-versleuteld)."
 
 #. translators: %s: Email address
@@ -544,10 +544,10 @@ msgstr ""
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 msgstr ""
 "Je winkel gebruikt een valuta die momenteel niet ondersteund wordt door de "
-"<strong>Nimiq Cryptocurrency Checkout</strong>."
+"<strong>Cryptocurrency Checkout by Nimiq</strong>."
 
 #: woo-nimiq-gateway.php:83
 msgid "Find out which currencies are supported."

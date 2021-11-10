@@ -31,14 +31,14 @@ _This Plugin is just getting started. Additional features such as instant and de
 = How Does It Work? =
 
 1. The customer selects “Cryptocurrency Checkout” and is sent to the Nimiq Checkout page.
-2. Nimiq Cryptocurrency Checkout offers to take payments in Bitcoin, Ethereum or Nimiq.
+2. Cryptocurrency Checkout by Nimiq offers to take payments in Bitcoin, Ethereum or Nimiq.
 3. The customer selects a cryptocurrency and pays. An order is created in the WooCommerce panel and set to 'on-hold' by the plugin.
 4. As soon as the transaction is confirmed on the blockchain, the plugin automatically updates the order status.
 
 = How To Integrate It? =
 
 1. Install and activate the plugin
-2. Find the **Nimiq Cryptocurrency Checkout** in your list of plugins and click 'Settings'
+2. Find the **Cryptocurrency Checkout by Nimiq** in your list of plugins and click 'Settings'
 3. Enter addresses and public keys of the currencies you want to accept
 4. Tell your customers about your new payment option!
 
@@ -169,7 +169,7 @@ Added French translations and an overlay when the Nimiq Hub popup is open.
 
 = 3.0.0 =
 
-Nimiq Cryptocurrency Checkout now also supports accepting payments in Bitcoin and Ethereum! Update your settings to enable the new currencies.
+Cryptocurrency Checkout by Nimiq now also supports accepting payments in Bitcoin and Ethereum! Update your settings to enable the new currencies.
 
 == Acknowledgement ==
 

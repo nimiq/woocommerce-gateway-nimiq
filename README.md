@@ -1,6 +1,6 @@
-![Nimiq Cryptocurrency Checkout](https://raw.githubusercontent.com/nimiq/woocommerce-gateway-nimiq/master/.wordpress-org/banner-1544x500.png)
+![Cryptocurrency Checkout by Nimiq](https://raw.githubusercontent.com/nimiq/woocommerce-gateway-nimiq/master/.wordpress-org/banner-1544x500.png)
 
-# Nimiq Cryptocurrency Checkout for WooCommerce
+# Cryptocurrency Checkout by Nimiq for WooCommerce
 
 A plugin for Wordpress to handle WooCommerce payments in the Nimiq (NIM), Bitcoin (BTC), and Ethereum (ETH) cryptocurrency.
 

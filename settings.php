@@ -5,7 +5,7 @@ $woo_nimiq_has_https     = (!empty($_SERVER[ 'HTTPS' ]) && $_SERVER[ 'HTTPS' ] !
 $woo_nimiq_has_extension = function_exists('\gmp_init') || function_exists('\bcmul');
 
 /* translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum' */
-$woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency Checkout</strong>.', 'wc-gateway-nimiq' );
+$woo_nimiq_no_extension_error = __( 'You must install & enable either the <code>php-bcmath</code> or <code>php-gmp</code> extension to accept %s with <strong>Cryptocurrency Checkout by Nimiq</strong>.', 'wc-gateway-nimiq' );
 
 $woo_nimiq_redirect_behaviour_options = [ 'popup' => 'Popup' ];
 if ( $woo_nimiq_has_https ) {
