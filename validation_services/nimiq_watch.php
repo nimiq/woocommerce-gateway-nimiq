@@ -2,6 +2,9 @@
 include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'interface.php' );
 
 class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation_Service_Interface {
+    // Constants
+    const API_TX_PER_PAGE = 25;
+
     /**
      * Initializes the validation service
      * @param {WC_Gateway_Nimiq} $gateway - A WC_Gateway_Nimiq class instance
@@ -9,9 +12,15 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
      */
     public function __construct( $gateway ) {
         $this->transaction = null;
+        $this->payment_state = null;
+        $this->transactions = [];
         $this->head_height = null;
+        $this->page = 0;
+        $this->last_api_call_time = null;
 
-        $this->api_domain = $gateway->get_option( 'network' ) === 'main' ? 'https://api.nimiq.watch' : 'https://test-api.nimiq.watch';
+        $this->api_domain = $gateway->get_option( 'network' ) === 'main'
+            ? 'https://api.nimiq.watch'
+            : 'https://test-api.nimiq.watch';
     }
 
     /**
@@ -51,31 +60,97 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
      * @return {'NOT_FOUND'|'PAID'|'OVERPAID'|'UNDERPAID'|WP_Error}
      */
     public function load_transaction( $transaction_hash, $order, $gateway ) {
+        // Reset loaded transaction
         $this->transaction = null;
+        $this->payment_state = null;
 
-        // Automatic transaction finding is not yet available for Nimiq
-        if ( empty( $transaction_hash ) ) return 'NOT_FOUND';
+        $recipient_address = null;
 
-        if ( !ctype_xdigit( $transaction_hash ) ) {
-            return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
+        if ( !empty( $transaction_hash ) ) {
+            if ( !ctype_xdigit( $transaction_hash ) ) {
+                return new WP_Error('service', __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) );
+            }
+
+            // Convert HEX hash into base64
+            $transaction_hash = urlencode( base64_encode( pack( 'H*', $transaction_hash ) ) );
+
+            $api_response = wp_remote_get( $this->api_domain . '/transaction/' . $transaction_hash );
+
+            if ( is_wp_error( $api_response ) ) {
+                return $api_response;
+            }
+
+            $this->transaction = json_decode( $api_response[ 'body' ] );
+            return $this->transaction_found() ? 'PAID' : 'NOT_FOUND';
         }
+
+        $recipient_address = Order_Utils::get_order_recipient_address( $order, $gateway );
+        // TODO: NIM Address validation
+        // if ( !AddressValidator::isValid( $recipient_address ) ) {
+        //     return new WP_Error('service', __( 'Invalid merchant address.', 'wc-gateway-nimiq' ) );
+        // }
 
         $head_height = $this->blockchain_height();
         if ( is_wp_error( $head_height ) ) {
             return $head_height;
         }
 
-        // Convert HEX hash into base64
-        $transaction_hash = urlencode( base64_encode( pack( 'H*', $transaction_hash ) ) );
+        // Use cached results, if any
+        $response = $this->transactions;
+        $page = $this->page;
 
-        $api_response = wp_remote_get( $this->api_domain . '/transaction/' . $transaction_hash );
+        while ( !$this->transaction ) {
+            $transaction = $this->find_transaction( $recipient_address, $order, $response, $gateway );
+            if ( $transaction && $this->payment_state ) {
+                $this->transaction = $transaction;
+                // Store tx hash in order
+                $order->update_meta_data( 'transaction_hash', $transaction->hash );
+                $order->update_meta_data( 'customer_nim_address', $transaction->sender_address );
+                $order->update_meta_data( 'nc_payment_state', $this->payment_state );
+                $order->save();
+                return $this->payment_state;
+            }
 
-        if ( is_wp_error( $api_response ) ) {
-            return $api_response;
+            if ( $this->payment_state === 'UNDERPAID' ) return $this->payment_state;
+
+            // Stop when no more transactions are available
+            // ($page is set to -1 below, when a paged API call returns less than API_TX_PER_PAGE transactions)
+            if ( $page < 0 ) {
+                return 'NOT_FOUND';
+            }
+
+            // Stop when earlierst transaction is earlier than the order date
+            $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+            if ( end( $response ) && ( empty( end( $response )->timestamp ) || end( $response )->timestamp < $order_date ) ) {
+                return 'NOT_FOUND';
+            }
+
+            // NIMIQ.WATCH API has a rate-limit of 10 requests/second, so we need to sleep for 100ms between requests
+            if ( $this->last_api_call_time ) {
+                $diff = $this->get_milliseconds() - $this->last_api_call_time;
+                $wait = max( 0, 100 - $diff );
+                usleep( $wait * 1e3 );
+            }
+
+            $page += 1;
+            $this->last_api_call_time = $this->get_milliseconds();
+            $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $page, self::API_TX_PER_PAGE ) );
+
+            if ( is_wp_error( $api_response ) ) {
+                return $api_response;
+            }
+
+            $response = array_reverse( json_decode( $api_response[ 'body' ] ) );
+
+            // Check number of returned transactions
+            if ( count( $response ) < self::API_TX_PER_PAGE ) {
+                $page = -1; // Signal that all transactions have been fetched
+            }
+
+            // Cache API results
+            $this->add_transactions( $response );
+            $this->page = $page;
         }
-
-        $this->transaction = json_decode( $api_response[ 'body' ] );
-        return $this->transaction_found() ? 'PAID' : 'NOT_FOUND';
     }
 
     /**
@@ -141,6 +216,48 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
      */
     public function confirmations() {
         return $this->blockchain_height() + 1 - $this->block_height();
+    }
+
+    private function get_milliseconds() {
+        return ceil( microtime(true) * 1e3 );
+    }
+
+    private function find_transaction( $recipient_address, $order, $transactions, $gateway ) {
+        $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
+        foreach ( $transactions as $tx ) {
+            // Check that tx is not too old
+            if (!empty( $tx->timestamp ) && $tx->timestamp < $order_date) continue;
+
+            if ( $tx->receiver_address === $recipient_address ) {
+                // If tx has a message, check that it matches
+                $extraData = base64_decode( $tx->data );
+                $message = mb_convert_encoding( $extraData, 'UTF-8' );
+                if ( !empty( $message ) ) {
+                    // Look for the last pair of round brackets in the tx message
+                    preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
+                    $tx_order_key = end( $matches )[1];
+                    if ( $tx_order_key !== $gateway->get_short_order_key( $order->get_order_key() ) ) {
+                        continue;
+                    }
+                }
+
+                $comparison = Crypto_Manager::unit_compare( $tx->value, Order_Utils::get_order_total_crypto( $order ) );
+                $this->payment_state = Order_Utils::get_payment_state( $comparison );
+                if ( $comparison >= 0 ) return $tx;
+            }
+        }
+        return null;
+    }
+
+    private function add_transactions( $transactions ) {
+        foreach ( $transactions as $tx ) {
+            $this->transactions[ $tx->hash ] = $tx;
+        }
+    }
+
+    private function get_url_transactions_by_address( string $address, int $page = 1, int $limit = 10 ) {
+        $path = '/account-transactions/' . $address . '/' . $limit . '/' . ( $page - 1 ) * self::API_TX_PER_PAGE;
+        return $this->api_domain . $path;
     }
 }
 

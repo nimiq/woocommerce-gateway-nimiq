@@ -140,13 +140,15 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		if ( $currency === 'nim' ) {
 			// Validate transaction data to include correct shortened order hash
 			$message = $service->message();
-			// Look for the last pair of round brackets in the tx message
-			preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
-			$tx_order_key = end( $matches )[1];
-			if ( $tx_order_key !== $gateway->get_short_order_key( $order->get_order_key() ) ) {
-				fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
-				$count_orders_updated++;
-				continue;
+			if ( !empty( $message ) ) {
+				// Look for the last pair of round brackets in the tx message
+				preg_match_all( '/.*\((.*?)\)/', $message, $matches, PREG_SET_ORDER );
+				$tx_order_key = end( $matches )[1];
+				if ( $tx_order_key !== $gateway->get_short_order_key( $order->get_order_key() ) ) {
+					fail_order( $order, __( 'Transaction order hash does not match.', 'wc-gateway-nimiq' ) );
+					$count_orders_updated++;
+					continue;
+				}
 			}
 		}
 

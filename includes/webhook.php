@@ -158,8 +158,8 @@ function woo_nimiq_checkout_callback_set_currency( $request, $order, $gateway ) 
 function woo_nimiq_checkout_callback_get_state( $request, $order, $gateway ) {
     $currency = Order_Utils::get_order_currency( $order, false );
 
-    if ( empty( $currency ) || $currency === 'nim' ) {
-        // When no currency was selected, or the currency is NIM, respond with the time only.
+    if ( empty( $currency ) ) {
+        // When no currency was selected, respond with the time only.
         return woo_nimiq_checkout_reply( [
             'time' => time(),
             'payment_accepted' => false,

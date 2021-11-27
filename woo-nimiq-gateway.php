@@ -660,8 +660,8 @@ function wc_nimiq_gateway_init() {
 			$currency = Order_Utils::get_order_currency( $order, false );
 
 			if ( $currency === 'nim' ) {
-				$transaction_hash = $result->hash;
-				$customer_nim_address = $result->raw->sender;
+				$transaction_hash = $result->hash ?: $order->get_meta( 'transaction_hash' );
+				$customer_nim_address = $result->raw->sender ?: $order->get_meta( 'customer_nim_address' );
 
 				if ( !$transaction_hash ) {
 					wc_add_notice( __( 'You need to confirm the Nimiq payment first.', 'wc-gateway-nimiq' ), 'error' );
@@ -669,7 +669,7 @@ function wc_nimiq_gateway_init() {
 				}
 
 				if ( strlen( $transaction_hash) !== 64 ) {
-					wc_add_notice( __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) . ' (' . $transaction_hash . '). ' . __( 'Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
+					wc_add_notice( __( 'Invalid transaction hash.', 'wc-gateway-nimiq' ) . ' (' . $transaction_hash . ') ' . __( 'Please contact support with this error message.', 'wc-gateway-nimiq' ), 'error' );
 					return false;
 				}
 

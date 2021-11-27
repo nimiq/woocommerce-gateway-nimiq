@@ -250,9 +250,9 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
                 $this->payment_state = $order->get_meta( 'nc_payment_state' ) ?: 'PAID';
                 return $tx;
             }
+            // Check that tx is not too old
+            if ($tx->status->confirmed && $tx->status->block_time < $order_date) continue;
             if ( empty( $transaction_hash ) ) {
-                // Check that tx is not too old
-                if ($tx->status->confirmed && $tx->status->block_time < $order_date) continue;
                 // Search outputs
                 foreach ( $tx->vout as $output ) {
                     if ( $output->scriptpubkey_address === $recipient_address ) {
