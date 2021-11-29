@@ -172,6 +172,13 @@ function _do_bulk_validate_transactions( $gateway, $ids ) {
 		$order->add_order_note( __( 'Transaction validated and confirmed.', 'wc-gateway-nimiq' ) );
 		$order->delete_meta_data( 'checkout_csrf_token' );
 		$order->payment_complete();
+
+		if ( $order->get_status() === 'processing' ) {
+			if ( !$order->needs_shipping_address() ) {
+				$order->update_status( 'completed', 'Order does not need shipping', false );
+			}
+		}
+
 		$count_orders_updated++;
 
 	} // end foreach loop
