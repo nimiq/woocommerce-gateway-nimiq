@@ -242,7 +242,7 @@ class WC_Gateway_Nimiq_Service_JsonRpcNimiq implements WC_Gateway_Nimiq_Validati
         $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             // Check that tx is not too old
-            if (!empty( $tx->timestamp ) && $tx->timestamp < $order_date) continue;
+            if (!empty( $tx->timestamp ) && $tx->timestamp < $order_date) return null;
             if ( $tx->toAddress === $recipient_address ) {
                 // If tx has a message, check that it matches
                 $extraData = hex2bin( $tx->data ?: '' );

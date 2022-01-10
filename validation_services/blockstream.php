@@ -251,7 +251,7 @@ class WC_Gateway_Nimiq_Validation_Service_Blockstream implements WC_Gateway_Nimi
                 return $tx;
             }
             // Check that tx is not too old
-            if ($tx->status->confirmed && $tx->status->block_time < $order_date) continue;
+            if ($tx->status->confirmed && $tx->status->block_time < $order_date) return null;
             if ( empty( $transaction_hash ) ) {
                 // Search outputs
                 foreach ( $tx->vout as $output ) {

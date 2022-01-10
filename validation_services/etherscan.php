@@ -92,7 +92,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
 
             $page += 1;
             $this->last_api_call_time = $this->get_milliseconds();
-            $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $page, self::API_TX_PER_PAGE ) );
+            $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $page ) );
 
             if ( is_wp_error( $api_response ) ) {
                 return $api_response;
@@ -206,7 +206,7 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
                 return $tx;
             }
             // Check that tx is not too old
-            if ($tx->timeStamp < $order_date) continue;
+            if ($tx->timeStamp < $order_date) return null;
             if ( empty( $transaction_hash ) ) {
                 if ( $tx->to === $recipient_address ) {
                     $comparison = Crypto_Manager::unit_compare( $tx->value, Order_Utils::get_order_total_crypto( $order ) );
@@ -224,10 +224,10 @@ class WC_Gateway_Nimiq_Validation_Service_Etherscan implements WC_Gateway_Nimiq_
         }
     }
 
-    private function get_url_transactions_by_address( string $address, int $page = 1, int $offset = 10 ) {
+    private function get_url_transactions_by_address( string $address, int $page = 1 ) {
         $query = '?module=account&action=txlist&startblock=0&endblock=99999999&sort=desc';
         $query .= '&page=' . $page;
-        $query .= '&offset=' . $offset;
+        $query .= '&offset=' . self::API_TX_PER_PAGE;
         $query .= '&address=' . $address;
         return $this->makeUrl( $query );
     }

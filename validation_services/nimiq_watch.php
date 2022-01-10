@@ -134,7 +134,7 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
 
             $page += 1;
             $this->last_api_call_time = $this->get_milliseconds();
-            $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $page, self::API_TX_PER_PAGE ) );
+            $api_response = wp_remote_get( $this->get_url_transactions_by_address( $recipient_address, $page ) );
 
             if ( is_wp_error( $api_response ) ) {
                 return $api_response;
@@ -226,8 +226,7 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
         $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
         foreach ( $transactions as $tx ) {
             // Check that tx is not too old
-            if (!empty( $tx->timestamp ) && $tx->timestamp < $order_date) continue;
-
+            if (!empty( $tx->timestamp ) && $tx->timestamp < $order_date) return null;
             if ( $tx->receiver_address === $recipient_address ) {
                 // If tx has a message, check that it matches
                 $extraData = base64_decode( $tx->data );
@@ -255,8 +254,8 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
         }
     }
 
-    private function get_url_transactions_by_address( string $address, int $page = 1, int $limit = 10 ) {
-        $path = '/account-transactions/' . $address . '/' . $limit . '/' . ( $page - 1 ) * self::API_TX_PER_PAGE;
+    private function get_url_transactions_by_address( string $address, int $page = 1 ) {
+        $path = '/account-transactions/' . $address . '/' . self::API_TX_PER_PAGE . '/' . ( $page - 1 ) * self::API_TX_PER_PAGE;
         return $this->api_domain . $path;
     }
 }
