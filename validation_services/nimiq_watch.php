@@ -119,7 +119,7 @@ class WC_Gateway_Nimiq_Service_Nimiqwatch implements WC_Gateway_Nimiq_Validation
                 return 'NOT_FOUND';
             }
 
-            // Stop when earlierst transaction is earlier than the order date
+            // Stop when earliest transaction is earlier than the order date
             $order_date = $order->get_data()[ 'date_created' ]->getTimestamp();
             if ( end( $response ) && ( empty( end( $response )->timestamp ) || end( $response )->timestamp < $order_date ) ) {
                 return 'NOT_FOUND';

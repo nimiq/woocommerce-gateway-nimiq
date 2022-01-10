@@ -81,7 +81,7 @@ $woo_nimiq_checkout_settings = [
             // List available validation services here. The option value must match the file name.
             'nimiq_watch'  => 'NIMIQ.WATCH (Testnet & Mainnet)',
             'json_rpc_nim' => 'Nimiq JSON-RPC API (Network configured by Nimiq node)',
-            'nimiqx'       => 'NimiqX (Mainnet)',
+            'nimiqx'       => 'Nimiq.Cafe, formerly NimiqX (Mainnet)',
         ],
         'desc_tip'    => true,
     ],
