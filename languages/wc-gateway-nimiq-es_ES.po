@@ -1,26 +1,27 @@
-# Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
+# Copyright (C) 2022 Nimiq
+# This file is distributed under the GNU General Public License v3.0.
 # Translators:
-# Ricardo Barquero Carranza <richy@nimiq.com>, 2020
+# Ricardo Barquero Carranza <richy@nimiq.com>, 2021
+# Sören Schwert <hello@soerenschwert.de>, 2022
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
-"POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-gateway-nimiq\n"
+"POT-Creation-Date: 2022-11-23T12:52:20+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
-"Last-Translator: Ricardo Barquero Carranza <richy@nimiq.com>, 2020\n"
+"Last-Translator: Sören Schwert <hello@soerenschwert.de>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/nimiq-foundation/teams/110181/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Domain: wc-gateway-nimiq\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.7.1\n"
 
 #. Plugin Name of the plugin
-#: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
+#: woo-nimiq-gateway.php:157 woo-nimiq-gateway.php:183
 msgid "Cryptocurrency Checkout by Nimiq"
 msgstr "Pago de Criptomonedas Nimiq"
 
@@ -64,24 +65,25 @@ msgstr "Destinatario de la transacción no coincide."
 msgid "Transaction value is too small."
 msgstr "El valor de la transacción es demasiado pequeño."
 
-#: includes/bulk_actions.php:147
+#: includes/bulk_actions.php:148
 msgid "Transaction order hash does not match."
 msgstr "El hash de la orden de la transacción no coincide."
 
-#: includes/bulk_actions.php:162
+#: includes/bulk_actions.php:164
 msgid "Valid transaction found, awaiting confirmation."
 msgstr "Una transacción válida fue encontrada, esperando confirmación."
 
-#: includes/bulk_actions.php:170
+#: includes/bulk_actions.php:172
 msgid "Transaction validated and confirmed."
 msgstr "Transacción validada y confirmada."
 
 #. translators: %d: Number of updated orders
-#: includes/bulk_actions.php:219 includes/validation_scheduler.php:64
+#: includes/bulk_actions.php:228 includes/validation_scheduler.php:64
 msgid "Updated %d order"
 msgid_plural "Updated %d orders"
 msgstr[0] " %d orden actualizada"
 msgstr[1] " %d ordenes actualizadas"
+msgstr[2] " %d ordenes actualizadas"
 
 #. translators: %d: Number of orders to process
 #: includes/validation_scheduler.php:42
@@ -89,17 +91,18 @@ msgid "Processing %d order"
 msgid_plural "Processing %d orders"
 msgstr[0] " %d orden procesándose"
 msgstr[1] " %d ordenes procesándose"
+msgstr[2] " %d ordenes procesándose"
 
 #. translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD
 #: price_services/coingecko.php:63
 msgid "The currency %s is not supported by Coingecko."
 msgstr "La criptomoneda %s no esta soportada por Coingecko."
 
-#: price_services/nimiqx.php:21 validation_services/nimiqx.php:20
+#: price_services/nimiqx.php:21 validation_services/nimiqx.php:26
 msgid "API key not set."
 msgstr "Llave API no configurada."
 
-#: price_services/nimiqx.php:24 validation_services/nimiqx.php:23
+#: price_services/nimiqx.php:24 validation_services/nimiqx.php:29
 msgid "Invalid API key."
 msgstr "Llave API inválida."
 
@@ -112,8 +115,8 @@ msgstr "LA moneda %s no es soportada por NimiqX."
 #: settings.php:8
 msgid ""
 "You must install & enable either the <code>php-bcmath</code> or <code>php-"
-"gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency "
-"Checkout</strong>."
+"gmp</code> extension to accept %s with <strong>Cryptocurrency Checkout by "
+"Nimiq</strong>."
 msgstr ""
 "Tiene que instalar & habilitar ya sea la extensión <code>php-bcmath</code> o"
 " <code>php-gmp</code> para aceptar %s con el <strong>Proceso de Pagos de "
@@ -252,7 +255,7 @@ msgid "This field is required."
 msgstr "Este campo es requerido."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:855
+#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:865
 msgid "Wallet Account Public Key"
 msgstr "Llave Publica de la Cuenta de la Billetera"
 
@@ -467,21 +470,21 @@ msgstr ""
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:49
-#: validation_services/json_rpc_nim.php:44
-#: validation_services/nimiq_watch.php:39
+#: validation_services/json_rpc_nim.php:51
+#: validation_services/nimiq_watch.php:48
 msgid "Could not get the current blockchain height from %s."
 msgstr "No se pudo obtener el número de bloque desde %s."
 
 #: validation_services/blockstream.php:72 validation_services/etherscan.php:41
-#: validation_services/json_rpc_nim.php:65 validation_services/nimiqx.php:66
-#: validation_services/nimiq_watch.php:60 woo-nimiq-gateway.php:672
+#: validation_services/json_rpc_nim.php:74 validation_services/nimiqx.php:74
+#: validation_services/nimiq_watch.php:71 woo-nimiq-gateway.php:682
 msgid "Invalid transaction hash."
 msgstr "Hash de transacción inválido."
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:177
 #: validation_services/etherscan.php:138
-#: validation_services/json_rpc_nim.php:101
+#: validation_services/json_rpc_nim.php:90
 msgid "Could not retrieve transaction information from %s."
 msgstr "No se pudo obtener información de transacción de %s."
 
@@ -491,17 +494,21 @@ msgstr "Dirección del vendedor inválida."
 
 #: validation_services/etherscan.php:237
 msgid "Etherscan API key not set."
-msgstr ""
+msgstr "Llave del API de Etherscan no configurada"
 
-#: validation_services/json_rpc_nim.php:16
+#: validation_services/json_rpc_nim.php:25
 msgid "API URL not set."
 msgstr "API URL no esta configurada"
 
-#: validation_services/json_rpc_nim.php:40
+#: validation_services/json_rpc_nim.php:47
 msgid "JSON-RPC replied:"
 msgstr "JSON-RPC respondió:"
 
-#: validation_services/nimiqx.php:15
+#: validation_services/json_rpc_nim.php:152
+msgid "Could not retrieve account transactions from JSON-RPC server."
+msgstr ""
+
+#: validation_services/nimiqx.php:21
 msgid "NimiqX can only be used for mainnet."
 msgstr "NimiqX solo puede ser usado en mainnet."
 
@@ -515,8 +522,8 @@ msgstr ""
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
-">= 7.1."
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use "
+"PHP >= 7.1."
 msgstr ""
 "Para usar el <strong>Método de Pago de Criptomonedas Nimiq</strong>, "
 "necesita PHP >= 7.1."
@@ -524,8 +531,8 @@ msgstr ""
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
-"under HTTPS (SSL encrypted)."
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must "
+"run under HTTPS (SSL encrypted)."
 msgstr ""
 "Para usar el <strong>Método de Pago de Criptomonedas Nimiq</strong>, su "
 "tienda de correr con HTTPS (encripción SSL)."
@@ -551,7 +558,7 @@ msgstr "Averigüe que monedas son soportadas."
 msgid "Settings"
 msgstr "Ajustes"
 
-#: woo-nimiq-gateway.php:148
+#: woo-nimiq-gateway.php:158
 msgid ""
 "Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be "
 "guided through the setup process, follow <a "
@@ -559,21 +566,22 @@ msgid ""
 "installation\">this tutorial.</a>"
 msgstr ""
 "Reciba pagos en Bitcoin, Ethereum, y Nimiq. Si quiere ser guiado a través "
-"del proceso inicial, siga <a href=\"https://nimiq.github.io/tutorials"
-"/wordpress-payment-plugin-installation\">este tutorial.</a>"
+"del proceso inicial, siga <a "
+"href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
+"installation\">este tutorial.</a>"
 
 #. translators: %s: Cryptocurrency name
-#: woo-nimiq-gateway.php:177
+#: woo-nimiq-gateway.php:187
 msgid "Pay with %s."
 msgstr "Pagar con %s."
 
 #. translators: %1$s: Two cryptocurrency names separated by comma, %2$s:
 #. Cryptocurrency name
-#: woo-nimiq-gateway.php:179
+#: woo-nimiq-gateway.php:189
 msgid "Pay with %1$s or %2$s."
 msgstr "Pagar con %1$s o %2$s."
 
-#: woo-nimiq-gateway.php:419
+#: woo-nimiq-gateway.php:429
 msgid ""
 "Cryptocurrency Checkout is temporarily not available. Please try reloading "
 "this page. (Issue: price service did not return any pricing information.)"
@@ -582,11 +590,11 @@ msgstr ""
 "favor intente recargando esta página. (Problema: el servicio de precios no "
 "retorno ninguna información de precios.)"
 
-#: woo-nimiq-gateway.php:538
+#: woo-nimiq-gateway.php:548
 msgid "What is Nimiq?"
 msgstr "¿Qué es Nimiq?"
 
-#: woo-nimiq-gateway.php:578
+#: woo-nimiq-gateway.php:588
 msgid ""
 "Javascript is required to pay with cryptocurrency. Please activate "
 "Javascript to continue."
@@ -595,46 +603,46 @@ msgstr ""
 "Javascript para continuar."
 
 #. translators: Used on the payment button: "PAY WITH <crypto icons>"
-#: woo-nimiq-gateway.php:600
+#: woo-nimiq-gateway.php:610
 msgid "PAY WITH"
 msgstr "PAGAR CON"
 
-#: woo-nimiq-gateway.php:608
+#: woo-nimiq-gateway.php:618
 msgid "Payment received"
 msgstr "Pago recibido"
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:642 woo-nimiq-gateway.php:651
-#: woo-nimiq-gateway.php:654
+#: woo-nimiq-gateway.php:652 woo-nimiq-gateway.php:661
+#: woo-nimiq-gateway.php:664
 msgid "Nimiq Payment failed. (%s)."
 msgstr "Pago Nimiq fallido. (%s)."
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:642
+#: woo-nimiq-gateway.php:652
 msgid "Response code not \"OK\""
 msgstr "Código de respuesta no es \"OK\""
 
-#: woo-nimiq-gateway.php:651
+#: woo-nimiq-gateway.php:661
 msgid "Could not decode Hub result"
 msgstr "No pudo decodificar el resultado del Hub"
 
-#: woo-nimiq-gateway.php:654
+#: woo-nimiq-gateway.php:664
 msgid "Hub result is empty"
 msgstr "El resultado del Hub esta vacío"
 
-#: woo-nimiq-gateway.php:667
+#: woo-nimiq-gateway.php:677
 msgid "You need to confirm the Nimiq payment first."
 msgstr "Tiene que confirmar el pago Nimiq primero."
 
-#: woo-nimiq-gateway.php:672
+#: woo-nimiq-gateway.php:682
 msgid "Please contact support with this error message."
 msgstr "Por favor contacte soporte con este mensaje de error."
 
-#: woo-nimiq-gateway.php:758
+#: woo-nimiq-gateway.php:768
 msgid "Waiting for transaction to be validated."
 msgstr "Esperando a que la transacción se validada."
 
-#: woo-nimiq-gateway.php:780
+#: woo-nimiq-gateway.php:790
 msgid ""
 "You must fill in your store's Nimiq address to be able to accept payments in"
 " NIM."
@@ -642,11 +650,11 @@ msgstr ""
 "Tiene que ingresar la dirección Nimiq de su tienda para poder aceptar pagos "
 "en NIM."
 
-#: woo-nimiq-gateway.php:782
+#: woo-nimiq-gateway.php:792
 msgid "Set your Nimiq address here."
 msgstr "Configure su dirección Nimiq aquí."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: woo-nimiq-gateway.php:855
+#: woo-nimiq-gateway.php:865
 msgid "<strong>%1$s %2$s</strong> was not saved:"
 msgstr "<strong>%1$s %2$s</strong> no fue guardado:"

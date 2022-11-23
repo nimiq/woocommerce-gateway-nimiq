@@ -128,6 +128,16 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'wc_nimiq_gate
 // We load the plugin later to ensure WC is loaded first since we're extending it.
 add_action( 'plugins_loaded', 'wc_nimiq_gateway_init', 11 );
 
+// Load translations
+add_action( 'init', 'wc_nimiq_gateway_load_textdomain' );
+
+/**
+ * Load plugin textdomain.
+ */
+function wc_nimiq_gateway_load_textdomain() {
+	load_plugin_textdomain( 'wc-gateway-nimiq', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+
 /**
  * Initializes plugin
  *

@@ -1,10 +1,7 @@
 # Copyright (C) 2022 Nimiq
 # This file is distributed under the GNU General Public License v3.0.
 # Translators:
-# Jim <jimvendrig10@gmail.com>, 2020
-# Fons <Fonsdesigns@hotmail.com>, 2020
-# BlockchainShay <Shaylish@live.nl>, 2020
-# Stefan, 2021
+# Francis RV, 2021
 # Sören Schwert <hello@soerenschwert.de>, 2022
 # 
 msgid ""
@@ -14,12 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2022-11-23T12:52:20+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
 "Last-Translator: Sören Schwert <hello@soerenschwert.de>, 2022\n"
-"Language-Team: Dutch (https://www.transifex.com/nimiq-foundation/teams/110181/nl/)\n"
+"Language-Team: Filipino (https://www.transifex.com/nimiq-foundation/teams/110181/fil/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fil\n"
+"Plural-Forms: nplurals=2; plural=(n == 1 || n==2 || n==3) || (n % 10 != 4 || n % 10 != 6 || n % 10 != 9);\n"
 "X-Domain: wc-gateway-nimiq\n"
 "X-Generator: WP-CLI 2.7.1\n"
 
@@ -34,7 +31,7 @@ msgstr "https://github.com/nimiq/woocommerce-gateway-nimiq"
 
 #. Description of the plugin
 msgid "Let customers pay with Bitcoin, Ethereum and Nimiq"
-msgstr "Laat klanten betalen met Bitcoin, Ethereum en Nimiq"
+msgstr "Hayaan ang mga customer na magbayad ng Bitcoin, Ethereum and Nimiq"
 
 #. Author of the plugin
 msgid "Nimiq"
@@ -46,71 +43,71 @@ msgstr "https://nimiq.com"
 
 #: includes/bulk_actions.php:20
 msgid "Validate Transactions"
-msgstr "Transacties valideren"
+msgstr "Patunayan ang Mga Transaksyon"
 
 #: includes/bulk_actions.php:94
 msgid "Transaction was not found."
-msgstr "Transactie niet gevonden."
+msgstr "Ang transaksyon ay hindi natagpuan."
 
 #: includes/bulk_actions.php:115
 msgid "Transaction arrived too late. (Quote expired)"
-msgstr "De transactie kwam te laat. (Offerte verlopen)"
+msgstr "Huli na dumating ang transaksyon. (Nag-expire na ang quote)"
 
 #: includes/bulk_actions.php:122
 msgid "Sender of transaction does not match."
-msgstr "Verzonden transactie komt niet overeen."
+msgstr "Ang pagpapadala ng transaksyon ay hindi tugma."
 
 #: includes/bulk_actions.php:128
 msgid "Recipient of transaction does not match."
-msgstr "De ontvanger van de transactie komt niet overeen."
+msgstr "Ang tatanggap ng transaksyon ay hindi tugma."
 
 #: includes/bulk_actions.php:135
 msgid "Transaction value is too small."
-msgstr "Transactie waarde is te klein."
+msgstr "Masyadong maliit ang halaga ng transaksyon."
 
 #: includes/bulk_actions.php:148
 msgid "Transaction order hash does not match."
-msgstr "Hash van transactiebestelling komt niet overeen."
+msgstr "Hindi tumutugma ang hash ng transaksyon ng order."
 
 #: includes/bulk_actions.php:164
 msgid "Valid transaction found, awaiting confirmation."
-msgstr "Geldige transactie gevonden, in afwachting van bevestiging."
+msgstr "Nahanap ang wastong transaksyon, naghihintay ng kumpirmasyon."
 
 #: includes/bulk_actions.php:172
 msgid "Transaction validated and confirmed."
-msgstr "Transactie gevalideerd en bevestigd."
+msgstr "Napatunayan at nakumpirma ang transaksyon."
 
 #. translators: %d: Number of updated orders
 #: includes/bulk_actions.php:228 includes/validation_scheduler.php:64
 msgid "Updated %d order"
 msgid_plural "Updated %d orders"
-msgstr[0] "%d bestelling bijgewerkt"
-msgstr[1] "%d bestellingen bijgewerkt"
+msgstr[0] "Nai-update na mga%dorder"
+msgstr[1] "Nai-update na mga %dorder"
 
 #. translators: %d: Number of orders to process
 #: includes/validation_scheduler.php:42
 msgid "Processing %d order"
 msgid_plural "Processing %d orders"
-msgstr[0] "%d bestelling verwerken"
-msgstr[1] "%d bestellingen verwerken"
+msgstr[0] "Mga order sa pagpoproseso %d"
+msgstr[1] "Mga order sa pagpoproseso %d "
 
 #. translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD
 #: price_services/coingecko.php:63
 msgid "The currency %s is not supported by Coingecko."
-msgstr "De valuta %s wordt niet ondersteund door Coingecko."
+msgstr "Ang pera %say hindi suportado ng Coingecko."
 
 #: price_services/nimiqx.php:21 validation_services/nimiqx.php:26
 msgid "API key not set."
-msgstr "API-sleutel niet ingesteld."
+msgstr "Hindi nakatakda ang key ng API."
 
 #: price_services/nimiqx.php:24 validation_services/nimiqx.php:29
 msgid "Invalid API key."
-msgstr "API Key ongeldig"
+msgstr "Di-wastong API key."
 
 #. translators: %s: Uppercase three-letter currency code, e.g. PEN, SGD
 #: price_services/nimiqx.php:57
 msgid "The currency %s is not supported by NimiqX."
-msgstr "De valuta %s wordt niet ondersteund door NimiqX."
+msgstr "Ang pera %say hindi suportado ng NimiqX."
 
 #. translators: %s: Full cryptocurrency name, 'Bitcoin' or 'Ethereum'
 #: settings.php:8
@@ -119,17 +116,17 @@ msgid ""
 "gmp</code> extension to accept %s with <strong>Cryptocurrency Checkout by "
 "Nimiq</strong>."
 msgstr ""
-"Om %s te accepteren met de <strong>Cryptocurrency Checkout by Nimiq</strong>"
-" Moet je de volgende extensies installeren of aanzetten <code>php-bcmath "
-"</code>of <code>php-gmp</code>"
+"Dapat mong i-install at paganahin ang alinman sa <code>php-bcmath</code> or "
+"<code>php-gmp</code> extension upang tanggapin%s with <strong>Cryptocurrency"
+" Checkout by Nimiq</strong>."
 
 #: settings.php:22
 msgid "also estimates fees"
-msgstr "ook geschatte vergoedingen "
+msgstr "tinatantiya din ang bayarin"
 
 #: settings.php:28
 msgid "Shop Logo"
-msgstr "Winkel Logo"
+msgstr "Logo ng Shop"
 
 #: settings.php:30
 msgid ""
@@ -137,74 +134,75 @@ msgid ""
 " The file must be on the same domain as your webshop. The image should be "
 "quadratic for best results."
 msgstr ""
-"Laat uw logo zien in Nimiq Checkout door hier een URL naar een "
-"afbeeldingsbestand in te voeren. Het bestand moet op hetzelfde domein staan "
-"​​als uw webshop. De afbeelding moet kwadratisch zijn voor de beste "
-"resultaten."
+"Ipakita ang iyong logo sa Nimiq Checkout sa pamamagitan ng paglalagay ng "
+"isang URL sa isang file ng imahe dito. Ang file ay dapat na nasa parehong "
+"domain tulad ng iyong webshop. Ang imahe ay dapat na quadratic para sa "
+"pinakamahusay na mga resulta."
 
 #: settings.php:34
 msgid "Enter URL or leave empty to use your WordPress's site icon."
 msgstr ""
-"Voer een URL in of laat leeg om je WordPress site icoon te gebruiken. "
+"Ipasok ang URL o iwanang walang laman upang magamit ang icon ng site ng "
+"iyong WordPress."
 
 #: settings.php:35
 msgid "Enter URL to display your logo during checkout."
-msgstr "Voer een URL in om je logo te laten zien tijdens de betaling."
+msgstr "Ipasok ang URL upang maipakita ang iyong logo habang nag-checkout."
 
 #: settings.php:43
 msgid "Email Instructions"
-msgstr "Email instructies "
+msgstr "Mga Tagubilin sa Email"
 
 #: settings.php:45
 msgid "Instructions that will be added to the thank-you page and emails."
-msgstr "Instructies die worden toegevoegd aan de bedank pagina en emails."
+msgstr "Mga tagubilin na maidaragdag sa pahina ng pasasalamat at mga email."
 
 #: settings.php:46
 msgid ""
 "You will receive email updates after your payment has been confirmed and "
 "when your order has been shipped."
 msgstr ""
-"Je ontvangt updates per email als je betaling is bevestigd en wanneer je "
-"bestelling is verstuurd."
+"Makakatanggap ka ng mga pag-update sa email pagkatapos makumpirma ang iyong "
+"pagbabayad at kung kailan naipadala ang iyong order."
 
 #. translators: %s: Full crypo currency name, e.g. 'Nimiq', 'Bitcoin' or
 #. 'Ethereum'
 #: settings.php:54 settings.php:126 settings.php:168
 msgid "All %s-related settings"
-msgstr "Alles %s-gerelateerde instellingen"
+msgstr "Ang lahat ng mga%s  setting na nauugnay"
 
 #: settings.php:59
 msgid "Wallet Address"
-msgstr "Wallet adres"
+msgstr "Adres sa Wallet"
 
 #: settings.php:61
 msgid "The Nimiq address that your customers will pay to."
-msgstr "Het Nimiq adres waar je klanten aan betalen."
+msgstr "Ang Nimiq adres na babayaran ng iyong mga customer."
 
 #: settings.php:68
 msgid "Transaction Message"
-msgstr "Transactie bericht"
+msgstr "Mensahe sa Transaksyon"
 
 #: settings.php:70
 msgid ""
 "Enter a message that should be included in every transaction. 50 characters "
 "maximum."
 msgstr ""
-"Voer een bericht in dat in iedere transactie terug moet komen. 50 tekens "
-"maximaal."
+"Maglagay ng mensahe na dapat isama sa bawat transaksyon. Maximum na 50 "
+"character."
 
 #: settings.php:71
 msgid "Thank you for shopping with us!"
-msgstr "Bedankt voor het winkelen bij ons!"
+msgstr "Salamat sa pamimili sa amin!"
 
 #: settings.php:76 settings.php:153 settings.php:191
 msgid "Chain Monitoring Service"
-msgstr "Chain bewaking service"
+msgstr "Serbisyo sa Pagmamanman ng Chain"
 
 #: settings.php:78
 msgid "Which service should be used for monitoring the Nimiq blockchain."
 msgstr ""
-"Welke service moet er gebruikt worden om de Nimiq blockchain te bewaken. "
+"Aling serbisyo ang dapat gamitin para sa pagsubaybay sa Nimiq blockchain."
 
 #: settings.php:90
 msgid "JSON-RPC URL"
@@ -215,61 +213,62 @@ msgid ""
 "Full URL (including port) of the Nimiq JSON-RPC server used to monitor the "
 "Nimiq blockchain."
 msgstr ""
-"Volledige URL (inclusief port) van de Nimig JSON-RPC server is gebruikt om "
-"toezicht te houden op de Nimiq blockchain "
+"Buong URL (kasama ang port) ng Nimiq JSON-RPC server na ginamit upang "
+"subaybayan ang Nimiq blockchain."
 
 #: settings.php:94
 msgid "This field is required when accepting Ethereum."
-msgstr "Dit veld is nodig als je Ethereum accepteert "
+msgstr "Kinakailangan ang larangan na ito kapag tumatanggap ng Ethereum."
 
 #: settings.php:100
 msgid "JSON-RPC Username"
-msgstr "JSON-RPC Gebruikersnaam"
+msgstr "Username ng JSON-RPC"
 
 #: settings.php:102
 msgid "Username for the protected JSON-RPC service. (Optional)"
-msgstr "Gebruikersnaam voor de beschermde JSON-RPC-service (Optioneel)"
+msgstr "Username para sa protektadong serbisyo ng JSON-RPC. (Opsyonal)"
 
 #: settings.php:107
 msgid "JSON-RPC Password"
-msgstr "JSON-RPC Wachtwoord "
+msgstr "JSON-RPC Password"
 
 #: settings.php:109
 msgid "Password for the protected JSON-RPC service. (Optional)"
-msgstr "Wachtwoord voor de beschermde JSON-RPC service (Optioneel)"
+msgstr "Ang password para sa protektadong serbisyo ng JSON-RPC. (Opsyonal)"
 
 #: settings.php:114
 msgid "NimiqX API Key"
-msgstr "NimiqX API Sleutel"
+msgstr "NimiqX API Key"
 
 #: settings.php:116
 msgid ""
 "Key for accessing the NimiqX exchange rate and chain monitoring service. "
 "Visit nimiqx.com to sign up for a key."
 msgstr ""
-"Sleutel voor toegang tot de NimiqX wisselkoers- en Chainbewakingsservice. "
-"Bezoek nimiqx.com om u aan te melden voor een sleutel."
+"Susi para sa pag-access sa rate ng palitan ng NimiqX at serbisyo sa "
+"pagsubaybay ng kadena. Bisitahin ang nimiqx.com upang mag-sign up para sa "
+"isang key."
 
 #: settings.php:117 settings.php:206
 msgid "This field is required."
-msgstr "Dit veld is nodig."
+msgstr "Ang patlang na ito ay kinakailangan."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
 #: settings.php:132 settings.php:174 woo-nimiq-gateway.php:865
 msgid "Wallet Account Public Key"
-msgstr "Wallet account publieke sleutel"
+msgstr "Public Key ng Wallet Account"
 
 #: settings.php:134
 msgid ""
 "Your Bitcoin xpub/zpub/tpub/vpub \"Master Public Key\" from which payment "
 "addresses are derived."
 msgstr ""
-"Jouw Bitcoin xpub/zpub/tpub/vpub \"Hoofd publieke sleutel\" waarvan "
-"betalingsadressen zijn afgeleid."
+"Ang iyong Bitcoin xpub/zpub/tpub/vpub na \"Master Public Key\" na nagmula sa"
+" mga address sa pagbabayad."
 
 #: settings.php:140
 msgid "Public Key Type"
-msgstr "Publieke sleutel type"
+msgstr "Public Key Type"
 
 #: settings.php:142
 msgid ""
@@ -278,11 +277,11 @@ msgid ""
 "\"Derivation\" or \"BIP32\" that looks similar to the values in the select "
 "box, in that case, pick the value that matches the one shown in your wallet."
 msgstr ""
-"Het afleidingstype van de publieke sleutel. Meestal hoeft u dit niet te "
-"wijzigen. Maar er zijn wallets zoals Coinomi die een veld met de naam "
-"\"Afleiding\" of \"BIP32\" laten zien dat lijkt op de waarden in het "
-"selectievakje. Kies in dat geval de waarde die overeenkomt met de waarde die"
-" in uw wallet wordt weergegeven."
+"Ang uri ng paghihiwalay ng susi ng publiko. Karaniwan, hindi mo ito "
+"kailangang baguhin. Ngunit may mga wallet tulad ng Coinomi na magpapakita ng"
+" isang patlang na tinatawag na \"Derivation\" o \"BIP32\" na mukhang katulad"
+" sa mga halaga sa select box, sa kasong iyon, piliin ang halagang tumutugma "
+"sa ipinakita sa iyong wallet."
 
 #: settings.php:145
 msgid "Legacy"
@@ -295,217 +294,221 @@ msgstr "Native SegWit"
 #: settings.php:155
 msgid "Which service should be used for monitoring the Bitcoin blockchain."
 msgstr ""
-"Welke service moet worden gebruikt voor het monitoren van de Bitcoin-"
-"blockchain."
+"Aling serbisyo ang dapat gamitin para sa pagsubaybay sa Bitcoin blockchain."
 
 #: settings.php:176
 msgid ""
 "Your Ethereum xpub \"Account Public Key\" from which payment addresses are "
 "derived."
 msgstr ""
-"Uw Ethereum xpub \"Account publieke sleutel\" waarvan de betalingsadressen "
-"zijn afgeleid."
+"Ang iyong Ethereum xpub na \"Account Public Key\" kung saan nagmula ang mga "
+"address sa pagbabayad."
 
 #: settings.php:184
 msgid ""
 "Re-using addresses reduces your shop's privacy but gives you the comfort of "
 "having payments distributed over less addresses."
 msgstr ""
-"Het hergebruiken van adressen vermindert de privacy van uw winkel, maar "
-"biedt u het gemak dat betalingen over minder adressen worden verdeeld."
+"Ang muling paggamit ng mga address ay binabawasan ang privacy ng iyong shop "
+"ngunit nagbibigay sa iyo ng ginhawa ng pagkakaroon ng mga pagbabayad na "
+"naipamahagi sa mas kaunting mga address."
 
 #: settings.php:185
 msgid "Re-use Addresses"
-msgstr "Hergebruik adressen"
+msgstr "Gumamit ulit ng Mga Adres"
 
 #: settings.php:193
 msgid "Which service should be used for monitoring the Ethereum blockchain."
 msgstr ""
-"Welke service moet worden gebruikt voor het monitoren van de Ethereum-"
-"blockchain."
+"Aling serbisyo ang dapat gamitin para sa pagsubaybay sa Ethereum blockchain."
 
 #: settings.php:203
 msgid "Etherscan.io API Key"
-msgstr "Etherscan.io API Sleutel"
+msgstr "Etherscan.io API Key"
 
 #: settings.php:205
 msgid "Token for accessing the Etherscan chain monitoring service."
-msgstr "Token om toegang te krijgen tot de Etherscan chain bewaking service."
+msgstr ""
+"Token para sa pag-access sa serbisyo ng pagsubaybay sa chain ng Etherscan."
 
 #: settings.php:219
 msgid "Network Mode"
-msgstr "Netwerk modus"
+msgstr "Network Mode"
 
 #: settings.php:221
 msgid ""
 "Which network to use: Testnet for testing, Mainnet when the shop is running "
 "live."
 msgstr ""
-"Welk netwerk te gebruiken: Testnet om te testen, Mainnet wanneer de winkel "
-"live draait."
+"Aling network ang gagamitin: Testnet para sa pagsubok, Mainnet kapag ang "
+"shop ay tumatakbo nang live."
 
 #: settings.php:228
 msgid "Exchange Rate service"
-msgstr "Wisselkoersservice"
+msgstr "Serbisyo ng Exchange Rate"
 
 #: settings.php:230
 msgid ""
 "Which service to use for fetching price information for currency conversion."
 msgstr ""
-"Welke service moet worden gebruikt voor het ophalen van prijsinformatie voor"
-" valuta conversie."
+"Aling serbisyo ang gagamitin para sa pagkuha ng impormasyon ng presyo para "
+"sa pag-convert ng pera."
 
 #: settings.php:237
 msgid "NIM Fee per Byte [Luna]"
-msgstr "NIM toeslag per Byte [Luna]"
+msgstr "NIM Fee per Byte [Luna]"
 
 #: settings.php:239
 msgid "Lunas per byte to be applied to transactions."
-msgstr "Lunas per Byte toe te passen op transacties."
+msgstr "Lunas bawat byte na mailalapat sa mga transaksyon."
 
 #. translators: %1$d: Amount, %2$s: Unit of amount
 #: settings.php:241 settings.php:249 settings.php:257
 msgid "Optional - Default: %1$d %2$s"
-msgstr "Optioneel - standaard:%1$d%2$s"
+msgstr "Optional - Default: %1$d %2$s"
 
 #: settings.php:246
 msgid "BTC Fee per Byte [Sat]"
-msgstr "BTC toeslag per Byte [Sat]"
+msgstr "BTC Fee per Byte [Sat]"
 
 #: settings.php:248
 msgid "Satoshis per byte to be applied to transactions."
-msgstr "Satoshis per byte toe te passen op transacties."
+msgstr "Satoshis bawat byte na mailalapat sa mga transaksyon."
 
 #: settings.php:254
 msgid "ETH Gas Price [Gwei]"
-msgstr "ETH Gas prijs [Gwe]"
+msgstr "ETH Gas Price [Gwei]"
 
 #: settings.php:256
 msgid "Gas price in Gwei to be applied to transactions."
-msgstr "Gas prijs in Gwei toe te passen op transacties."
+msgstr "Ang presyo ng gas sa Gwei na mailalapat sa mga transaksyon."
 
 #: settings.php:262
 msgid "Margin Percentage"
-msgstr "Margepercentage"
+msgstr "Porsyento ng Margin"
 
 #: settings.php:264
 msgid ""
 "A margin to apply to crypto payments, in percent. Can also be negative."
 msgstr ""
-"Een marge in procenten die moet worden toegepast op crypto betalingen, Kan "
-"ook negatief zijn."
+"Isang margin na mailalapat sa mga pagbabayad ng crypto, sa porsyento. Maaari"
+" ring maging negatibo."
 
 #: settings.php:273
 msgid "Validation Interval [minutes]"
-msgstr "Validatie interval [minuten]"
+msgstr "Validation Interval [minutes]"
 
 #: settings.php:275
 msgid ""
 "Interval between validating transactions, in minutes. If you change this, "
 "disable and enable this plugin to apply the new interval."
 msgstr ""
-"Interval tussen het valideren van transacties, in minuten. Als u dit "
-"wijzigt, schakelt u deze plug-in uit en weer in om het nieuwe interval toe "
-"te passen."
+"Ang pagitan sa pagitan ng pagpapatunay ng mga transaksyon, sa ilang minuto. "
+"Kung binago mo ito, huwag paganahin at paganahin ang plugin na ito upang "
+"mailapat ang bagong agwat."
 
 #. translators: %d: Number of minutes
 #: settings.php:277 settings.php:294
 msgid "Optional - Default: %d minutes"
-msgstr "Optioneel - standaard:%dMinuten "
+msgstr "Opsyonal - Default: %dminuto"
 
 #: settings.php:282
 msgid "Checkout Behavior"
-msgstr "afreken gedrag"
+msgstr "Checkout Behavior"
 
 #: settings.php:284
 msgid ""
 "How should the user be forwarded to Nimiq Checkout to finalize the payment "
 "process, as a popup or by being redirected?"
 msgstr ""
-"Hoe moet de gebruiker worden doorgestuurd naar de Nimiq Checkout om het "
-"betalingsproces af te ronden? als een pop-up of door omgeleid te worden?"
+"Paano dapat maipasa ang gumagamit sa Nimiq Checkout upang tapusin ang "
+"proseso ng pagbabayad, bilang isang popup o sa pamamagitan ng pagre-"
+"redirect?"
 
 #: settings.php:291
 msgid "Payment Timeout"
-msgstr "Betaling onderbreking"
+msgstr "Payment Timeout"
 
 #: settings.php:293
 msgid ""
 "How many minutes to wait for a payment transaction before considering the "
 "order to have failed."
 msgstr ""
-"Hoeveel minuten moet er worden gewacht op een betalingstransactie voordat de"
-" bestelling als mislukt wordt beschouwd."
+"Ilang minuto upang maghintay para sa isang transaksyon sa pagbabayad bago "
+"isaalang-alang ang order na nabigo."
 
 #. translators: %s: Cryptocurrency name
 #: settings.php:300 settings.php:309 settings.php:317
 msgid "Required confirmations for %s"
-msgstr "Vereiste bevestigingen voor %s"
+msgstr "Mga kinakailangang kumpirmasyon para sa %s"
 
 #: settings.php:302
 msgid ""
 "The number of confirmations required to accept a Nimiq transaction. Each "
 "confirmation takes 1 minute on average."
 msgstr ""
-"Het aantal bevestigingen dat vereist is om een Nimiq transactie te "
-"accepteren. Elke bevestiging duur gemiddeld 1 minuut. "
+"Ang bilang ng mga kumpirmasyon na kinakailangan upang makatanggap ng isang "
+"transaksyon sa Nimiq. Ang bawat kumpirmasyon ay tumatagal ng 1 minuto sa "
+"average."
 
 #. translators: %d: Number of blocks
 #: settings.php:304 settings.php:312 settings.php:320
 msgid "Optional - Default: %d blocks"
-msgstr "Optioneel - Standaard:%dBlocks"
+msgstr "Optional - Default: %d blocks"
 
 #: settings.php:311
 msgid ""
 "The number of confirmations required to accept a Bitcoin transaction. Each "
 "confirmation takes 10 minutes on average."
 msgstr ""
-"Het aantal bevestigingen dat vereist is om een Bitcoin transactie te "
-"accepteren. Elke transactie duurt gemiddeld 10 minuten."
+"Ang bilang ng mga kumpirmasyon na kinakailangan upang makatanggap ng isang "
+"Bitcoin transaksyon. Ang bawat kumpirmasyon ay tumatagal ng 10 minuto sa "
+"average."
 
 #: settings.php:319
 msgid ""
 "The number of confirmations required to accept an Ethereum transaction. Each"
 " confirmation takes 15 seconds on average."
 msgstr ""
-"Het aantal bevestigingen dat vereist is om een Ethereum transactie te "
-"accepteren. Elke transactie duurt gemiddeld 15 seconden."
+"Ang bilang ng mga kumpirmasyon na kinakailangan upang makatanggap ng isang "
+"transaksyon sa Ethereum. Ang bawat kumpirmasyon ay tumatagal ng 15 segundo "
+"sa average."
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:49
 #: validation_services/json_rpc_nim.php:51
 #: validation_services/nimiq_watch.php:48
 msgid "Could not get the current blockchain height from %s."
-msgstr "Kan de huidige blockchain hoogte niet ophalen van %s."
+msgstr "Hindi makuha ang kasalukuyang taas ng blockchain mula sa %s."
 
 #: validation_services/blockstream.php:72 validation_services/etherscan.php:41
 #: validation_services/json_rpc_nim.php:74 validation_services/nimiqx.php:74
 #: validation_services/nimiq_watch.php:71 woo-nimiq-gateway.php:682
 msgid "Invalid transaction hash."
-msgstr "Ongeldige transactie hash."
+msgstr "Di-wastong hash ng transaksyon."
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:177
 #: validation_services/etherscan.php:138
 #: validation_services/json_rpc_nim.php:90
 msgid "Could not retrieve transaction information from %s."
-msgstr "Kan transactiegegevens niet ophalen van %s."
+msgstr "Hindi makuha ang impormasyon sa transaksyon mula sa %s."
 
 #: validation_services/etherscan.php:47
 msgid "Invalid merchant address."
-msgstr "Ongeldig handelaars adres."
+msgstr "Di-wastong adres ng merchant."
 
 #: validation_services/etherscan.php:237
 msgid "Etherscan API key not set."
-msgstr "Etherscan API-sleutel niet ingesteld."
+msgstr "Hindi itinakda ang susi ng Etherscan API."
 
 #: validation_services/json_rpc_nim.php:25
 msgid "API URL not set."
-msgstr "API URL niet ingesteld."
+msgstr "Hindi itinakda ang API URL."
 
 #: validation_services/json_rpc_nim.php:47
 msgid "JSON-RPC replied:"
-msgstr "JSON-RPC antwoordde:"
+msgstr "Sumagot ang JSON-RPC:"
 
 #: validation_services/json_rpc_nim.php:152
 msgid "Could not retrieve account transactions from JSON-RPC server."
@@ -513,23 +516,23 @@ msgstr ""
 
 #: validation_services/nimiqx.php:21
 msgid "NimiqX can only be used for mainnet."
-msgstr "NimiqX kan alleen gebruikt worden voor het mainnet"
+msgstr "Maaari lamang magamit ang NimiqX para sa mainnet."
 
 #: woo-nimiq-gateway.php:36
 msgid ""
 "To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
 msgstr ""
-"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je "
-"WooCommerce hebben geïnstaleerd."
+"Upang magamit ang <strong>Cryptocurrency Checkout by Nimiq</strong>, dapat "
+"ay mayroon kang naka-install na WooCommerce!"
 
 #: woo-nimiq-gateway.php:45
 msgid ""
 "To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use "
 "PHP >= 7.1."
 msgstr ""
-"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je "
-"PHP >=7.1 gebruiken."
+"Upang magamit ang <strong>Cryptocurrency Checkout by Nimiq</strong>, "
+"kailangan mong gumamit ng PHP> = 7.1."
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
@@ -537,30 +540,31 @@ msgid ""
 "To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must "
 "run under HTTPS (SSL encrypted)."
 msgstr ""
-"Om <strong>Cryptocurrency Checkout by Nimiq</strong> te gebruiken, moet je "
-"winkel onder HTTPS draaien (SSL-versleuteld)."
+"Upang magamit ang<strong>Cryptocurrency Checkout by Nimiq</strong>, dapat "
+"tumakbo ang iyong tindahan sa ilalim ng HTTPS (naka-encrypt na SSL)."
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid "If you believe this error is a mistake, contact us at %s."
 msgstr ""
-"Als je denkt dat deze error een fout is neem dan contact met ons op via%s"
+"Kung naniniwala kang isang error ang error na ito, makipag-ugnay sa amin "
+"sa%s."
 
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
 "<strong>Cryptocurrency Checkout by Nimiq</strong>."
 msgstr ""
-"Je winkel gebruikt een valuta die momenteel niet ondersteund wordt door de "
-"<strong>Cryptocurrency Checkout by Nimiq</strong>."
+"Gumagamit ang iyong tindahan ng isang pera na kasalukuyang hindi suportado "
+"ng <strong>Cryptocurrency Checkout by Nimiq</strong>."
 
 #: woo-nimiq-gateway.php:83
 msgid "Find out which currencies are supported."
-msgstr "Ontdek welke valuta's ondersteund worden."
+msgstr "Alamin kung aling mga pera ang sinusuportahan."
 
 #: woo-nimiq-gateway.php:120
 msgid "Settings"
-msgstr "Instellingen"
+msgstr "Settings"
 
 #: woo-nimiq-gateway.php:158
 msgid ""
@@ -569,96 +573,96 @@ msgid ""
 "href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
 "installation\">this tutorial.</a>"
 msgstr ""
-"Ontvang betalingen in Bitcoin, Ethereum en Nimiq. Als je graag geholpen "
-"wordt door het instellingen proces volg dan <a "
+"Makatanggap ng mga pagbabayad sa Bitcoin, Ethereum, at Nimiq. Kung nais mong"
+" gabayan ka sa proseso ng pag-set up, sundin ang <a "
 "href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
-"installation\">Deze handleiding.</a>"
+"installation\">tutorial na ito.</a>"
 
 #. translators: %s: Cryptocurrency name
 #: woo-nimiq-gateway.php:187
 msgid "Pay with %s."
-msgstr "Betaal met %s."
+msgstr "Bayaran ng%s."
 
 #. translators: %1$s: Two cryptocurrency names separated by comma, %2$s:
 #. Cryptocurrency name
 #: woo-nimiq-gateway.php:189
 msgid "Pay with %1$s or %2$s."
-msgstr "Betaal met %1$s of %2$s."
+msgstr "Magbayad gamit %1$so%2$s."
 
 #: woo-nimiq-gateway.php:429
 msgid ""
 "Cryptocurrency Checkout is temporarily not available. Please try reloading "
 "this page. (Issue: price service did not return any pricing information.)"
 msgstr ""
-"Afrekenen met cryptocurrency is tijdelijk niet beschikbaar. Probeer deze "
-"pagina opnieuw te laden. (Probleem: prijsservice heeft geen prijsinformatie "
-"geretourneerd.)"
+"Pansamantalang hindi magagamit ang Cryptocurrency Checkout. Mangyaring "
+"subukang i-reload ang pahinang ito. (Isyu: ang serbisyo sa presyo ay hindi "
+"nagbalik ng anumang impormasyon sa pagpepresyo.)"
 
 #: woo-nimiq-gateway.php:548
 msgid "What is Nimiq?"
-msgstr "Wat is Nimiq?"
+msgstr "Ano ang Nimiq?"
 
 #: woo-nimiq-gateway.php:588
 msgid ""
 "Javascript is required to pay with cryptocurrency. Please activate "
 "Javascript to continue."
 msgstr ""
-"Javascript is nodig om te betalen met Cryptocurrency. Activeer Javascript om"
-" door te gaan"
+"Kailangan ang Javascript na magbayad gamit ang cryptocurrency. Mangyaring "
+"buhayin ang Javascript upang magpatuloy."
 
 #. translators: Used on the payment button: "PAY WITH <crypto icons>"
 #: woo-nimiq-gateway.php:610
 msgid "PAY WITH"
-msgstr "BETAAL MET"
+msgstr "MAGBAYAD SA"
 
 #: woo-nimiq-gateway.php:618
 msgid "Payment received"
-msgstr "Betaling ontvangen"
+msgstr "Natanggap ang bayad"
 
 #. translators: %s: Error message
 #: woo-nimiq-gateway.php:652 woo-nimiq-gateway.php:661
 #: woo-nimiq-gateway.php:664
 msgid "Nimiq Payment failed. (%s)."
-msgstr "Nimiq betaling is mislukt. (%s)."
+msgstr "Nabigo ang Pagbabayad ng Nimiq. (%s)."
 
 #. translators: %s: Error message
 #: woo-nimiq-gateway.php:652
 msgid "Response code not \"OK\""
-msgstr "Reactiecode niet \"OK\""
+msgstr "Ang code ng sagot ay hindi \"OK\""
 
 #: woo-nimiq-gateway.php:661
 msgid "Could not decode Hub result"
-msgstr "Kan Hub resultaat niet decoderen"
+msgstr "Hindi ma-decode ang resulta ng Hub"
 
 #: woo-nimiq-gateway.php:664
 msgid "Hub result is empty"
-msgstr "Hub resultaat is leeg"
+msgstr "Walang laman ang resulta sa Hub"
 
 #: woo-nimiq-gateway.php:677
 msgid "You need to confirm the Nimiq payment first."
-msgstr "U moet eerst de Nimiq betaling bevestigen."
+msgstr "Kailangan mo munang kumpirmahin ang bayad sa Nimiq."
 
 #: woo-nimiq-gateway.php:682
 msgid "Please contact support with this error message."
-msgstr "Neem contact op met support voor dit foutbericht."
+msgstr "Mangyaring makipag-ugnay sa suporta sa mensahe ng error na ito."
 
 #: woo-nimiq-gateway.php:768
 msgid "Waiting for transaction to be validated."
-msgstr "Wachten tot transactie is gevalideerd."
+msgstr "Naghihintay para sa pagpapatunay na maipatunayan."
 
 #: woo-nimiq-gateway.php:790
 msgid ""
 "You must fill in your store's Nimiq address to be able to accept payments in"
 " NIM."
 msgstr ""
-"U moet het Nimiq-adres van uw winkel invullen om betalingen in NIM te kunnen"
-" accepteren."
+"Dapat mong punan ang address ng Nimiq ng iyong tindahan upang makatanggap ng"
+" mga pagbabayad sa NIM."
 
 #: woo-nimiq-gateway.php:792
 msgid "Set your Nimiq address here."
-msgstr "Stel hier uw Nimiq-adres in."
+msgstr "Itakda ang iyong Nimiq address dito."
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
 #: woo-nimiq-gateway.php:865
 msgid "<strong>%1$s %2$s</strong> was not saved:"
-msgstr "<strong>%1$s%2$s</strong>Is niet opgeslagen:"
+msgstr "<strong>%1$s%2$s</strong>ay hindi nai-save:"

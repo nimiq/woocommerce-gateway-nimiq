@@ -1,16 +1,17 @@
-# Copyright (C) 2021 Nimiq
-# This file is distributed under the same license as the Cryptocurrency Checkout by Nimiq plugin.
+# Copyright (C) 2022 Nimiq
+# This file is distributed under the GNU General Public License v3.0.
 # Translators:
 # Miao Yu <miaoyu319@gmail.com>, 2020
 # Sven <sven@nimiq.com>, 2021
-#
+# Sören Schwert <hello@soerenschwert.de>, 2022
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.3.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-nimiq\n"
-"POT-Creation-Date: 2021-01-25T10:27:25+00:00\n"
+"Project-Id-Version: Cryptocurrency Checkout by Nimiq 3.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-gateway-nimiq\n"
+"POT-Creation-Date: 2022-11-23T12:52:20+00:00\n"
 "PO-Revision-Date: 2019-11-19 15:53+0000\n"
-"Last-Translator: Sven <sven@nimiq.com>, 2021\n"
+"Last-Translator: Sören Schwert <hello@soerenschwert.de>, 2022\n"
 "Language-Team: Chinese (https://www.transifex.com/nimiq-foundation/teams/110181/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,12 +19,12 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Domain: wc-gateway-nimiq\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.7.1\n"
 
 #. Plugin Name of the plugin
-#: woo-nimiq-gateway.php:147 woo-nimiq-gateway.php:173
+#: woo-nimiq-gateway.php:157 woo-nimiq-gateway.php:183
 msgid "Cryptocurrency Checkout by Nimiq"
-msgstr "Nimiq 加密货币结账组件"
+msgstr ""
 
 #. Plugin URI of the plugin
 msgid "https://github.com/nimiq/woocommerce-gateway-nimiq"
@@ -65,23 +66,23 @@ msgstr "交易接收者不匹配"
 msgid "Transaction value is too small."
 msgstr "交易金额太小"
 
-#: includes/bulk_actions.php:147
+#: includes/bulk_actions.php:148
 msgid "Transaction order hash does not match."
 msgstr "交易订单哈希值不匹配"
 
-#: includes/bulk_actions.php:162
+#: includes/bulk_actions.php:164
 msgid "Valid transaction found, awaiting confirmation."
 msgstr "有效交易已找到，等待确认中"
 
-#: includes/bulk_actions.php:170
+#: includes/bulk_actions.php:172
 msgid "Transaction validated and confirmed."
 msgstr "交易已验证并确认"
 
 #. translators: %d: Number of updated orders
-#: includes/bulk_actions.php:219 includes/validation_scheduler.php:64
+#: includes/bulk_actions.php:228 includes/validation_scheduler.php:64
 msgid "Updated %d order"
 msgid_plural "Updated %d orders"
-msgstr[0] "已更新 %d 个订单"
+msgstr[0] "已更新%d个订单"
 
 #. translators: %d: Number of orders to process
 #: includes/validation_scheduler.php:42
@@ -94,11 +95,11 @@ msgstr[0] "正在处理%d个订单"
 msgid "The currency %s is not supported by Coingecko."
 msgstr "Coingecko不支持%s货币"
 
-#: price_services/nimiqx.php:21 validation_services/nimiqx.php:20
+#: price_services/nimiqx.php:21 validation_services/nimiqx.php:26
 msgid "API key not set."
 msgstr "未设置API密钥"
 
-#: price_services/nimiqx.php:24 validation_services/nimiqx.php:23
+#: price_services/nimiqx.php:24 validation_services/nimiqx.php:29
 msgid "Invalid API key."
 msgstr "无效的API密钥"
 
@@ -111,11 +112,11 @@ msgstr "NimiqX不支持%s货币"
 #: settings.php:8
 msgid ""
 "You must install & enable either the <code>php-bcmath</code> or <code>php-"
-"gmp</code> extension to accept %s with <strong>Nimiq Cryptocurrency "
-"Checkout</strong>."
+"gmp</code> extension to accept %s with <strong>Cryptocurrency Checkout by "
+"Nimiq</strong>."
 msgstr ""
-"您必须安装并启用<code>php-bcmath</code>或<code>php-"
-"gmp</code>扩展，才能通过<strong>Nimiq加密货币结账组件</strong>接受%s"
+"你必须安装并启用<code>php-bcmath</code>或<code>php-"
+"gmp</code>扩充工具，才能通过<strong>Nimiq加密货币结账组件</strong>接受%s"
 
 #: settings.php:22
 msgid "also estimates fees"
@@ -123,7 +124,7 @@ msgstr "以及估算费用"
 
 #: settings.php:28
 msgid "Shop Logo"
-msgstr "商店 Logo"
+msgstr "商店Logo"
 
 #: settings.php:30
 msgid ""
@@ -131,15 +132,15 @@ msgid ""
 " The file must be on the same domain as your webshop. The image should be "
 "quadratic for best results."
 msgstr ""
-"通过在此处输入图像文件的URL，您可以在Nimiq 结账组件中显示Logo。该文件必须与您的商店位于同一域名下，图像应为正方形以获得最佳效果"
+"通过在此处输入图像文件的URL，你可以在Nimiq 结账组件中显示Logo。该文件必须与你的商店位于同一域名下，图像应为正方形以获得最佳效果"
 
 #: settings.php:34
 msgid "Enter URL or leave empty to use your WordPress's site icon."
-msgstr "请在此处输入URL或留空，以使用您的WordPress站点图标"
+msgstr "请在此处输入URL或留空，以使用你的WordPress站点图标"
 
 #: settings.php:35
 msgid "Enter URL to display your logo during checkout."
-msgstr "在此处输入URL以在结帐时显示您的Logo"
+msgstr "在此处输入URL以在结帐时显示你的Logo"
 
 #: settings.php:43
 msgid "Email Instructions"
@@ -153,7 +154,7 @@ msgstr "将在“感谢页面”和电子邮件中添加的说明"
 msgid ""
 "You will receive email updates after your payment has been confirmed and "
 "when your order has been shipped."
-msgstr "付款确认后以及订单发货后，您将收到电子邮件更新"
+msgstr "付款确认后以及订单发货后，你将收到电子邮件更新"
 
 #. translators: %s: Full crypo currency name, e.g. 'Nimiq', 'Bitcoin' or
 #. 'Ethereum'
@@ -167,7 +168,7 @@ msgstr "钱包地址"
 
 #: settings.php:61
 msgid "The Nimiq address that your customers will pay to."
-msgstr "接收您客户付款的Nimiq地址"
+msgstr "接收你客户付款的Nimiq地址"
 
 #: settings.php:68
 msgid "Transaction Message"
@@ -181,7 +182,7 @@ msgstr "将在每笔交易中显示的信息，最多50个字符"
 
 #: settings.php:71
 msgid "Thank you for shopping with us!"
-msgstr "感谢您的购物！"
+msgstr "感谢你的购物！"
 
 #: settings.php:76 settings.php:153 settings.php:191
 msgid "Chain Monitoring Service"
@@ -203,7 +204,7 @@ msgstr "用于监控Nimiq区块链的Nimiq JSON-RPC服务器的完整URL（包�
 
 #: settings.php:94
 msgid "This field is required when accepting Ethereum."
-msgstr "若您欲接受以太坊此栏必填"
+msgstr "若你欲接受以太坊此栏必填"
 
 #: settings.php:100
 msgid "JSON-RPC Username"
@@ -236,7 +237,7 @@ msgid "This field is required."
 msgstr "必填项"
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:855
+#: settings.php:132 settings.php:174 woo-nimiq-gateway.php:865
 msgid "Wallet Account Public Key"
 msgstr "钱包帐户公钥"
 
@@ -244,7 +245,7 @@ msgstr "钱包帐户公钥"
 msgid ""
 "Your Bitcoin xpub/zpub/tpub/vpub \"Master Public Key\" from which payment "
 "addresses are derived."
-msgstr "您的比特币 xpub / zpub / tpub / vpub“主公钥”"
+msgstr "你的比特币 xpub / zpub / tpub / vpub“主公钥”"
 
 #: settings.php:140
 msgid "Public Key Type"
@@ -257,8 +258,8 @@ msgid ""
 "\"Derivation\" or \"BIP32\" that looks similar to the values in the select "
 "box, in that case, pick the value that matches the one shown in your wallet."
 msgstr ""
-"公钥派生的类型，通常不需要更改。但有一些钱包，如Coinomi，会显示 \"Derivation \"或 \"BIP32 "
-"\"的字段，看起来与选择框中的值相似，在这种情况下，请选择与您钱包中显示的值相匹配的值"
+"公钥派生的类型通常不需要更改。但有一些钱包，如Coinomi，会显示 \"Derivation \"或 \"BIP32 "
+"\"的字段，看起来与选择框中的值相似，在这种情况下，请选择与你钱包中显示的值相匹配的值"
 
 #: settings.php:145
 msgid "Legacy"
@@ -276,13 +277,13 @@ msgstr "此服务用于监控比特币区块链"
 msgid ""
 "Your Ethereum xpub \"Account Public Key\" from which payment addresses are "
 "derived."
-msgstr "您的以太坊xpub“帐户公钥”"
+msgstr "你的以太坊xpub“帐户公钥”"
 
 #: settings.php:184
 msgid ""
 "Re-using addresses reduces your shop's privacy but gives you the comfort of "
 "having payments distributed over less addresses."
-msgstr "重复使用地址会降低您商店的隐私，但可以让您轻松地在少量的地址上分配付款"
+msgstr "重复使用地址会降低你商店的隐私，但可以让你轻松地在少量的地址上分配付款"
 
 #: settings.php:185
 msgid "Re-use Addresses"
@@ -365,7 +366,7 @@ msgstr "验证间隔 [分钟]"
 msgid ""
 "Interval between validating transactions, in minutes. If you change this, "
 "disable and enable this plugin to apply the new interval."
-msgstr "验证交易之间的时间间隔，以分钟为单位。若您更改此设置，请关闭并重新启用此插件以应用新的间隔"
+msgstr "验证交易之间的时间间隔，以分钟为单位。若你更改此设置，请关闭并重新启用此插件以应用新的间隔"
 
 #. translators: %d: Number of minutes
 #: settings.php:277 settings.php:294
@@ -422,21 +423,21 @@ msgstr "接受以太坊交易所需的确认数，每次确认平均需要15秒"
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:49
-#: validation_services/json_rpc_nim.php:44
-#: validation_services/nimiq_watch.php:39
+#: validation_services/json_rpc_nim.php:51
+#: validation_services/nimiq_watch.php:48
 msgid "Could not get the current blockchain height from %s."
 msgstr "无法从%s获取当前的区块链高度"
 
 #: validation_services/blockstream.php:72 validation_services/etherscan.php:41
-#: validation_services/json_rpc_nim.php:65 validation_services/nimiqx.php:66
-#: validation_services/nimiq_watch.php:60 woo-nimiq-gateway.php:672
+#: validation_services/json_rpc_nim.php:74 validation_services/nimiqx.php:74
+#: validation_services/nimiq_watch.php:71 woo-nimiq-gateway.php:682
 msgid "Invalid transaction hash."
 msgstr "无效的交易哈希"
 
 #. translators: %s: Blockchain monitoring service
 #: validation_services/blockstream.php:177
 #: validation_services/etherscan.php:138
-#: validation_services/json_rpc_nim.php:101
+#: validation_services/json_rpc_nim.php:90
 msgid "Could not retrieve transaction information from %s."
 msgstr "无法从%s检索交易信息"
 
@@ -448,15 +449,19 @@ msgstr "无效的商家地址"
 msgid "Etherscan API key not set."
 msgstr "未设置Etherscan API密钥"
 
-#: validation_services/json_rpc_nim.php:16
+#: validation_services/json_rpc_nim.php:25
 msgid "API URL not set."
 msgstr "未设置API URL"
 
-#: validation_services/json_rpc_nim.php:40
+#: validation_services/json_rpc_nim.php:47
 msgid "JSON-RPC replied:"
 msgstr "JSON-RPC回复："
 
-#: validation_services/nimiqx.php:15
+#: validation_services/json_rpc_nim.php:152
+msgid "Could not retrieve account transactions from JSON-RPC server."
+msgstr ""
+
+#: validation_services/nimiqx.php:21
 msgid "NimiqX can only be used for mainnet."
 msgstr "NimiqX仅可用于主网"
 
@@ -464,31 +469,31 @@ msgstr "NimiqX仅可用于主网"
 msgid ""
 "To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you must have "
 "WooCommerce installed!"
-msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您必须安装WooCommerce！"
+msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，你必须安装WooCommerce！"
 
 #: woo-nimiq-gateway.php:45
 msgid ""
-"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use PHP "
-">= 7.1."
-msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您需要使用PHP> = 7.1"
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, you need to use "
+"PHP >= 7.1."
+msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，你需要使用PHP> = 7.1"
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid ""
-"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must run "
-"under HTTPS (SSL encrypted)."
-msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，您的商店必须在HTTPS（SSL加密）下运行"
+"To use <strong>Cryptocurrency Checkout by Nimiq</strong>, your store must "
+"run under HTTPS (SSL encrypted)."
+msgstr "欲使用<strong>Nimiq 加密货币结账组件</strong>，你的商店必须在HTTPS（SSL加密）下运行"
 
 #. translators: %s: Email address
 #: woo-nimiq-gateway.php:65
 msgid "If you believe this error is a mistake, contact us at %s."
-msgstr "如果您认为此错误信息有误，请通过%s与我们联系"
+msgstr "如果你认为此错误信息有误，请通过%s与我们联系"
 
 #: woo-nimiq-gateway.php:81
 msgid ""
 "Your store uses a currency that is currently not supported by the "
 "<strong>Cryptocurrency Checkout by Nimiq</strong>."
-msgstr "您的商店使用了<strong>Nimiq 加密货币结账组件</strong> 当前不支持的货币"
+msgstr "你的商店使用了<strong>Nimiq 加密货币结账组件</strong> 当前不支持的货币"
 
 #: woo-nimiq-gateway.php:83
 msgid "Find out which currencies are supported."
@@ -498,95 +503,95 @@ msgstr "找出支持哪些货币"
 msgid "Settings"
 msgstr "设置"
 
-#: woo-nimiq-gateway.php:148
+#: woo-nimiq-gateway.php:158
 msgid ""
 "Receive payments in Bitcoin, Ethereum, and Nimiq. If you would like to be "
 "guided through the setup process, follow <a "
 "href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
 "installation\">this tutorial.</a>"
 msgstr ""
-"接收比特币，以太坊和Nimiq的付款。如果您希望在安装过程中得到指导，请参考<a "
+"接收比特币，以太坊和Nimiq的付款。如果你希望在安装过程中得到指导，请参考<a "
 "href=\"https://nimiq.github.io/tutorials/wordpress-payment-plugin-"
 "installation\">本教程</a>"
 
 #. translators: %s: Cryptocurrency name
-#: woo-nimiq-gateway.php:177
+#: woo-nimiq-gateway.php:187
 msgid "Pay with %s."
 msgstr "使用%s支付"
 
 #. translators: %1$s: Two cryptocurrency names separated by comma, %2$s:
 #. Cryptocurrency name
-#: woo-nimiq-gateway.php:179
+#: woo-nimiq-gateway.php:189
 msgid "Pay with %1$s or %2$s."
 msgstr "使用%1$s或%2$s支付"
 
-#: woo-nimiq-gateway.php:419
+#: woo-nimiq-gateway.php:429
 msgid ""
 "Cryptocurrency Checkout is temporarily not available. Please try reloading "
 "this page. (Issue: price service did not return any pricing information.)"
 msgstr "暂时无法使用加密货币结账组件。请尝试重新加载此页面。（问题：价格服务未返回任何价格信息。）"
 
-#: woo-nimiq-gateway.php:538
+#: woo-nimiq-gateway.php:548
 msgid "What is Nimiq?"
 msgstr "Nimiq是什么？"
 
-#: woo-nimiq-gateway.php:578
+#: woo-nimiq-gateway.php:588
 msgid ""
 "Javascript is required to pay with cryptocurrency. Please activate "
 "Javascript to continue."
 msgstr "欲以加密货币付款必须使用Javascript，请激活Javascript以继续。"
 
 #. translators: Used on the payment button: "PAY WITH <crypto icons>"
-#: woo-nimiq-gateway.php:600
+#: woo-nimiq-gateway.php:610
 msgid "PAY WITH"
 msgstr "使用...支付"
 
-#: woo-nimiq-gateway.php:608
+#: woo-nimiq-gateway.php:618
 msgid "Payment received"
 msgstr "已收到付款"
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:642 woo-nimiq-gateway.php:651
-#: woo-nimiq-gateway.php:654
+#: woo-nimiq-gateway.php:652 woo-nimiq-gateway.php:661
+#: woo-nimiq-gateway.php:664
 msgid "Nimiq Payment failed. (%s)."
 msgstr "Nimiq付款失败（%s）"
 
 #. translators: %s: Error message
-#: woo-nimiq-gateway.php:642
+#: woo-nimiq-gateway.php:652
 msgid "Response code not \"OK\""
 msgstr "响应代码不正确"
 
-#: woo-nimiq-gateway.php:651
+#: woo-nimiq-gateway.php:661
 msgid "Could not decode Hub result"
 msgstr "无法解码接口中心结果"
 
-#: woo-nimiq-gateway.php:654
+#: woo-nimiq-gateway.php:664
 msgid "Hub result is empty"
 msgstr "接口中心结果为空"
 
-#: woo-nimiq-gateway.php:667
+#: woo-nimiq-gateway.php:677
 msgid "You need to confirm the Nimiq payment first."
-msgstr "您必须先确认Nimiq付款"
+msgstr "你必须先确认Nimiq付款"
 
-#: woo-nimiq-gateway.php:672
+#: woo-nimiq-gateway.php:682
 msgid "Please contact support with this error message."
 msgstr "请与支持人员联系告知此错误消息"
 
-#: woo-nimiq-gateway.php:758
+#: woo-nimiq-gateway.php:768
 msgid "Waiting for transaction to be validated."
 msgstr "等待交易验证中"
 
-#: woo-nimiq-gateway.php:780
+#: woo-nimiq-gateway.php:790
 msgid ""
 "You must fill in your store's Nimiq address to be able to accept payments in"
 " NIM."
-msgstr "您必须填写商店的Nimiq地址，才能接受NIM付款"
+msgstr "你必须填写商店的Nimiq地址，才能接受NIM付款"
 
-#: woo-nimiq-gateway.php:782
+#: woo-nimiq-gateway.php:792
 msgid "Set your Nimiq address here."
-msgstr "在此处设置您的Nimiq地址"
+msgstr "在此处设置你的Nimiq地址"
 
 #. translators: 1: Currency full name (e.g. 'Bitcoin'), 2: Setting name
-#: woo-nimiq-gateway.php:855
+#: woo-nimiq-gateway.php:865
 msgid "<strong>%1$s %2$s</strong> was not saved:"
 msgstr "<strong>%1$s%2$s</strong>未保存"
