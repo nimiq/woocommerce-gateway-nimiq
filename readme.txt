@@ -3,10 +3,10 @@
 Contributors: nimiq
 Tags: woocommerce, cryptocurrency, crypto, checkout, gateway, nimiq, nim, bitcoin, btc, ethereum, eth
 Requires at least: 4.9
-Tested up to: 5.6
+Tested up to: 6.1
 Requires WooCommerce at least: 3.5
-Tested WooCommerce up to: 4.9
-Stable tag: 3.4.0
+Tested WooCommerce up to: 7.1
+Stable tag: 3.4.1
 Requires PHP: 7.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -71,6 +71,10 @@ We believe that cryptocurrencies are the future and will provide a better, more 
 7. Receive the payments straight to your wallet
 
 == Changelog ==
+
+= 3.4.1 - 2022.11.23 =
+
+* Add languages: Filipino, Portuguese, Russian, Ukrainian
 
 = 3.4.0 - 2022.01.10 =
 
